@@ -1,0 +1,13 @@
+(env
+  (dev
+     (flags (:standard -warn-error -A))))
+
+(library
+ (name posix_time_stubs)
+ (public_name posix-time.stubs)
+ (libraries posix-time.types ctypes.stubs))
+
+(rule
+ (targets posix_time_generated_types.ml)
+ (action  (with-stdout-to %{targets}
+            (run ../generator/gen_types_c))))

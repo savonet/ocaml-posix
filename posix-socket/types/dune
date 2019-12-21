@@ -1,0 +1,15 @@
+(env
+  (dev
+     (flags (:standard -warn-error -A))))
+
+(library
+ (name posix_socket_types)
+ (public_name posix-socket.types)
+ (libraries posix-socket.constants ctypes.stubs))
+
+(rule
+ (targets posix_socket_generated_constants.ml)
+ (deps    (:exec ../generator/exec.sh)
+          (:gen ../generator/gen_constants_c))
+ (action  (with-stdout-to %{targets}
+            (system "%{exec} %{ocaml-config:system} %{gen}"))))
