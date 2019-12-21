@@ -1,8 +1,11 @@
 (lang dune 2.0)
+(name ocaml-posix)
 (source (github savonet/ocaml-posix))
 (license MIT)
 (authors "Romain Beauxis")
 (maintainers "romain.beauxis@gmail.com")
+
+(generate_opam_files true)
 
 (package
  (name posix-base)
