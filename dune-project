@@ -5,6 +5,15 @@
 (maintainers "romain.beauxis@gmail.com")
 
 (package
+ (name posix-base)
+ (synopsis "Base module for the posix bindings")
+ (description "posix-base provides base tools for the posix binding modules.")
+ (depends
+  (dune (> 2.0))
+  ctypes)
+)
+
+(package
  (name posix-time)
  (synopsis "Bindings for posix time functions")
  (description "posix-time provides the types and bindings for posix time APIs.")
