@@ -1,3 +1,5 @@
+open Ctypes
+
 module Generators : sig
   module type TypesDef = sig
     module Types  : Cstubs.Types.BINDINGS
@@ -18,4 +20,22 @@ module Generators : sig
   module Stubs(Def: StubsDef) : sig
     val gen : unit -> unit
   end
+end
+
+module Types : sig
+  module type Signed = sig
+    type t
+    val t: t typ
+    include Signed.S with type t := t
+  end
+
+  val mkSigned: name:string -> size:int -> (module Signed)
+
+  module type Unsigned = sig
+    type t
+    val t: t typ
+    include Unsigned.S with type t := t
+  end
+
+  val mkUnsigned: name:string -> size:int -> (module Unsigned)
 end

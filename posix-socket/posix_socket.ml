@@ -1,26 +1,11 @@
 open Ctypes
 
-include Posix_socket_types.SaFamily
+include Posix_socket_types
 
 include Posix_socket_stubs.Def(Posix_socket_generated_stubs)
 
 type socket_type = int
 let socket_type_t = int
-
-let sock_dgram = Types.sock_dgram
-let sock_stream = Types.sock_stream
-let sock_seqpacket = Types.sock_seqpacket
-
-let sa_family_t = Types.sa_family_t
-
-let af_inet = Types.af_inet
-let af_inet6 = Types.af_inet6
-let af_unspec = Types.af_unspec
-
-type socklen = Types.socklen
-let socklen_t = Types.socklen_t
-let int_of_socklen = Types.int_of_socklen
-let socklen_of_int = Types.socklen_of_int
 
 let from_sockaddr_storage t ptr =
   from_voidp t (to_voidp ptr)
@@ -33,7 +18,7 @@ let sockaddr_storage_t = SockaddrStorage.t
 module Sockaddr = struct
   include Types.Sockaddr
   let from_sockaddr_storage = from_sockaddr_storage t
-  let sa_data_len = Types.sa_data_len
+  let sa_data_len = sa_data_len
 end
 
 type sockaddr = Sockaddr.t structure
@@ -59,27 +44,25 @@ type sockaddr_in6 = SockaddrInet6.t structure
 let sockaddr_in6_t = SockaddrInet6.t
 
 let getnameinfo sockaddr_ptr =
-  let maxhost = Types.ni_maxhost in
-  let s = allocate_n char ~count:maxhost in
-  let maxserv = Types.ni_maxserv in
-  let p = allocate_n char ~count:maxserv in
-  match getnameinfo sockaddr_ptr (socklen_of_int (sizeof sockaddr_t))
-                    s (socklen_of_int maxhost) 
-                    p (socklen_of_int maxserv)
-                    (Types.ni_numerichost lor
-                     Types.ni_numericserv)  with
+  let s = allocate_n char ~count:ni_maxhost in
+  let p = allocate_n char ~count:ni_maxserv in
+  match getnameinfo sockaddr_ptr (Socklen.of_int (sizeof sockaddr_t))
+                    s (Socklen.of_int ni_maxhost) 
+                    p (Socklen.of_int ni_maxserv)
+                    (ni_numerichost lor
+                     ni_numericserv)  with
     | 0 ->
       let host =
         let length =
           Unsigned.Size_t.to_int
-            (strnlen s (Unsigned.Size_t.of_int maxhost))
+            (strnlen s (Unsigned.Size_t.of_int ni_maxhost))
         in
         string_from_ptr s ~length
       in
       let port =
         let length =
           Unsigned.Size_t.to_int
-            (strnlen p (Unsigned.Size_t.of_int maxserv))
+            (strnlen p (Unsigned.Size_t.of_int ni_maxserv))
         in
         let port =
           string_from_ptr p ~length
@@ -102,8 +85,8 @@ let getaddrinfo host port =
     allocate_n Types.Addrinfo.t ~count:1
   in
   (hints |-> Types.Addrinfo.ai_flags) <-@
-     (Types.ni_numerichost lor
-      Types.ni_numericserv);
+     (ni_numerichost lor
+      ni_numericserv);
   let p =
     allocate_n (ptr Types.Addrinfo.t) ~count:1
   in

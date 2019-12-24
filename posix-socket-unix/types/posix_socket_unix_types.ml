@@ -3,18 +3,18 @@ open Posix_socket_types
 
 module Constants = Posix_socket_unix_constants.Def(Posix_socket_unix_generated_constants)
 
+include Constants
+
+let af_unix = Sa_family.of_int af_unix
+
 module Def (S : Cstubs.Types.TYPE) = struct
-  include Constants
-
-  module T = SaFamily.T(S)
-
-  let af_unix = SaFamily.sa_family_of_int af_unix
+  let sa_family_t = S.lift_typ sa_family_t
 
   module SockaddrUnix = struct
     type t = unit
 
     let t = S.structure "sockaddr_un"
-    let sun_family = S.field t "sun_family" T.t
+    let sun_family = S.field t "sun_family" sa_family_t
     let sun_path = S.field t "sun_path" (S.array sun_path_len S.char)
     let () = S.seal t
   end

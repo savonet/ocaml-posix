@@ -1,5 +1,5 @@
 (library
  (name posix_time_constants)
  (public_name posix-time.constants)
- (libraries ctypes.stubs))
+ (libraries posix-types ctypes.stubs))
 

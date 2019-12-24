@@ -1,0 +1,13 @@
+(executable
+ (name gen_constants_c)
+ (modules gen_constants_c)
+ (libraries posix-types.constants posix_base))
+
+(rule
+ (targets gen_constants.c)
+ (action  (run ./gen_constants_c.exe %{targets})))
+
+(rule
+ (targets gen_constants_c)
+ (deps    (:c_code ./gen_constants.c))
+ (action  (run %{ocaml-config:c_compiler} -I %{lib:ctypes:} -I %{ocaml-config:standard_library} -o %{targets} %{c_code})))

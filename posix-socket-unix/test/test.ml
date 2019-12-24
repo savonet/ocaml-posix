@@ -13,7 +13,7 @@ let () =
     from_ptr SockaddrUnix.t sockaddr
   in
   Printf.printf "sockaddr_un.sun_family = %d\n%!"
-    (int_of_sa_family
+    (Sa_family.to_int
       (!@ (sockaddr_un |-> SockaddrUnix.sun_family)));
   let unix_socket =
     to_unix_sockaddr sockaddr

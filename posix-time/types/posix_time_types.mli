@@ -8,14 +8,10 @@ type fd_set
 val fd_set : fd_set typ
 val fd_setsize: int
 
-type clockid_t
-val clockid_t : clockid_t typ
-val int64_of_clockid : clockid_t -> Int64.t
-val clockid_of_int64 : Int64.t -> clockid_t
-val clock_monotonic: int
-val clock_realtime: int
-val clock_process_cputime_id: int
-val clock_thread_cputime_id: int
+val clock_monotonic: Posix_types.clockid_t
+val clock_realtime: Posix_types.clockid_t
+val clock_process_cputime_id: Posix_types.clockid_t
+val clock_thread_cputime_id: Posix_types.clockid_t
 
 module Def (S : Cstubs.Types.TYPE) : sig 
   module Tm : sig

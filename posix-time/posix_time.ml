@@ -52,19 +52,11 @@ type clock = [
   | `Thread_cputime
 ]
 
-let clock_id_of_int v =
-  Posix_time_types.clockid_of_int64
-    (Int64.of_int v)
-
 let clock_id_of_clock = function
-  | `Realtime ->
-      clock_id_of_int Posix_time_types.clock_realtime
-  | `Monotonic ->
-      clock_id_of_int Posix_time_types.clock_monotonic
-  | `Process_cputime -> 
-      clock_id_of_int Posix_time_types.clock_process_cputime_id
-  | `Thread_cputime ->
-      clock_id_of_int Posix_time_types.clock_thread_cputime_id
+  | `Realtime -> Posix_time_types.clock_realtime
+  | `Monotonic -> Posix_time_types.clock_monotonic
+  | `Process_cputime -> Posix_time_types.clock_process_cputime_id 
+  | `Thread_cputime -> Posix_time_types.clock_thread_cputime_id
 
 let to_timespec timespec =
   let get f = getf timespec f in

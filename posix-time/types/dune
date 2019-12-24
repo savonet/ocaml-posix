@@ -5,7 +5,7 @@
 (library
  (name posix_time_types)
  (public_name posix-time.types)
- (libraries posix-time.constants ctypes.stubs))
+ (libraries posix-time.constants posix-base ctypes.stubs))
 
 (rule
  (targets posix_time_generated_constants.ml)

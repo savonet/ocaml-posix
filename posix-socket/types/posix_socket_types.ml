@@ -2,105 +2,31 @@ open Ctypes
 
 module Constants = Posix_socket_constants.Def(Posix_socket_generated_constants)
 
-module type Socklen = functor (S : Cstubs.Types.TYPE) -> sig
-  type socklen
-  val socklen_t : socklen S.typ
-  val int_of_socklen : socklen -> int
-  val socklen_of_int : int -> socklen
-end
+let socklen : (module Posix_base.Types.Unsigned) =
+  Posix_base.Types.mkUnsigned  ~name:"socklen_t" ~size:Constants.socklen_t_len
 
-let socklen : (module Socklen)  =
-    match Constants.socklen_t_len with
-      | 1 ->  (module functor (S : Cstubs.Types.TYPE) -> struct
-                 type socklen = Unsigned.uint8
-                 let socklen_t = S.uint8_t
-                 let int_of_socklen = Unsigned.UInt8.to_int
-                 let socklen_of_int = Unsigned.UInt8.of_int
-               end)
-      | 2 -> (module functor (S : Cstubs.Types.TYPE) -> struct
-                 type socklen = Unsigned.uint16
-                 let socklen_t = S.uint16_t
-                 let int_of_socklen = Unsigned.UInt16.to_int
-                 let socklen_of_int = Unsigned.UInt16.of_int
-               end)
-      | 4 -> (module functor (S : Cstubs.Types.TYPE) -> struct
-                 type socklen = Unsigned.uint32
-                 let socklen_t = S.uint32_t
-                 let int_of_socklen = Unsigned.UInt32.to_int
-                 let socklen_of_int = Unsigned.UInt32.of_int
-               end)
-      | 8 -> (module functor (S : Cstubs.Types.TYPE) -> struct
-                 type socklen = Unsigned.uint64
-                 let socklen_t = S.uint64_t
-                 let int_of_socklen = Unsigned.UInt64.to_int
-                 let socklen_of_int = Unsigned.UInt64.of_int
-               end)
-      | _ -> assert false
+module Socklen = (val socklen : Posix_base.Types.Unsigned)
 
-module Socklen = (val socklen : Socklen)
+type socklen_t = Socklen.t
+let socklen_t = Socklen.t
 
-module type SaFamily = sig
-  type sa_family
-  val int_of_sa_family : sa_family -> int
-  val sa_family_of_int : int -> sa_family
-  
-  module T : functor (S : Cstubs.Types.TYPE) -> sig
-    val t : sa_family S.typ
-  end
-end
+let sa_family : (module Posix_base.Types.Unsigned) =
+  Posix_base.Types.mkUnsigned  ~name:"sa_family_t" ~size:Constants.sa_family_t_len
 
-let saFamily : (module SaFamily)  =
-    match Constants.sa_family_len with
-      | 1 ->  (module struct
-                 type sa_family = Unsigned.uint8
-                 let int_of_sa_family = Unsigned.UInt8.to_int
-                 let sa_family_of_int = Unsigned.UInt8.of_int                 
-                 module T (S : Cstubs.Types.TYPE) = struct
-                   let t = S.uint8_t
-                 end
-               end)
-      | 2 -> (module struct
-                 type sa_family = Unsigned.uint16
-                 let int_of_sa_family = Unsigned.UInt16.to_int
-                 let sa_family_of_int = Unsigned.UInt16.of_int
-                 module T (S : Cstubs.Types.TYPE) = struct
-                   let t = S.uint16_t
-                 end
-               end)
-      | 4 -> (module struct
-                 type sa_family = Unsigned.uint32
-                 let int_of_sa_family = Unsigned.UInt32.to_int
-                 let sa_family_of_int = Unsigned.UInt32.of_int
-                 module T (S : Cstubs.Types.TYPE) = struct
-                   let t = S.uint32_t
-                 end
-               end)
-      | 8 -> (module struct
-                 type sa_family = Unsigned.uint64
-                 let int_of_sa_family = Unsigned.UInt64.to_int
-                 let sa_family_of_int = Unsigned.UInt64.of_int
-                 module T (S : Cstubs.Types.TYPE) = struct
-                   let t = S.uint64_t
-                 end
-               end)
-      | _ -> assert false
+module Sa_family = (val sa_family : Posix_base.Types.Unsigned)
 
-module SaFamily = (val saFamily : SaFamily)
+type sa_family_t = Sa_family.t
+let sa_family_t = Sa_family.t
+
+include Constants
+
+let af_inet = Sa_family.of_int af_inet
+let af_inet6 = Sa_family.of_int af_inet6
+let af_unspec = Sa_family.of_int af_unspec
 
 module Def (S : Cstubs.Types.TYPE) = struct
-  include Constants
-
-  include Socklen(S)
-
-  include SaFamily
-
-  let af_inet = sa_family_of_int af_inet
-  let af_inet6 = sa_family_of_int af_inet6
-  let af_unspec = sa_family_of_int af_unspec
-
-  module SaFamilyT = SaFamily.T(S)
-
-  let sa_family_t = S.typedef SaFamilyT.t "sa_family_t"
+  let sa_family_t = S.lift_typ sa_family_t
+  let socklen_t = S.lift_typ socklen_t
 
   module Sockaddr = struct
     type t = unit

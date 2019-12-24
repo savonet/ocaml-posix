@@ -5,7 +5,7 @@
 (library
  (name posix_socket_types)
  (public_name posix-socket.types)
- (libraries posix-socket.constants ctypes.stubs))
+ (libraries posix-socket.constants posix-base ctypes.stubs))
 
 (rule
  (targets posix_socket_generated_constants.ml)

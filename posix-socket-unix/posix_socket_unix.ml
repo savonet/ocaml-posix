@@ -1,10 +1,9 @@
 open Ctypes
 open Posix_socket
 
-module Types = Posix_socket_unix_types.Def(Posix_socket_unix_generated_types)
+include Posix_socket_unix_types
 
-let sun_path_len = Types.sun_path_len
-let af_unix = Types.af_unix
+module Types = Posix_socket_unix_types.Def(Posix_socket_unix_generated_types)
 
 type sockaddr_un = Types.sockaddr_un
 let sockaddr_un_t = Types.sockaddr_un_t

@@ -14,20 +14,21 @@ val sock_stream    : socket_type
 val sock_seqpacket : socket_type
 
 (** Type of the [sa_family] field. *)
-type sa_family = Posix_socket_types.SaFamily.sa_family
-val sa_family_t : sa_family typ
-val int_of_sa_family : sa_family -> int
+module Sa_family = Posix_socket_types.Sa_family
+
+type sa_family_t = Sa_family.t
+val sa_family_t : sa_family_t typ
 
 (** Socket types constants. *)
-val af_inet     : sa_family
-val af_inet6    : sa_family
-val af_unspec   : sa_family
+val af_inet     : sa_family_t
+val af_inet6    : sa_family_t
+val af_unspec   : sa_family_t
 
 (** Ctypes routines for C type socklen_t. *)
-type socklen
-val socklen_t : socklen typ
-val int_of_socklen : socklen -> int
-val socklen_of_int : int -> socklen
+module Socklen : Unsigned.S
+
+type socklen_t
+val socklen_t : socklen_t typ
 
 (** Storage-safe overall structure. Used to allocate
     a structure large enough for any of the sub-types
@@ -35,7 +36,7 @@ val socklen_of_int : int -> socklen
 module SockaddrStorage : sig
   type t
   val t : t structure typ
-  val ss_family : (sa_family, t structure) field
+  val ss_family : (sa_family_t, t structure) field
 end
 
 type sockaddr_storage = SockaddrStorage.t structure
@@ -45,7 +46,7 @@ val sockaddr_storage_t : sockaddr_storage typ
 module Sockaddr : sig
   type t
   val t : t structure typ
-  val sa_family : (sa_family, t structure) field
+  val sa_family : (sa_family_t, t structure) field
   val sa_data : (char carray, t structure) field
   val sa_data_len  : int
 
@@ -68,7 +69,7 @@ module SockaddrInet : sig
 
   type t
   val t : t structure typ
-  val sin_family : (sa_family, t structure) field
+  val sin_family : (sa_family_t, t structure) field
   val sin_port : (in_port, t structure) field
   val sin_addr : (in_addr structure, t structure) field
 
@@ -86,7 +87,7 @@ module SockaddrInet6 : sig
 
   type t
   val t : t structure typ
-  val sin6_family : (sa_family, t structure) field
+  val sin6_family : (sa_family_t, t structure) field
   val sin6_port : (in_port, t structure) field
   val sin6_flowinfo : (Unsigned.uint32, t structure) field
   val sin6_addr : (in6_addr structure, t structure) field

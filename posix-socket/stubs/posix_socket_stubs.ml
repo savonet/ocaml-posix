@@ -3,6 +3,8 @@ open Ctypes
 module Def (F : Cstubs.FOREIGN) = struct
   open F
 
+  open Posix_socket_types
+
   module Types = Posix_socket_types.Def(Posix_socket_generated_types)
 
   open Types

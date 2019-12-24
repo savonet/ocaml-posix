@@ -15,7 +15,7 @@ let () =
     from_unix_sockaddr (Unix.ADDR_INET (inet_addr,80))
   in
   Printf.printf "sockaddr.sa_family = %d\n%!"
-    (int_of_sa_family
+    (Sa_family.to_int
       (!@ (sockaddr |-> Sockaddr.sa_family)));
   let sockaddr_in =
     from_ptr SockaddrInet.t sockaddr

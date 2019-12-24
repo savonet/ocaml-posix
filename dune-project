@@ -13,6 +13,17 @@
  (description "posix-base provides base tools for the posix binding modules.")
  (depends
   (dune (> 2.0))
+  integers
+  ctypes)
+)
+
+(package
+ (name posix-types)
+ (synopsis "Bindings for the types defined in <sys/types.h>")
+ (description "posix-types provides an API to the types defines in <sys/types.h>")
+ (depends
+  (dune (> 2.0))
+  posix-base
   ctypes)
 )
 

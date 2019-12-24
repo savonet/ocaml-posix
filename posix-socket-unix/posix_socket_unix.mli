@@ -2,13 +2,13 @@ open Ctypes
 open Posix_socket
 
 (** Socket types constants. *)
-val af_unix     : sa_family
+val af_unix : sa_family_t
 
 (** Unix socket_un structure. *)
 module SockaddrUnix : sig
   type t
   val t : t structure typ
-  val sun_family : (sa_family, t structure) field 
+  val sun_family : (sa_family_t, t structure) field 
   val sun_path : (char carray, t structure) field 
   val sun_path_len : int
 
