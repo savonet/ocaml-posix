@@ -34,6 +34,7 @@
  (depends
   (dune (> 2.0))
   ctypes
+  posix-base
   unix-errno)
 )
 
@@ -43,6 +44,7 @@
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
  (depends
   (dune (> 2.0))
+  posix-base
   ctypes)
 )
 
@@ -53,6 +55,7 @@
  (depends
   (dune (> 2.0))
   ctypes
+  posix-base
   posix-socket
   unix-errno)
 )
