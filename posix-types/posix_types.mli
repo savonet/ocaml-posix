@@ -73,14 +73,3 @@ val time_t : time_t typ
 val uid_t : uid_t typ
 val useconds_t : useconds_t typ
 val suseconds_t : suseconds_t typ
-
-(* non-arithmetic types from <sys/types.h> *)
-(** {2 POSIX non-arithmetic types} *)
-
-(*
-type sigset_t
-
-(** {3 Values representing POSIX non-arithmetic types} *)
-
-val sigset_t             : sigset_t typ
-*)
