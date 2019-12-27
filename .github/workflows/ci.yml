@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup OCaml
+      uses: avsm/setup-ocaml@v1.0
+    - name: Install locally
+      run: opam pin -y add .
+    - name: Run tests
+      run: eval $(opam env) && dune runtest
