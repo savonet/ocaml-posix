@@ -1,7 +1,7 @@
 (executable
  (name gen_types_c)
  (modules gen_types_c)
- (libraries posix-socket-unix.types posix_base))
+ (libraries posix-socket-unix.types posix-base))
 
 (rule
  (targets gen_types.c)
@@ -15,7 +15,7 @@
 (executable
  (name gen_constants_c)
  (modules gen_constants_c)
- (libraries posix-socket-unix.constants posix_base))
+ (libraries posix-socket-unix.constants posix-base))
 
 (rule
  (targets gen_constants.c)

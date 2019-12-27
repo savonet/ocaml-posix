@@ -1,12 +1,12 @@
 (executable
  (name gen_stubs)
  (modules gen_stubs)
- (libraries posix-socket.stubs posix_base))
+ (libraries posix-socket.stubs posix-base))
 
 (executable
  (name gen_types_c)
  (modules gen_types_c)
- (libraries posix-socket.types posix_base))
+ (libraries posix-socket.types posix-base))
 
 (rule
  (targets gen_types.c)
@@ -20,7 +20,7 @@
 (executable
  (name gen_constants_c)
  (modules gen_constants_c)
- (libraries posix-socket.constants posix_base))
+ (libraries posix-socket.constants posix-base))
 
 (rule
  (targets gen_constants.c)
