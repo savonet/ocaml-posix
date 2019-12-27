@@ -8,7 +8,7 @@
  (public_name posix-types)
  (synopsis
    "posix-types provides access to POSIX's types defined in <sys/types.h>")
- (libraries unix unix-errno.unix ctypes posix-types.constants posix-base))
+ (libraries ctypes posix-types.constants posix-base))
 
 (rule
  (targets posix_types_generated_constants.ml)
