@@ -69,7 +69,6 @@
   (dune (> 2.0))
   ctypes
   posix-base
-  posix-types
   posix-socket)
 )
 
