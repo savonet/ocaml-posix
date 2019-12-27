@@ -1,15 +1,19 @@
 (env
-  (dev
-     (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))
 
 (library
- (name         posix_socket_unix)
- (public_name  posix-socket-unix)
- (synopsis    "posix-socket-unix provides access to unix-specific sockaddr_un")
- (enabled_if   (= %{os_type} Unix))
- (libraries    unix unix-errno.unix ctypes posix-socket posix-socket-unix.types))
+ (name posix_socket_unix)
+ (public_name posix-socket-unix)
+ (synopsis "posix-socket-unix provides access to unix-specific sockaddr_un")
+ (enabled_if
+  (= %{os_type} Unix))
+ (libraries unix unix-errno.unix ctypes posix-socket posix-socket-unix.types))
 
 (rule
  (targets posix_socket_unix_generated_types.ml)
- (deps    (:gen ./generator/gen_types_c))
- (action  (system "%{gen} > %{targets}")))
+ (deps
+  (:gen ./generator/gen_types_c))
+ (action
+  (system "%{gen} > %{targets}")))

@@ -1,7 +1,8 @@
 open Ctypes
 open Posix_socket_types
 
-module Constants = Posix_socket_unix_constants.Def(Posix_socket_unix_generated_constants)
+module Constants =
+  Posix_socket_unix_constants.Def (Posix_socket_unix_generated_constants)
 
 include Constants
 
@@ -20,5 +21,6 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr_un = SockaddrUnix.t structure
+
   let sockaddr_un_t : sockaddr_un S.typ = SockaddrUnix.t
 end

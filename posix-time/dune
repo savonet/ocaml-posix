@@ -1,18 +1,23 @@
 (env
-  (dev
-     (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))
 
 (library
- (name           posix_time)
- (public_name    posix-time)
- (synopsis      "posix-time provides access to POSIX's time-related APIs")
- (foreign_stubs (language c) (names posix_time_generated_stubs))
- (libraries      unix unix-errno.unix ctypes posix-time.types posix-time.stubs))
+ (name posix_time)
+ (public_name posix-time)
+ (synopsis "posix-time provides access to POSIX's time-related APIs")
+ (foreign_stubs
+  (language c)
+  (names posix_time_generated_stubs))
+ (libraries unix unix-errno.unix ctypes posix-time.types posix-time.stubs))
 
 (rule
  (targets posix_time_generated_stubs.ml)
- (action  (run ./generator/gen_stubs.exe ml %{targets})))
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
 
 (rule
  (targets posix_time_generated_stubs.c)
- (action  (run ./generator/gen_stubs.exe c %{targets})))
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))

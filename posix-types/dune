@@ -1,14 +1,18 @@
 (env
-  (dev
-     (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))
 
 (library
- (name           posix_types)
- (public_name    posix-types)
- (synopsis      "posix-types provides access to POSIX's types defined in <sys/types.h>")
- (libraries      unix unix-errno.unix ctypes posix-types.constants posix-base))
+ (name posix_types)
+ (public_name posix-types)
+ (synopsis
+   "posix-types provides access to POSIX's types defined in <sys/types.h>")
+ (libraries unix unix-errno.unix ctypes posix-types.constants posix-base))
 
 (rule
  (targets posix_types_generated_constants.ml)
- (action  (with-stdout-to %{targets}
-            (run ./generator/gen_constants_c))))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./generator/gen_constants_c))))

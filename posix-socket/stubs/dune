@@ -1,6 +1,7 @@
 (env
-  (dev
-     (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))
 
 (library
  (name posix_socket_stubs)
@@ -9,7 +10,10 @@
 
 (rule
  (targets posix_socket_generated_types.ml)
- (deps    (:exec ../generator/exec.sh)
-          (:gen ../generator/gen_types_c))
- (action  (with-stdout-to %{targets}
-            (system "%{exec} %{ocaml-config:system} %{gen}"))))
+ (deps
+  (:exec ../generator/exec.sh)
+  (:gen ../generator/gen_types_c))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))

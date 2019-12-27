@@ -1,10 +1,13 @@
 (library
  (name posix_socket_unix_types)
  (public_name posix-socket-unix.types)
- (enabled_if   (= %{os_type} Unix))
+ (enabled_if
+  (= %{os_type} Unix))
  (libraries posix-socket.types posix-socket-unix.constants ctypes.stubs))
 
 (rule
  (targets posix_socket_unix_generated_constants.ml)
- (deps    (:gen ../generator/gen_constants_c))
- (action  (system "%{gen} > %{targets}")))
+ (deps
+  (:gen ../generator/gen_constants_c))
+ (action
+  (system "%{gen} > %{targets}")))

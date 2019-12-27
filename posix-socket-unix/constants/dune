@@ -1,6 +1,6 @@
 (library
  (name posix_socket_unix_constants)
  (public_name posix-socket-unix.constants)
- (enabled_if   (= %{os_type} Unix))
+ (enabled_if
+  (= %{os_type} Unix))
  (libraries ctypes.stubs))
-

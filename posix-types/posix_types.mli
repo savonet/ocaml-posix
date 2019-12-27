@@ -1,5 +1,4 @@
 open Ctypes
-
 open Posix_base.Types
 
 (** Some POSIX types. *)
@@ -53,26 +52,26 @@ type suseconds_t = Suseconds.t
 
 (** {3 Values representing POSIX arithmetic types} *)
 
-val blkcnt_t    : blkcnt_t typ
-val blksize_t   : blksize_t typ
-val clock_t     : clock_t typ
-val clockid_t   : clockid_t typ
-val dev_t       : dev_t typ
-val fsblkcnt_t  : fsblkcnt_t typ
-val fsfilcnt_t  : fsfilcnt_t typ
-val gid_t       : gid_t typ
-val id_t        : id_t typ
-val ino_t       : ino_t typ
-val key_t       : key_t typ
-val mode_t      : mode_t typ
-val nlink_t     : nlink_t typ
-val off_t       : off_t typ
-val pid_t       : pid_t typ
-val size_t      : size_t typ
-val ssize_t     : ssize_t typ
-val time_t      : time_t typ
-val uid_t       : uid_t typ
-val useconds_t  : useconds_t typ
+val blkcnt_t : blkcnt_t typ
+val blksize_t : blksize_t typ
+val clock_t : clock_t typ
+val clockid_t : clockid_t typ
+val dev_t : dev_t typ
+val fsblkcnt_t : fsblkcnt_t typ
+val fsfilcnt_t : fsfilcnt_t typ
+val gid_t : gid_t typ
+val id_t : id_t typ
+val ino_t : ino_t typ
+val key_t : key_t typ
+val mode_t : mode_t typ
+val nlink_t : nlink_t typ
+val off_t : off_t typ
+val pid_t : pid_t typ
+val size_t : size_t typ
+val ssize_t : ssize_t typ
+val time_t : time_t typ
+val uid_t : uid_t typ
+val useconds_t : useconds_t typ
 val suseconds_t : suseconds_t typ
 
 (* non-arithmetic types from <sys/types.h> *)

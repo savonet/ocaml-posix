@@ -1,6 +1,7 @@
 (env
-  (dev
-     (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))
 
 (library
  (name posix_time_stubs)
@@ -9,5 +10,7 @@
 
 (rule
  (targets posix_time_generated_types.ml)
- (action  (with-stdout-to %{targets}
-            (run ../generator/gen_types_c))))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_types_c))))

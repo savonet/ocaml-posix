@@ -2,4 +2,3 @@
  (name posix_socket_constants)
  (public_name posix-socket.constants)
  (libraries ctypes.stubs))
-

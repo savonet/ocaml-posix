@@ -2,4 +2,3 @@
  (name posix_types_constants)
  (public_name posix-types.constants)
  (libraries ctypes.stubs))
-

@@ -1,11 +1,27 @@
-let types = [
-  "blkcnt_t"; "blksize_t"; "clock_t";
-  "clockid_t"; "dev_t"; "fsblkcnt_t"; "fsfilcnt_t";
-  "gid_t"; "id_t"; "ino_t"; "key_t";
-  "mode_t"; "nlink_t"; "off_t"; "pid_t";
-  "size_t"; "ssize_t"; "suseconds_t";
-  "time_t"; "uid_t"; "useconds_t"
-]
+let types =
+  [
+    "blkcnt_t";
+    "blksize_t";
+    "clock_t";
+    "clockid_t";
+    "dev_t";
+    "fsblkcnt_t";
+    "fsfilcnt_t";
+    "gid_t";
+    "id_t";
+    "ino_t";
+    "key_t";
+    "mode_t";
+    "nlink_t";
+    "off_t";
+    "pid_t";
+    "size_t";
+    "ssize_t";
+    "suseconds_t";
+    "time_t";
+    "uid_t";
+    "useconds_t";
+  ]
 
 module Def (S : Cstubs.Types.TYPE) = struct
   let blkcnt_t_size = S.constant "BLKCNT_T_SIZE" S.int
