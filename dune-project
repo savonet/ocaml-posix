@@ -62,14 +62,32 @@
 )
 
 (package
- (name posix-bindings)
- (synopsis "POSIX bindings")
- (description "install all available posix bindings")
+  (name posix-universal)
+ (synopsis "POSIX bindings available for all systems")
+ (description "install posix bindings available on all systems")
  (depends
   (dune (> 2.0))
   ctypes
   posix-base
+  posix-types
+  posix-socket)
+)
+
+(package
+ (name posix-unix)
+ (synopsis "POSIX bindings for unix systems")
+ (description "install all available posix bindings on unix systems")
+ (depends
+  (dune (> 2.0))
+  ctypes
+  posix-base
+  posix-types
   posix-socket
-  posix-socket-unix
-  posix-time)
+  posix-socket-unix)
+)
+
+(package
+ (name posix-bindings)
+ (synopsis "POSIX bindings")
+ (description "install all available posix bindings")
 )

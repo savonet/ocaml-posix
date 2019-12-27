@@ -7,14 +7,6 @@ authors: ["Romain Beauxis"]
 license: "MIT"
 homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
-depends: [
-  "dune" {> "2.0"}
-  "ctypes"
-  "posix-base"
-  "posix-socket"
-  "posix-socket-unix"
-  "posix-time"
-]
 build: [
   ["dune" "subst"] {pinned}
   [
@@ -30,3 +22,6 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/savonet/ocaml-posix.git"
+depends: [
+  "posix-unix" | "posix-universal"
+]

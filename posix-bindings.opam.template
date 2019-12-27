@@ -1,0 +1,3 @@
+depends: [
+  "posix-unix" | "posix-universal"
+]
