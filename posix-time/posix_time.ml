@@ -60,13 +60,13 @@ let clock_id_of_clock = function
 
 let to_timespec timespec =
   let get f = getf timespec f in
-  { tv_sec  = PosixTypes.Time.to_int64 (get Types.Timespec.tv_sec);
+  { tv_sec  = Posix_types.Time.to_int64 (get Types.Timespec.tv_sec);
     tv_nsec = Signed.Long.to_int64 (get Types.Timespec.tv_nsec) }
 
 let from_timespec {tv_sec;tv_nsec} =
   let timespec = make Types.Timespec.t in
   setf timespec Types.Timespec.tv_sec
-    (PosixTypes.Time.of_int64 tv_sec);
+    (Posix_types.Time.of_int64 tv_sec);
   setf timespec Types.Timespec.tv_nsec
     (Signed.Long.of_int64 tv_nsec);
   timespec
@@ -111,12 +111,12 @@ let clock_settime clock timespec =
         | _ -> None))
 
 let ctime time =
-  ctime (PosixTypes.Time.of_int64 time)
+  ctime (Posix_types.Time.of_int64 time)
 
 let gmtime time =
   Errno_unix.with_unix_exn (fun () ->
     Errno_unix.raise_on_errno (fun () ->
-      let time = PosixTypes.Time.of_int64 time in
+      let time = Posix_types.Time.of_int64 time in
       match gmtime time with
         | ptr when is_null ptr -> None
         | ptr -> Some (to_tm (!@ ptr))))
@@ -124,7 +124,7 @@ let gmtime time =
 let localtime time =
   Errno_unix.with_unix_exn (fun () ->
     Errno_unix.raise_on_errno (fun () ->
-      let time = PosixTypes.Time.of_int64 time in
+      let time = Posix_types.Time.of_int64 time in
       match localtime time with
         | ptr when is_null ptr -> None
         | ptr -> Some (to_tm (!@ ptr))))
@@ -134,7 +134,7 @@ let mktime tm =
     Errno_unix.raise_on_errno (fun () ->
       let tm = from_tm tm in 
       let time = mktime (addr tm) in
-      match PosixTypes.Time.to_int64 time with
+      match Posix_types.Time.to_int64 time with
         | -1L -> None
         | time -> Some time))
 
@@ -170,15 +170,15 @@ module Sys = struct
 
   let to_timeval timeval =
     let get f = getf timeval f in
-    { tv_sec  = PosixTypes.Time.to_int64 (get Types.Timeval.tv_sec);
-      tv_usec = PosixTypes.Suseconds.to_int64 (get Types.Timeval.tv_usec) }
+    { tv_sec  = Posix_types.Time.to_int64 (get Types.Timeval.tv_sec);
+      tv_usec = Posix_types.Suseconds.to_int64 (get Types.Timeval.tv_usec) }
 
   let from_timeval {tv_sec;tv_usec} =
     let timeval = make Types.Timeval.t in
     setf timeval Types.Timeval.tv_sec
-      (PosixTypes.Time.of_int64 tv_sec);
+      (Posix_types.Time.of_int64 tv_sec);
     setf timeval Types.Timeval.tv_usec
-      (PosixTypes.Suseconds.of_int64 tv_usec);
+      (Posix_types.Suseconds.of_int64 tv_usec);
     timeval
 
   let to_itimerval itimerval =

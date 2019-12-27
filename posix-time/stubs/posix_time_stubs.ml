@@ -13,11 +13,11 @@ module Def (F : Cstubs.FOREIGN) = struct
   let clock_gettime = foreign "clock_gettime" (Posix_types.clockid_t @-> ptr Timespec.t @-> (returning int))
   let clock_settime = foreign "clock_settime" (Posix_types.clockid_t @-> ptr Timespec.t @-> (returning int))
 
-  let ctime = foreign "ctime" (PosixTypes.time_t @-> (returning string))
+  let ctime = foreign "ctime" (Posix_types.time_t @-> (returning string))
 
-  let gmtime = foreign "gmtime" (PosixTypes.time_t @-> (returning (ptr Tm.t)))
-  let localtime = foreign "localtime" (PosixTypes.time_t @-> (returning (ptr Tm.t)))
-  let mktime = foreign "mktime" (ptr Tm.t @-> (returning PosixTypes.time_t))
+  let gmtime = foreign "gmtime" (Posix_types.time_t @-> (returning (ptr Tm.t)))
+  let localtime = foreign "localtime" (Posix_types.time_t @-> (returning (ptr Tm.t)))
+  let mktime = foreign "mktime" (ptr Tm.t @-> (returning Posix_types.time_t))
 
   let nanosleep = foreign "nanosleep" (ptr Timespec.t @-> ptr void @-> (returning int))
 

@@ -31,15 +31,15 @@ module Def (S : Cstubs.Types.TYPE) : sig
   module Timespec : sig
     type t
     val t : t structure S.typ
-    val tv_sec  : (PosixTypes.time_t, t structure) S.field
+    val tv_sec  : (Posix_types.time_t, t structure) S.field
     val tv_nsec : (Signed.long, t structure) S.field
   end
 
   module Timeval : sig
     type t
     val t : t structure S.typ
-    val tv_sec  : (PosixTypes.time_t, t structure) S.field
-    val tv_usec : (PosixTypes.suseconds_t, t structure) S.field
+    val tv_sec  : (Posix_types.time_t, t structure) S.field
+    val tv_usec : (Posix_types.suseconds_t, t structure) S.field
   end
 
   module Itimerval : sig

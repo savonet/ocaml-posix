@@ -41,7 +41,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let t =
       S.structure "timespec"
     let tv_sec =
-      S.field t "tv_sec" (S.lift_typ PosixTypes.time_t)
+      S.field t "tv_sec" (S.lift_typ Posix_types.time_t)
     let tv_nsec =
       S.field t "tv_nsec" (S.lift_typ long)
     let () =
@@ -53,9 +53,9 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let t =
       S.structure "timeval"
     let tv_sec =
-      S.field t "tv_sec" (S.lift_typ PosixTypes.time_t)
+      S.field t "tv_sec" (S.lift_typ Posix_types.time_t)
     let tv_usec =
-      S.field t "tv_usec" (S.lift_typ PosixTypes.suseconds_t)
+      S.field t "tv_usec" (S.lift_typ Posix_types.suseconds_t)
     let () =
       S.seal t
   end
