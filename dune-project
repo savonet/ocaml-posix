@@ -1,5 +1,5 @@
 (lang dune 2.0)
-(name ocaml-posix)
+(name posix-bindings)
 (source (github savonet/ocaml-posix))
 (license MIT)
 (authors "Romain Beauxis")
@@ -58,4 +58,17 @@
   posix-base
   posix-socket
   unix-errno)
+)
+
+(package
+ (name posix-bindings)
+ (synopsis "POSIX bindings")
+ (description "install all available posix bindings")
+ (depends
+  (dune (> 2.0))
+  ctypes
+  posix-base
+  posix-socket
+  posix-socket-unix
+  posix-time)
 )
