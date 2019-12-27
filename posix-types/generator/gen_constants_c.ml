@@ -12,6 +12,7 @@ module Constants = Posix_base.Generators.Types(struct
   let c_headers = Printf.sprintf "
 #include <sys/types.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 %s" defines
 end)
