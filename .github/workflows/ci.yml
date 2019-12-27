@@ -17,6 +17,4 @@ jobs:
     - name: Pin locally
       run: opam pin -y add --no-action .
     - name: Install locally
-      run: opam depext -y -i posix-bindings
-    - name: Run tests
-      run: eval $(opam env) && dune runtest
+      run: opam depext -y -i --with-test posix-bindings
