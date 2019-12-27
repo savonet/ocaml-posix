@@ -38,7 +38,7 @@ let () =
 
   Printf.printf "gettimeofday: %s\n%!" (sprint_timeval (Sys.gettimeofday ()));
 
-  Printf.printf "Sleeping 10s..\n%!";
+  Printf.printf "Sleeping 1s..\n%!";
   nanosleep { tv_sec = 1L; tv_nsec = 0L };
 
   let r, w = Unix.pipe () in
