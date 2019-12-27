@@ -38,4 +38,16 @@ module Types : sig
   end
 
   val mkUnsigned: name:string -> size:int -> (module Unsigned)
+
+  module type Arithmetic = sig
+    type t
+    val t : t typ
+    val is_float : bool
+    val to_int64 : t -> int64
+    val of_int64 : int64 -> t
+    val to_float : t -> float
+    val of_float : float -> t
+  end
+
+  val mkArithmetic: name:string -> size:int -> is_float:bool -> (module Arithmetic)
 end

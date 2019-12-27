@@ -49,6 +49,61 @@ module Generators = struct
 end
 
 module Types = struct
+  module type Arithmetic = sig
+    type t
+    val t : t typ
+    val is_float : bool
+    val to_int64 : t -> int64
+    val of_int64 : int64 -> t
+    val to_float : t -> float
+    val of_float : float -> t
+  end
+
+  let mkArithmetic ~name ~size ~is_float : (module Arithmetic) =
+    match is_float, size with
+      | true, _ ->
+        (module struct
+          type t = float
+          let t = typedef float name
+          let is_float = true
+          let to_int64 = Int64.of_float
+          let of_int64 = Int64.to_float
+          let to_float x = x
+          let of_float x = x
+        end)
+      | false, 1
+      | false, 2 ->
+        (module struct
+          type t = int
+          let t = typedef int name
+          let is_float = false
+          let to_int64 = Int64.of_int
+          let of_int64 = Int64.to_int
+          let to_float = float_of_int
+          let of_float = int_of_float
+        end)
+      | false, 4 ->
+        (module struct
+          type t = int32
+          let t = typedef int32_t name
+          let is_float = false
+          let to_int64 = Int64.of_int32
+          let of_int64 = Int64.to_int32
+          let to_float = Int32.to_float
+          let of_float = Int32.of_float
+        end)
+      | false, 8 ->
+        (module struct
+          type t = int64
+          let t = typedef int64_t name
+          let is_float = false
+          let to_int64 x = x
+          let of_int64 x = x
+          let to_float = Int64.to_float
+          let of_float = Int64.of_float
+        end)
+      | _ -> assert false
+
   module type Signed = sig
     type t
     val t : t typ

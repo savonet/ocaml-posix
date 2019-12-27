@@ -1,19 +1,11 @@
 open Ctypes
 
+open Posix_base.Types
+
 (** Some POSIX types. *)
 
 (* arithmetic types from <sys/types.h> *)
 (** {2 POSIX arithmetic types} *)
-
-module type Arithmetic = sig
-  type t
-  val t : t typ
-  val is_float : bool
-  val to_int64 : t -> int64
-  val of_int64 : int64 -> t
-  val to_float : t -> float
-  val of_float : float -> t
-end
 
 module Blkcnt : Signed.S
 module Blksize : Signed.S
