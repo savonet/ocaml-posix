@@ -1,3 +1,4 @@
 (test
  (name test)
+ (package posix-time)
  (libraries posix-time threads))
