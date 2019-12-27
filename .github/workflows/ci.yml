@@ -19,4 +19,4 @@ jobs:
     - name: Install locally
       run: opam depext -y -i posix-bindings
     - name: Run tests locally
-      run: dune runtest
+      run: eval $(opam env) && dune runtest
