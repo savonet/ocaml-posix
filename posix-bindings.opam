@@ -23,5 +23,6 @@ build: [
 ]
 dev-repo: "git+https://github.com/savonet/ocaml-posix.git"
 depends: [
-  "posix-unix" | "posix-universal"
+  "posix-universal"
+  "posix-unix" {os != "win32"}
 ]

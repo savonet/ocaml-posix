@@ -1,3 +1,4 @@
 depends: [
-  "posix-unix" | "posix-universal"
+  "posix-universal"
+  "posix-unix" {os != "win32"}
 ]
