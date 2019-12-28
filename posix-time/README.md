@@ -11,6 +11,6 @@ The C API bound in this module are defined on POSIX systems by the following fil
 
 The low-level API mirrors as much as possible the original POSIX definitions. It is defined in [src/types/posix_time_types.mli](types/posix_time_types.mli). This API can be used to build further C bindings using `ocaml-ctypes`.
 
-[src/Posix_time.mli](posix_time.mli) provides a high-level API compatible exported from the low-level bindings.
+[src/posix_time.mli](posix_time.mli) provides a high-level API compatible exported from the low-level bindings.
 
 Happy hacking!
