@@ -1,4 +1,4 @@
-# sys-socket-unix
+# posix-socket-unix
 
 This module provides OCaml ctypes bindings to system-specific low-level socket structure and data-types.
 
