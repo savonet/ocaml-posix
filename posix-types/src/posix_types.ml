@@ -1,4 +1,3 @@
-open Ctypes
 open Posix_base.Types
 module Constants = Posix_types_constants.Def (Posix_types_generated_constants)
 open Constants
@@ -165,3 +164,94 @@ module Useconds = (val useconds : Unsigned)
 type useconds_t = Useconds.t
 
 let useconds_t = Useconds.t
+
+module type Abstract = sig
+  type t
+
+  val t : t Ctypes.typ
+end
+
+let mkAbstract : name:string -> size:int -> alignment:int -> (module Abstract) =
+ fun ~name ~size ~alignment:a ->
+  ( module struct
+    open Ctypes
+
+    type t = unit Ctypes.abstract
+
+    let t = abstract ~name ~size ~alignment:a
+  end : Abstract )
+
+module Pthread = struct
+  module Attr =
+  ( val mkAbstract ~name:"pthread_attr_t" ~size:pthread_attr_t_size
+          ~alignment:pthread_attr_t_alignment )
+
+  module Cond =
+  ( val mkAbstract ~name:"pthread_cond_t" ~size:pthread_cond_t_size
+          ~alignment:pthread_cond_t_alignment )
+
+  module Condattr =
+  ( val mkAbstract ~name:"pthread_condattr_t" ~size:pthread_condattr_t_size
+          ~alignment:pthread_condattr_t_alignment )
+
+  module Key =
+  ( val mkAbstract ~name:"pthread_key_t" ~size:pthread_key_t_size
+          ~alignment:pthread_key_t_alignment )
+
+  module Mutex =
+  ( val mkAbstract ~name:"pthread_mutex_t" ~size:pthread_mutex_t_size
+          ~alignment:pthread_mutex_t_alignment )
+
+  module Mutexattr =
+  ( val mkAbstract ~name:"pthread_mutexattr_t" ~size:pthread_mutexattr_t_size
+          ~alignment:pthread_mutexattr_t_alignment )
+
+  module Once =
+  ( val mkAbstract ~name:"pthread_once_t" ~size:pthread_once_t_size
+          ~alignment:pthread_once_t_alignment )
+
+  module Rwlock =
+  ( val mkAbstract ~name:"pthread_rwlock_t" ~size:pthread_rwlock_t_size
+          ~alignment:pthread_rwlock_t_alignment )
+
+  module Rwlockattr =
+  ( val mkAbstract ~name:"pthread_rwlockattr_t" ~size:pthread_rwlockattr_t_size
+          ~alignment:pthread_rwlockattr_t_alignment )
+
+  module T =
+  ( val mkAbstract ~name:"pthread_t" ~size:pthread_t_size
+          ~alignment:pthread_t_alignment )
+
+  type attr_t = Attr.t
+  type cond_t = Cond.t
+  type condattr_t = Condattr.t
+  type key_t = Key.t
+  type mutex_t = Mutex.t
+  type mutexattr_t = Mutexattr.t
+  type once_t = Once.t
+  type rwlock_t = Rwlock.t
+  type rwlockattr_t = Rwlockattr.t
+  type t = T.t
+end
+
+type pthread_attr_t = Pthread.Attr.t
+type pthread_cond_t = Pthread.Cond.t
+type pthread_condattr_t = Pthread.Condattr.t
+type pthread_key_t = Pthread.Key.t
+type pthread_mutex_t = Pthread.Mutex.t
+type pthread_mutexattr_t = Pthread.Mutexattr.t
+type pthread_once_t = Pthread.Once.t
+type pthread_rwlock_t = Pthread.Rwlock.t
+type pthread_rwlockattr_t = Pthread.Rwlockattr.t
+type pthread_t = Pthread.T.t
+
+let pthread_attr_t = Pthread.Attr.t
+let pthread_cond_t = Pthread.Cond.t
+let pthread_condattr_t = Pthread.Condattr.t
+let pthread_key_t = Pthread.Key.t
+let pthread_mutex_t = Pthread.Mutex.t
+let pthread_mutexattr_t = Pthread.Mutexattr.t
+let pthread_once_t = Pthread.Once.t
+let pthread_rwlock_t = Pthread.Rwlock.t
+let pthread_rwlockattr_t = Pthread.Rwlockattr.t
+let pthread_t = Pthread.T.t

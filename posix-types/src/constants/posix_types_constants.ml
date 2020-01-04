@@ -1,4 +1,4 @@
-let types =
+let number_types =
   [
     "blkcnt_t";
     "blksize_t";
@@ -20,7 +20,21 @@ let types =
     "suseconds_t";
     "time_t";
     "uid_t";
+  ]
+
+let abstract_types =
+  [
     "useconds_t";
+    "pthread_attr_t";
+    "pthread_cond_t";
+    "pthread_condattr_t";
+    "pthread_key_t";
+    "pthread_mutex_t";
+    "pthread_mutexattr_t";
+    "pthread_once_t";
+    "pthread_rwlock_t";
+    "pthread_rwlockattr_t";
+    "pthread_t";
   ]
 
 module Def (S : Cstubs.Types.TYPE) = struct
@@ -48,4 +62,33 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let is_time_t_float = S.constant "IS_TIME_T_FLOAT" S.bool
   let uid_t_size = S.constant "UID_T_SIZE" S.int
   let useconds_t_size = S.constant "USECONDS_T_SIZE" S.int
+  let pthread_attr_t_alignment = S.constant "PTHREAD_ATTR_T_ALIGNMENT" S.int
+  let pthread_cond_t_alignment = S.constant "PTHREAD_COND_T_ALIGNMENT" S.int
+
+  let pthread_condattr_t_alignment =
+    S.constant "PTHREAD_CONDATTR_T_ALIGNMENT" S.int
+
+  let pthread_key_t_alignment = S.constant "PTHREAD_KEY_T_ALIGNMENT" S.int
+  let pthread_mutex_t_alignment = S.constant "PTHREAD_MUTEX_T_ALIGNMENT" S.int
+
+  let pthread_mutexattr_t_alignment =
+    S.constant "PTHREAD_MUTEXATTR_T_ALIGNMENT" S.int
+
+  let pthread_once_t_alignment = S.constant "PTHREAD_ONCE_T_ALIGNMENT" S.int
+  let pthread_rwlock_t_alignment = S.constant "PTHREAD_RWLOCK_T_ALIGNMENT" S.int
+
+  let pthread_rwlockattr_t_alignment =
+    S.constant "PTHREAD_RWLOCKATTR_T_ALIGNMENT" S.int
+
+  let pthread_t_alignment = S.constant "PTHREAD_T_ALIGNMENT" S.int
+  let pthread_attr_t_size = S.constant "PTHREAD_ATTR_T_SIZE" S.int
+  let pthread_cond_t_size = S.constant "PTHREAD_COND_T_SIZE" S.int
+  let pthread_condattr_t_size = S.constant "PTHREAD_CONDATTR_T_SIZE" S.int
+  let pthread_key_t_size = S.constant "PTHREAD_KEY_T_SIZE" S.int
+  let pthread_mutex_t_size = S.constant "PTHREAD_MUTEX_T_SIZE" S.int
+  let pthread_mutexattr_t_size = S.constant "PTHREAD_MUTEXATTR_T_SIZE" S.int
+  let pthread_once_t_size = S.constant "PTHREAD_ONCE_T_SIZE" S.int
+  let pthread_rwlock_t_size = S.constant "PTHREAD_RWLOCK_T_SIZE" S.int
+  let pthread_rwlockattr_t_size = S.constant "PTHREAD_RWLOCKATTR_T_SIZE" S.int
+  let pthread_t_size = S.constant "PTHREAD_T_SIZE" S.int
 end

@@ -73,3 +73,100 @@ val time_t : time_t typ
 val uid_t : uid_t typ
 val useconds_t : useconds_t typ
 val suseconds_t : suseconds_t typ
+
+(** {3 Pthread API} *)
+
+module Pthread : sig
+  module Attr : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Cond : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Condattr : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Key : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Mutex : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Mutexattr : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Once : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Rwlock : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module Rwlockattr : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  module T : sig
+    type t
+
+    val t : t Ctypes.typ
+  end
+
+  type attr_t = Attr.t
+  type cond_t = Cond.t
+  type condattr_t = Condattr.t
+  type key_t = Key.t
+  type mutex_t = Mutex.t
+  type mutexattr_t = Mutexattr.t
+  type once_t = Once.t
+  type rwlock_t = Rwlock.t
+  type rwlockattr_t = Rwlockattr.t
+  type t = T.t
+end
+
+type pthread_attr_t = Pthread.Attr.t
+type pthread_cond_t = Pthread.Cond.t
+type pthread_condattr_t = Pthread.Condattr.t
+type pthread_key_t = Pthread.Key.t
+type pthread_mutex_t = Pthread.Mutex.t
+type pthread_mutexattr_t = Pthread.Mutexattr.t
+type pthread_once_t = Pthread.Once.t
+type pthread_rwlock_t = Pthread.Rwlock.t
+type pthread_rwlockattr_t = Pthread.Rwlockattr.t
+type pthread_t = Pthread.T.t
+
+val pthread_attr_t : pthread_attr_t Ctypes.typ
+val pthread_cond_t : pthread_cond_t Ctypes.typ
+val pthread_condattr_t : pthread_condattr_t Ctypes.typ
+val pthread_key_t : pthread_key_t Ctypes.typ
+val pthread_mutex_t : pthread_mutex_t Ctypes.typ
+val pthread_mutexattr_t : pthread_mutexattr_t Ctypes.typ
+val pthread_once_t : pthread_once_t Ctypes.typ
+val pthread_rwlock_t : pthread_rwlock_t Ctypes.typ
+val pthread_rwlockattr_t : pthread_rwlockattr_t Ctypes.typ
+val pthread_t : pthread_t Ctypes.typ
