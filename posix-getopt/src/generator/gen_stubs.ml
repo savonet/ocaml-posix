@@ -11,13 +11,6 @@ module Stubs = Posix_base.Generators.Stubs (struct
 
 #ifdef HAS_GETOPT_H
 #include <getopt.h>
-#else
-struct option {
-  char *name;
-  int has_arg;
-  int *flag;
-  int val;
-};
 #endif
 
 static int *getoptind() {
@@ -28,8 +21,8 @@ static int *getopterr() {
   return &opterr;
 }
 
-static int *getoptopt() {
-  return &optopt;
+static char *getoptopt() {
+  return (char *)&optopt;
 }
 
 static int *getoptreset() {

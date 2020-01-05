@@ -30,7 +30,7 @@ let optarg () =
   let p = getoptarg () in
   string_from_ptr p ~length:(strlen p)
 
-let print_error flag = opterr <-@ flag
+let print_error flag = opterr <-@ if flag then 1 else 0
 let () = print_error false
 
 let reset () =

@@ -2,7 +2,6 @@ open Ctypes
 
 module Def (F : Cstubs.FOREIGN) = struct
   open F
-
   module Types = Posix_getopt_types.Def (Posix_getopt_generated_types)
   include Types
 
@@ -24,7 +23,7 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let getoptarg = foreign "getoptarg" (void @-> returning (ptr char))
   let getoptind = foreign "getoptind" (void @-> returning (ptr int))
-  let getopterr = foreign "getopterr" (void @-> returning (ptr bool))
+  let getopterr = foreign "getopterr" (void @-> returning (ptr int))
   let getoptopt = foreign "getoptopt" (void @-> returning (ptr char))
   let getoptreset = foreign "getoptreset" (void @-> returning (ptr int))
   let strlen = foreign "strlen" (ptr char @-> returning int)
