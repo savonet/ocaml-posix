@@ -2,10 +2,9 @@
 
 Ocaml-posix provides various bindings to POSIX APIS.
 
-Each package consists of a low-level APIs to be used with [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) and high-level APIs that can 
-be used in OCaml projects.
+Each package consists of a low-level APIs to be used with [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) and high-level APIs that can be used in OCaml projects.
 
-The purpose of this repository is to aggregate all existing POSIX bindings into a single, consistent ubmrella. 
+The purpose of this repository is to aggregate all existing POSIX bindings into a single, consistent umbrella. 
 
 Currently, it contains:
 * `posix-types`, replacing and extending [ocaml-posix-types](https://github.com/yallop/ocaml-posix-types) as well as [PosixTypes](http://ocamllabs.io/ocaml-ctypes/PosixTypes.html) from `ocaml-ctypes`
