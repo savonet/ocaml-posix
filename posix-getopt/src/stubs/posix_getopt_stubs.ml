@@ -32,8 +32,8 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let getoptarg = foreign "getoptarg" (void @-> returning (ptr char))
   let getoptind = foreign "getoptind" (void @-> returning (ptr int))
-  let getopterr = foreign "getopterr" (void @-> returning (ptr int))
-  let getoptopt = foreign "getoptopt" (void @-> returning (ptr int))
+  let getopterr = foreign "getopterr" (void @-> returning (ptr bool))
+  let getoptopt = foreign "getoptopt" (void @-> returning (ptr char))
   let getoptreset = foreign "getoptreset" (void @-> returning (ptr int))
   let strlen = foreign "strlen" (ptr char @-> returning int)
 end

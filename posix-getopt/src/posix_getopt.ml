@@ -30,7 +30,7 @@ let optarg () =
   let p = getoptarg () in
   string_from_ptr p ~length:(strlen p)
 
-let print_error flag = opterr <-@ if flag then 1 else 0
+let print_error flag = opterr <-@ flag
 let () = print_error false
 
 let reset () =
@@ -52,14 +52,14 @@ let apply_opt c = function
   | `Required callback -> callback (optarg ())
 
 let check_result c opts select =
-  if c = '?' then raise (Unknown_option (Char.chr !@optopt));
-  let _optopt = if c = ':' then Char.chr !@optopt else c in
+  if c = '?' then raise (Unknown_option !@optopt);
+  let _optopt = if c = ':' then !@optopt else c in
   let opt = List.find (select _optopt) opts in
   if c = ':' then begin
     match opt.arg with
       | `None _ -> assert false
       | `Optional _ -> ()
-      | `Required _ -> raise (Missing_argument (Char.chr !@optopt))
+      | `Required _ -> raise (Missing_argument !@optopt)
   end;
   opt
 

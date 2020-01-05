@@ -1,4 +1,3 @@
-open Ctypes
 module Constants = Posix_uname_constants.Def (Posix_uname_generated_constants)
 include Constants
 
