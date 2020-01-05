@@ -1,0 +1,4 @@
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries posix-getopt.stubs posix-base))

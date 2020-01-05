@@ -62,6 +62,31 @@
 )
 
 (package
+ (name posix-uname)
+ (synopsis "Bindings for posix uname")
+ (description "posix-getopt provides a simple interface for POSIX uname.")
+ (depends
+  (dune (> 2.0))
+  ctypes
+  posix-base
+  unix-errno)
+)
+
+(package
+ (name posix-getopt)
+ (synopsis "Bindings for posix getopt/getopt_long")
+ (description "posix-getopt provides a simple interface for the POSIX getopt and its extensions, getopt_long and getopt_long_only.")
+ (depends
+  (dune (> 2.0))
+  dune-configurator
+  (ounit2 :with-test)
+  (posix-uname :with-test)
+  ctypes
+  posix-base
+  unix-errno)
+)
+
+(package
  (name posix-bindings)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
@@ -71,5 +96,7 @@
   posix-base
   posix-types
   posix-socket
-  posix-socket-unix)
+  posix-socket-unix
+  posix-uname
+  posix-getopt)
 )

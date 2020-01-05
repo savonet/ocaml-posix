@@ -1,0 +1,29 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_getopt)
+ (public_name posix-getopt)
+ (synopsis "posix-getopt provides access to the features exposed in unistd.h")
+ (foreign_stubs
+  (language c)
+  (names posix_getopt_generated_stubs))
+ (libraries ctypes unix-errno.unix posix-getopt.stubs))
+
+(rule
+ (targets posix_getopt_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_getopt_generated_stubs.c)
+ (deps config.h)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))
+
+(rule
+ (targets config.h)
+ (action
+  (run ./config/discover.exe)))

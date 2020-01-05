@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (package posix-getopt)
+ (libraries posix-uname posix-getopt ounit2))

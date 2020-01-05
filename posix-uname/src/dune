@@ -1,0 +1,24 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_uname)
+ (public_name posix-uname)
+ (synopsis
+   "posix-uname provides access to the features exposed in sys/utsname.h")
+ (foreign_stubs
+  (language c)
+  (names posix_uname_generated_stubs))
+ (libraries unix unix-errno.unix ctypes posix-uname.types posix-uname.stubs))
+
+(rule
+ (targets posix_uname_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_uname_generated_stubs.c)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))
