@@ -24,7 +24,7 @@
  (description "posix-types provides an API to the types defines in <sys/types.h>")
  (depends
   (dune (> 2.0))
-  posix-base
+  (posix-base (= :version))
   ctypes)
 )
 
@@ -35,8 +35,8 @@
  (depends
   (dune (> 2.0))
   ctypes
-  posix-base
-  posix-types
+  (posix-base (= :version))
+  (posix-types (= :version))
   unix-errno)
 )
 
@@ -46,7 +46,7 @@
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
  (depends
   (dune (> 2.0))
-  posix-base
+  (posix-base (= :version))
   ctypes)
 )
 
@@ -57,8 +57,8 @@
  (depends
   (dune (> 2.0))
   ctypes
-  posix-base
-  posix-socket
+  (posix-base (= :version))
+  (posix-socket (= :version))
   unix-errno)
 )
 
@@ -69,7 +69,7 @@
  (depends
   (dune (> 2.0))
   ctypes
-  posix-base
+  (posix-base (= :version))
   unix-errno)
 )
 
@@ -81,9 +81,9 @@
   (dune (> 2.0))
   dune-configurator
   (ounit2 :with-test)
-  (posix-uname :with-test)
+  (posix-uname (and :with-test (= :version)))
   ctypes
-  posix-base
+  (posix-base (= :version))
   unix-errno)
 )
 
@@ -94,10 +94,10 @@
  (depends
   (dune (> 2.0))
   ctypes
-  posix-base
-  posix-types
-  posix-socket
-  posix-socket-unix
-  posix-uname
-  posix-getopt)
+  (posix-base (= :version))
+  (posix-types (= :version))
+  (posix-socket (= :version))
+  (posix-socket-unix (= :version))
+  (posix-uname (= :version))
+  (posix-getopt (= :version)))
 )

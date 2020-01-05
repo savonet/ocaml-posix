@@ -13,9 +13,9 @@ depends: [
   "dune" {> "2.0"}
   "dune-configurator"
   "ounit2" {with-test}
-  "posix-uname" {with-test}
+  "posix-uname" {with-test & = version}
   "ctypes"
-  "posix-base"
+  "posix-base" {= version}
   "unix-errno"
 ]
 build: [

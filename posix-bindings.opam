@@ -11,12 +11,12 @@ bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
   "dune" {> "2.0"}
   "ctypes"
-  "posix-base"
-  "posix-types"
-  "posix-socket"
-  "posix-socket-unix"
-  "posix-uname"
-  "posix-getopt"
+  "posix-base" {= version}
+  "posix-types" {= version}
+  "posix-socket" {= version}
+  "posix-socket-unix" {= version}
+  "posix-uname" {= version}
+  "posix-getopt" {= version}
 ]
 build: [
   ["dune" "subst"] {pinned}
