@@ -111,7 +111,10 @@ let getopt_long_generic fn argv opts =
   let index = allocate int 0 in
   let rec f () =
     let ret =
-      fn _argc (CArray.start _argv) _short_opts (CArray.start _long_opts) index
+      Errno_unix.with_unix_exn (fun () ->
+          Errno_unix.raise_on_errno (fun () ->
+              fn _argc (CArray.start _argv) _short_opts
+                (CArray.start _long_opts) index))
     in
     if ret = -1 then remaining_argv _argv
     else begin
@@ -125,7 +128,16 @@ let getopt_long_generic fn argv opts =
   in
   f ()
 
-let getopt_long = getopt_long_generic getopt_long
-let getopt_long_only = getopt_long_generic getopt_long_only
 let has_getopt_long = has_getopt_long ()
 let has_getopt_long_only = has_getopt_long_only ()
+
+let getopt_long x y z t u =
+  let ret = getopt_long x y z t u in
+  if has_getopt_long then Some ret else None
+
+let getopt_long_only x y z t u =
+  let ret = getopt_long_only x y z t u in
+  if has_getopt_long_only then Some ret else None
+
+let getopt_long = getopt_long_generic getopt_long
+let getopt_long_only = getopt_long_generic getopt_long_only

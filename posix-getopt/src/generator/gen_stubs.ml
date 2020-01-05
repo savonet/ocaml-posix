@@ -11,6 +11,13 @@ module Stubs = Posix_base.Generators.Stubs (struct
 
 #ifdef HAS_GETOPT_H
 #include <getopt.h>
+#else
+struct option {
+  char *name;
+  int has_arg;
+  int *flag;
+  int val;
+};
 #endif
 
 static int *getoptind() {
@@ -43,7 +50,8 @@ static int has_getopt_long() {
 }
 
 int getopt_long(int x, char **y, const char *z, const struct option *t, int *u) {
-  return ENOSYS;
+  errno = ENOSYS;
+  return 0;
 }
 #else
 static int has_getopt_long() {
@@ -57,7 +65,8 @@ static int has_getopt_long_only() {
 }
 
 int getopt_long_only(int x, char **y, const char *z, const struct option *t, int *u) {
-  return ENOSYS;
+  errno = ENOSYS;
+  return 0;
 }
 #else
 static int has_getopt_long_only() {
