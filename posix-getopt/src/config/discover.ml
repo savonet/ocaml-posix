@@ -22,6 +22,7 @@ int main()
 
 let has_get_getopt_long_code =
   {|
+#include <stddef.h>
 #include <getopt.h>
 
 int main()
@@ -33,6 +34,7 @@ int main()
 
 let has_get_getopt_long_only_code =
   {|
+#include <stddef.h>
 #include <getopt.h>
 
 int main()
