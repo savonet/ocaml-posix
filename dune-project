@@ -1,5 +1,4 @@
 (lang dune 2.0)
-(version 2.0.0)
 (name posix-bindings)
 (source (github savonet/ocaml-posix))
 (license MIT)
