@@ -34,10 +34,13 @@ let print_error flag = opterr <-@ if flag then 1 else 0
 let () = print_error false
 
 let reset () =
-  if is_null optreset then (* GNU *)
-    optind <-@ 0 else (* Others *)
-                   optreset <-@ 1;
-  optind <-@ 1
+  (* GNU *)
+  if is_null optreset then optind <-@ 0
+  else begin
+    (* Others *)
+    optreset <-@ 1;
+    optind <-@ 1
+  end
 
 let remaining_argv _argv =
   let argc = CArray.length _argv in
