@@ -2,3 +2,27 @@
  (name gen_stubs)
  (modules gen_stubs)
  (libraries posix-getopt.stubs posix-base))
+
+(executable
+ (name gen_types_c)
+ (modules gen_types_c)
+ (libraries posix-getopt.types posix-base))
+
+(rule
+ (targets gen_types.c)
+ (deps config.h)
+ (action
+  (run ./gen_types_c.exe %{targets})))
+
+(rule
+ (targets config.h)
+ (action
+  (run ../config/discover.exe)))
+
+(rule
+ (targets gen_types_c)
+ (deps
+  (:c_code ./gen_types.c))
+ (action
+  (run %{ocaml-config:c_compiler} -I %{lib:ctypes:} -I
+    %{ocaml-config:standard_library} -o %{targets} %{c_code})))

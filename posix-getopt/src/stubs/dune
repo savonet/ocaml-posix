@@ -6,4 +6,14 @@
 (library
  (name posix_getopt_stubs)
  (public_name posix-getopt.stubs)
- (libraries ctypes.stubs))
+ (libraries posix-getopt.types ctypes.stubs))
+
+(rule
+ (targets posix_getopt_generated_types.ml)
+ (deps
+  (:exec ../generator/exec.sh)
+  (:gen ../generator/gen_types_c))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))

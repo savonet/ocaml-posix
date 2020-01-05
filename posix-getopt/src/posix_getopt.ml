@@ -92,10 +92,10 @@ let long_opt_of_opt { name; arg } =
   let long_name, short_name = name in
   let _opt = make Option.t in
   setf _opt Option.name long_name;
-  let has_args = match arg with `None _ -> 0 | _ -> 1 in
-  setf _opt Option.has_args has_args;
+  let has_arg = match arg with `None _ -> 0 | _ -> 1 in
+  setf _opt Option.has_arg has_arg;
   setf _opt Option.flag (from_voidp int null);
-  setf _opt Option.value (Char.code short_name);
+  setf _opt Option._val (Char.code short_name);
   _opt
 
 let getopt_long_generic fn argv opts =

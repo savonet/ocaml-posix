@@ -1,0 +1,9 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_getopt_types)
+ (public_name posix-getopt.types)
+ (libraries posix-base ctypes.stubs))

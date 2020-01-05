@@ -3,16 +3,8 @@ open Ctypes
 module Def (F : Cstubs.FOREIGN) = struct
   open F
 
-  module Option = struct
-    type t
-
-    let t : t structure typ = structure "option"
-    let name = field t "name" string
-    let has_args = field t "has_args" int
-    let flag = field t "flag" (ptr int)
-    let value = field t "value" int
-    let () = seal t
-  end
+  module Types = Posix_getopt_types.Def (Posix_getopt_generated_types)
+  include Types
 
   let getopt = foreign "getopt" (int @-> ptr string @-> string @-> returning int)
   let has_getopt_long = foreign "has_getopt_long" (void @-> returning bool)
