@@ -124,6 +124,5 @@ let getopt_long_generic fn argv opts =
 
 let getopt_long = getopt_long_generic getopt_long
 let getopt_long_only = getopt_long_generic getopt_long_only
-
 let has_getopt_long = has_getopt_long ()
 let has_getopt_long_only = has_getopt_long_only ()

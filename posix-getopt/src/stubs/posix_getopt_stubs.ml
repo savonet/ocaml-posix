@@ -15,7 +15,6 @@ module Def (F : Cstubs.FOREIGN) = struct
   end
 
   let getopt = foreign "getopt" (int @-> ptr string @-> string @-> returning int)
-
   let has_getopt_long = foreign "has_getopt_long" (void @-> returning bool)
 
   let getopt_long =
@@ -23,7 +22,8 @@ module Def (F : Cstubs.FOREIGN) = struct
       ( int @-> ptr string @-> string @-> ptr Option.t @-> ptr int
       @-> returning int )
 
-  let has_getopt_long_only = foreign "has_getopt_long_only" (void @-> returning bool)
+  let has_getopt_long_only =
+    foreign "has_getopt_long_only" (void @-> returning bool)
 
   let getopt_long_only =
     foreign "getopt_long_only"

@@ -13,7 +13,6 @@ exception Missing_argument of char
 
 val has_getopt_long : bool
 val has_getopt_long_only : bool
-
 val print_error : bool -> unit
 val reset : unit -> unit
 val getopt : string array -> short opt list -> string array
