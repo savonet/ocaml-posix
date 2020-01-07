@@ -1,5 +1,10 @@
 # ocaml-posix
 
+![GitHub](https://img.shields.io/github/license/savonet/ocaml-posix)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/savonet/ocaml-posix/CI)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/savonet/ocaml-posix)
+
+
 Ocaml-posix provides various bindings to POSIX APIS.
 
 Each package consists of a low-level APIs to be used with [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) and high-level APIs that can be used in OCaml projects.
