@@ -18,6 +18,10 @@ Currently, it contains:
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
 
+## API
+
+The API documentation can be consulted [here](http://www.liquidsoap.info/ocaml-posix/)
+
 ## How to build
 
 ```
