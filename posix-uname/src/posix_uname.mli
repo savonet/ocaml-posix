@@ -1,3 +1,6 @@
+
+(** Bindings to <sys/utsname.h> *)
+
 type utsname = {
   sysname : string;
   nodename : string;

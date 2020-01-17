@@ -1,6 +1,9 @@
 open Ctypes
 
+(** Ctypes types for <sys/utsname.h> *)
+
 module Def (S : Cstubs.Types.TYPE) : sig
+  (** Ctypes type for [struct utsname] *)
   module Utsname : sig
     type t
 

@@ -1,10 +1,12 @@
 open Ctypes
 open Posix_base.Types
 
-(** Some POSIX types. *)
+(** POSIX types from <sys/types.h>. This module is used to build 
+    further POSIX bindings. See {!Posix_time_types} for an example. *)
 
-(* arithmetic types from <sys/types.h> *)
 (** {2 POSIX arithmetic types} *)
+
+(** {3 Base modules} *)
 
 module Blkcnt : Signed.S
 module Blksize : Signed.S
@@ -28,6 +30,8 @@ module Uid : Unsigned.S
 module Useconds : Unsigned.S
 module Suseconds : Signed.S
 
+(** {3 Types} *)
+
 type blkcnt_t = Blkcnt.t
 type blksize_t = Blksize.t
 type clock_t = Clock.t
@@ -50,7 +54,7 @@ type uid_t = Uid.t
 type useconds_t = Useconds.t
 type suseconds_t = Suseconds.t
 
-(** {3 Values representing POSIX arithmetic types} *)
+(** {3 Values} *)
 
 val blkcnt_t : blkcnt_t typ
 val blksize_t : blksize_t typ
@@ -74,7 +78,9 @@ val uid_t : uid_t typ
 val useconds_t : useconds_t typ
 val suseconds_t : suseconds_t typ
 
-(** {3 Pthread API} *)
+(** {2 Pthread API} *)
+
+(** {3 Base module} *)
 
 module Pthread : sig
   module Attr : sig
@@ -149,6 +155,8 @@ module Pthread : sig
   type t = T.t
 end
 
+(** {3 Types} *)
+
 type pthread_attr_t = Pthread.Attr.t
 type pthread_cond_t = Pthread.Cond.t
 type pthread_condattr_t = Pthread.Condattr.t
@@ -159,6 +167,8 @@ type pthread_once_t = Pthread.Once.t
 type pthread_rwlock_t = Pthread.Rwlock.t
 type pthread_rwlockattr_t = Pthread.Rwlockattr.t
 type pthread_t = Pthread.T.t
+
+(** {3 Values} *)
 
 val pthread_attr_t : pthread_attr_t Ctypes.typ
 val pthread_cond_t : pthread_cond_t Ctypes.typ
