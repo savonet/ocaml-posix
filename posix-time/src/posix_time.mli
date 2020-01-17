@@ -1,7 +1,7 @@
-(* High-level API to <time.h> and <sys/time.h>.
- * See: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html
- * and: https://pubs.opengroup.org/onlinepubs/7908799/xsh/systime.h.html
- * for an explanation about the data structures and functions. *)
+(** High-level API to <time.h> and <sys/time.h>.
+    See: {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html} time.h}
+    and {{:https://pubs.opengroup.org/onlinepubs/7908799/xsh/systime.h.html} systime.h}
+    for an explanation about the data structures and functions. *)
 
 module Timespec : sig
   (** POSIX timespec time specifier with seconds and nanoseconds. A normalized
