@@ -10,10 +10,7 @@
 
 (rule
  (targets posix_signal_generated_constants.ml)
- (deps
-  (:exec ../generator/exec.sh)
-  (:gen ../generator/gen_constants_c))
  (action
   (with-stdout-to
    %{targets}
-   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+   (run ../generator/gen_constants_c))))
