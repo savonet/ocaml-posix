@@ -10,6 +10,7 @@
  (foreign_stubs
   (language c)
   (names posix_signal_generated_stubs))
+ (c_library_flags %{ocaml-config:native_c_libraries})
  (libraries unix unix-errno.unix ctypes posix-signal.types posix-signal.stubs))
 
 (rule
