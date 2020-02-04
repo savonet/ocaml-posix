@@ -1,0 +1,19 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_signal_types)
+ (public_name posix-signal.types)
+ (libraries posix-signal.constants posix-base ctypes.stubs))
+
+(rule
+ (targets posix_signal_generated_constants.ml)
+ (deps
+  (:exec ../generator/exec.sh)
+  (:gen ../generator/gen_constants_c))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))

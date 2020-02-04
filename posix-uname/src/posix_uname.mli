@@ -1,4 +1,3 @@
-
 (** Bindings to <sys/utsname.h> *)
 
 type utsname = {

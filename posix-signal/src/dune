@@ -1,0 +1,23 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_signal)
+ (public_name posix-signal)
+ (synopsis "posix-signal provides access to the features exposed in signal.h")
+ (foreign_stubs
+  (language c)
+  (names posix_signal_generated_stubs))
+ (libraries unix unix-errno.unix ctypes posix-signal.types posix-signal.stubs))
+
+(rule
+ (targets posix_signal_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_signal_generated_stubs.c)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))

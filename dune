@@ -1,7 +1,9 @@
 (rule
-  (alias upload-doc)
-  (deps (alias doc))
-  (action 
-    (progn (run cp -rf _doc/_html/ ../../docs)
-           (run git commit ../../docs -m"Update docs")
-           (run git push origin master))))
+ (alias upload-doc)
+ (deps
+  (alias doc))
+ (action
+  (progn
+   (run cp -rf _doc/_html/ ../../docs)
+   (run git commit ../../docs -m "Update docs")
+   (run git push origin master))))

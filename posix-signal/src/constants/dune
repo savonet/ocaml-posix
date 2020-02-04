@@ -1,0 +1,4 @@
+(library
+ (name posix_signal_constants)
+ (public_name posix-signal.constants)
+ (libraries ctypes.stubs))

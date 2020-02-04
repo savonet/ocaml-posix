@@ -19,9 +19,19 @@
 )
 
 (package
+ (name posix-signal)
+ (synopsis "Bindings for the types defined in <signal.h>")
+ (description "posix-signal provides an API to the types and bindings defined in <signal.h>")
+ (depends
+  (dune (> 2.0))
+  (posix-base (= :version))
+  ctypes)
+)
+
+(package
  (name posix-types)
  (synopsis "Bindings for the types defined in <sys/types.h>")
- (description "posix-types provides an API to the types defines in <sys/types.h>")
+ (description "posix-types provides an API to the types defined in <sys/types.h>")
  (depends
   (dune (> 2.0))
   (posix-base (= :version))

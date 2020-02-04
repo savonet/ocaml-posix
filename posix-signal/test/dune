@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (package posix-signal)
+ (libraries posix-signal))

@@ -17,6 +17,7 @@ Currently, it contains:
 * `posix-time`, replacing and extending [posix-time](https://github.com/mwweissmann/ocaml-posix-time) and replacing [unix-time](https://github.com/dsheets/ocaml-unix-time) and [posix-clock](https://github.com/mwweissmann/ocaml-posix-clock)
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
+* `posix-signal`
 
 ## API
 
