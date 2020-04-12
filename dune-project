@@ -75,7 +75,7 @@
 (package
  (name posix-uname)
  (synopsis "Bindings for posix uname")
- (description "posix-getopt provides a simple interface for POSIX uname.")
+ (description "posix-uname provides a simple interface for POSIX uname.")
  (depends
   (dune (> 2.0))
   ctypes
