@@ -10,7 +10,6 @@
 
 (package
  (name posix-base)
- (version 2.0.1)
  (synopsis "Base module for the posix bindings")
  (description "posix-base provides base tools for the posix binding modules.")
  (depends
