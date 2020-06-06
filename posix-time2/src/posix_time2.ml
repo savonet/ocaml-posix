@@ -1,5 +1,5 @@
 open Ctypes
-include Posix_time_stubs.Def (Posix_time_generated_stubs)
+include Posix_time2_stubs.Def (Posix_time2_generated_stubs)
 
 module Timespec = struct
   type t = { tv_sec : int64; tv_nsec : int64 }
@@ -200,10 +200,10 @@ end
 type clock = [ `Realtime | `Monotonic | `Process_cputime | `Thread_cputime ]
 
 let clock_id_of_clock = function
-  | `Realtime -> Posix_time_types.clock_realtime
-  | `Monotonic -> Posix_time_types.clock_monotonic
-  | `Process_cputime -> Posix_time_types.clock_process_cputime_id
-  | `Thread_cputime -> Posix_time_types.clock_thread_cputime_id
+  | `Realtime -> Posix_time2_types.clock_realtime
+  | `Monotonic -> Posix_time2_types.clock_monotonic
+  | `Process_cputime -> Posix_time2_types.clock_process_cputime_id
+  | `Thread_cputime -> Posix_time2_types.clock_thread_cputime_id
 
 let asctime tm = asctime (addr (Tm.from_tm tm))
 
@@ -270,9 +270,9 @@ let nanosleep timespec =
 type itimer = [ `Real | `Virtual | `Prof ]
 
 let int_of_itimer = function
-  | `Real -> Posix_time_types.itimer_real
-  | `Virtual -> Posix_time_types.itimer_virtual
-  | `Prof -> Posix_time_types.itimer_prof
+  | `Real -> Posix_time2_types.itimer_real
+  | `Virtual -> Posix_time2_types.itimer_virtual
+  | `Prof -> Posix_time2_types.itimer_prof
 
 let setitimer timer v =
   Errno_unix.with_unix_exn (fun () ->
@@ -304,12 +304,12 @@ let select r w e timeval =
       Errno_unix.raise_on_errno (fun () ->
           let maxfd = ref (-1) in
           let mk_fd_set l =
-            let set = allocate_n Posix_time_types.fd_set ~count:1 in
+            let set = allocate_n Posix_time2_types.fd_set ~count:1 in
             fd_zero set;
             List.iter
               (fun fd ->
                 let fd = Obj.magic fd in
-                if fd > Posix_time_types.fd_setsize then
+                if fd > Posix_time2_types.fd_setsize then
                   failwith "invalid Unix.file_descriptor!";
                 if fd > !maxfd then maxfd := fd;
                 fd_set fd set)

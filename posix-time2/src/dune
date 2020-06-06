@@ -4,20 +4,20 @@
    (:standard -warn-error -A))))
 
 (library
- (name posix_time)
+ (name posix_time2)
  (public_name posix-time2)
  (synopsis "posix-time2 provides access to POSIX's time-related APIs")
  (foreign_stubs
   (language c)
-  (names posix_time_generated_stubs))
+  (names posix_time2_generated_stubs))
  (libraries unix unix-errno.unix ctypes posix-time2.types posix-time2.stubs))
 
 (rule
- (targets posix_time_generated_stubs.ml)
+ (targets posix_time2_generated_stubs.ml)
  (action
   (run ./generator/gen_stubs.exe ml %{targets})))
 
 (rule
- (targets posix_time_generated_stubs.c)
+ (targets posix_time2_generated_stubs.c)
  (action
   (run ./generator/gen_stubs.exe c %{targets})))

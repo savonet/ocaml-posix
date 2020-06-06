@@ -1,5 +1,5 @@
 module Constants = Posix_base.Generators.Types (struct
-  module Types = Posix_time_constants.Def
+  module Types = Posix_time2_constants.Def
 
   let c_headers =
     {|

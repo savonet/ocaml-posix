@@ -1,4 +1,4 @@
-open Posix_time
+open Posix_time2
 
 let sprint_timespec { Timespec.tv_sec; tv_nsec } =
   Printf.sprintf "tv_sec: %Li, tv_nsec: %Li" tv_sec tv_nsec

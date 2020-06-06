@@ -1,4 +1,4 @@
 (library
- (name posix_time_constants)
+ (name posix_time2_constants)
  (public_name posix-time2.constants)
  (libraries posix-types ctypes.stubs))

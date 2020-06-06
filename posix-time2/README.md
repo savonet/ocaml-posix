@@ -9,8 +9,8 @@ The C API bound in this module are defined on POSIX systems by the following fil
 * [time.h](https://pubs.opengroup.org/onlinepubs/009695399/basedefs/time.h.html)
 * [sys/time.h](https://pubs.opengroup.org/onlinepubs/7908799/xsh/systime.h.html)
 
-The low-level API mirrors as much as possible the original POSIX definitions. It is defined in [posix_time_types.mli](src/types/posix_time_types.mli). This API can be used to build further C bindings using `ocaml-ctypes`.
+The low-level API mirrors as much as possible the original POSIX definitions. It is defined in [posix_time2_types.mli](src/types/posix_time2_types.mli). This API can be used to build further C bindings using `ocaml-ctypes`.
 
-[posix_time.mli](src/posix_time.mli) provides a high-level API compatible exported from the low-level bindings.
+[posix_time2.mli](src/posix_time2.mli) provides a high-level API compatible exported from the low-level bindings.
 
 Happy hacking!

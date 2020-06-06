@@ -4,12 +4,12 @@
    (:standard -warn-error -A))))
 
 (library
- (name posix_time_stubs)
+ (name posix_time2_stubs)
  (public_name posix-time2.stubs)
  (libraries posix-types posix-time2.types ctypes.stubs))
 
 (rule
- (targets posix_time_generated_types.ml)
+ (targets posix_time2_generated_types.ml)
  (action
   (with-stdout-to
    %{targets}

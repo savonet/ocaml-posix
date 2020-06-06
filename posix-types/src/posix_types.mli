@@ -2,7 +2,7 @@ open Ctypes
 open Posix_base.Types
 
 (** POSIX types from <sys/types.h>. This module is used to build 
-    further POSIX bindings. See {!Posix_time_types} for an example. *)
+    further POSIX bindings. See {!Posix_time2_types} for an example. *)
 
 (** {2 POSIX arithmetic types} *)
 

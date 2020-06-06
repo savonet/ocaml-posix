@@ -1,5 +1,5 @@
 open Ctypes
-module Constants = Posix_time_constants.Def (Posix_time_generated_constants)
+module Constants = Posix_time2_constants.Def (Posix_time2_generated_constants)
 include Constants
 
 type fd_set = unit Ctypes.abstract
