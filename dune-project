@@ -25,7 +25,8 @@
  (depends
   (dune (> 2.5))
   (posix-base (= :version))
-  ctypes)
+  ctypes
+  unix-errno)
 )
 
 (package
