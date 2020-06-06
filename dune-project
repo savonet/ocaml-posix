@@ -34,6 +34,7 @@
  (synopsis "Bindings for the types defined in <sys/types.h>")
  (description "posix-types provides an API to the types defined in <sys/types.h>")
  (depends
+  (ocaml (>= 4.03))
   (dune (> 2.5))
   (posix-base (= :version))
   ctypes)
