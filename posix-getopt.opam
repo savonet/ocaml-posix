@@ -33,4 +33,4 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/savonet/ocaml-posix.git"
-available: os != "win32"
+available: os != "win32" & os != "bsd"

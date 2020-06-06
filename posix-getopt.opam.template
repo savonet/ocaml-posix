@@ -1,1 +1,1 @@
-available: os != "win32"
+available: os != "win32" & os != "bsd"
