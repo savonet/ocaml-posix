@@ -5,12 +5,12 @@
 
 (library
  (name posix_time)
- (public_name posix-time)
- (synopsis "posix-time provides access to POSIX's time-related APIs")
+ (public_name posix-time2)
+ (synopsis "posix-time2 provides access to POSIX's time-related APIs")
  (foreign_stubs
   (language c)
   (names posix_time_generated_stubs))
- (libraries unix unix-errno.unix ctypes posix-time.types posix-time.stubs))
+ (libraries unix unix-errno.unix ctypes posix-time2.types posix-time2.stubs))
 
 (rule
  (targets posix_time_generated_stubs.ml)

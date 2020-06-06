@@ -14,7 +14,7 @@ The purpose of this repository is to aggregate all existing POSIX bindings into 
 Currently, it contains:
 * `posix-types`, replacing and extending [ocaml-posix-types](https://github.com/yallop/ocaml-posix-types) as well as [PosixTypes](http://ocamllabs.io/ocaml-ctypes/PosixTypes.html) from `ocaml-ctypes`
 * `posix-posix-socket` and `posix-socket-unix`, replacing and extending [sys-socket](https://github.com/toots/ocaml-sys-socket)
-* `posix-time`, replacing and extending [posix-time](https://github.com/mwweissmann/ocaml-posix-time) and replacing [unix-time](https://github.com/dsheets/ocaml-unix-time) and [posix-clock](https://github.com/mwweissmann/ocaml-posix-clock)
+* `posix-time2`, replacing and extending [posix-time2](https://github.com/mwweissmann/ocaml-posix-time2) and replacing [unix-time](https://github.com/dsheets/ocaml-unix-time) and [posix-clock](https://github.com/mwweissmann/ocaml-posix-clock)
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
 * `posix-signal`

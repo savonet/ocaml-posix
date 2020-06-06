@@ -1,4 +1,4 @@
-# posix-time
+# posix-time2
 
 This module provides OCaml ctypes bindings to system-specific low-level time-related structures, functions and data-types.
 

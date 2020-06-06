@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (package posix-time2)
+ (libraries posix-time2 threads))

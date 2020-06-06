@@ -9,7 +9,7 @@ license: "MIT"
 homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
-  "dune" {> "2.0"}
+  "dune" {> "2.5"}
   "ctypes"
   "posix-base" {= version}
   "posix-types" {= version}

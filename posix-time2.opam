@@ -3,14 +3,14 @@ opam-version: "2.0"
 version: "2.0.0"
 synopsis: "Bindings for posix time functions"
 description:
-  "posix-time provides the types and bindings for posix time APIs."
+  "posix-time2 provides the types and bindings for posix time APIs."
 maintainer: ["romain.beauxis@gmail.com"]
 authors: ["Romain Beauxis"]
 license: "MIT"
 homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
-  "dune" {> "2.0"}
+  "dune" {> "2.5"}
   "ctypes"
   "posix-base" {= version}
   "posix-types" {= version}
