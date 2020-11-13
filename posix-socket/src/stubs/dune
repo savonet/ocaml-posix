@@ -12,7 +12,7 @@
  (targets posix_socket_generated_types.ml)
  (deps
   (:exec ../generator/exec.sh)
-  (:gen ../generator/gen_types_c))
+  (:gen ../generator/gen_types_c_target.exe))
  (action
   (with-stdout-to
    %{targets}

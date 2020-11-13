@@ -14,7 +14,7 @@
   (run ./gen_types_c.exe %{targets})))
 
 (rule
- (targets gen_types_c)
+ (targets gen_types_c_target.exe)
  (deps
   (:c_code ./gen_types.c))
  (action
@@ -32,7 +32,7 @@
   (run ./gen_constants_c.exe %{targets})))
 
 (rule
- (targets gen_constants_c)
+ (targets gen_constants_c_target.exe)
  (deps
   (:c_code ./gen_constants.c))
  (action

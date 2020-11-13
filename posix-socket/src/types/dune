@@ -12,7 +12,7 @@
  (targets posix_socket_generated_constants.ml)
  (deps
   (:exec ../generator/exec.sh)
-  (:gen ../generator/gen_constants_c))
+  (:gen ../generator/gen_constants_c_target.exe))
  (action
   (with-stdout-to
    %{targets}
