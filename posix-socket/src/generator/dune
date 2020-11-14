@@ -1,17 +1,55 @@
-(executable
- (name gen_stubs)
- (modules gen_stubs)
- (libraries posix-socket.stubs posix-base))
+(rule
+ (targets gen_stubs.exe)
+ (deps
+  (:ml ./gen_stubs.ml))
+ (action
+  (run %{ocamlopt}
+    -I %{lib:ctypes.stubs:}
+    -I %{lib:integers:}
+    -I %{lib:posix-base:}
+    -I ../stubs
+    -I ../stubs/.posix_socket_stubs.objs/native/
+    -I ../stubs/.posix_socket_stubs.objs/byte/
+    %{lib:str:str.cmxa}
+    %{lib:integers:integers.cmxa}
+    %{lib:ctypes.stubs:ctypes.cmxa}
+    %{lib:ctypes.stubs:cstubs.cmxa}
+    %{lib:posix-base:posix_base.cmxa}
+    %{lib:posix-socket:constants/posix_socket_constants.cmxa}
+    %{lib:posix-socket:types/posix_socket_types.cmxa}
+    %{lib:posix-socket:stubs/posix_socket_stubs.cmxa}
+    %{ml}
+    -o %{targets})))
 
-(executable
- (name gen_types_c)
- (modules gen_types_c)
- (libraries posix-socket.types posix-base))
+(rule
+ (targets gen_types_c.exe)
+ (deps
+  (:ml gen_types_c.ml))
+ (action
+  (run %{ocamlopt}
+    -I %{lib:ctypes.stubs:}
+    -I %{lib:integers:}
+    -I %{lib:posix-base:}
+    -I ../types
+    -I ../types/.posix_socket_types.objs/native/
+    -I ../types/.posix_socket_types.objs/byte/
+    %{lib:str:str.cmxa}
+    %{lib:integers:integers.cmxa}
+    %{lib:ctypes.stubs:ctypes.cmxa}
+    %{lib:ctypes.stubs:cstubs.cmxa}
+    %{lib:posix-base:posix_base.cmxa}
+    %{lib:posix-socket:constants/posix_socket_constants.cmxa}
+    %{lib:posix-socket:types/posix_socket_types.cmxa}
+    %{ml}
+    -o %{targets})))
 
 (rule
  (targets gen_types.c)
+ (deps
+  (:exec ./exec.sh)
+  (:gen ./gen_types_c.exe))  
  (action
-  (run ./gen_types_c.exe %{targets})))
+  (system "./%{exec} %{ocaml-config:system} ./%{gen} %{targets}")))
 
 (rule
  (targets gen_types_c_target.exe)
@@ -21,15 +59,34 @@
   (run %{ocaml-config:c_compiler} -I %{lib:ctypes:} -I
     %{ocaml-config:standard_library} -o %{targets} %{c_code})))
 
-(executable
- (name gen_constants_c)
- (modules gen_constants_c)
- (libraries posix-socket.constants posix-base))
+(rule
+ (targets gen_constants_c.exe)
+ (deps
+  (:ml gen_constants_c.ml))
+ (action
+  (run %{ocamlopt}
+    -I %{lib:ctypes.stubs:}
+    -I %{lib:integers:}
+    -I %{lib:posix-base:}
+    -I ../constants
+    -I ../constants/.posix_socket_constants.objs/native/
+    -I ../constants/.posix_socket_constants.objs/byte/
+    %{lib:str:str.cmxa}
+    %{lib:integers:integers.cmxa}
+    %{lib:ctypes.stubs:ctypes.cmxa}
+    %{lib:ctypes.stubs:cstubs.cmxa}
+    %{lib:posix-base:posix_base.cmxa}
+    %{lib:posix-socket:constants/posix_socket_constants.cmxa}
+    %{ml}
+    -o %{targets})))
 
 (rule
  (targets gen_constants.c)
+ (deps
+  (:exec ./exec.sh)
+  (:gen ./gen_constants_c.exe))
  (action
-  (run ./gen_constants_c.exe %{targets})))
+  (system "./%{exec} %{ocaml-config:system} ./%{gen} %{targets}")))
 
 (rule
  (targets gen_constants_c_target.exe)

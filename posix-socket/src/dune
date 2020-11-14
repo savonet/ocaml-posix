@@ -15,10 +15,16 @@
 
 (rule
  (targets posix_socket_generated_stubs.ml)
+ (deps
+  (:exec ./generator/exec.sh)
+  (:gen ./generator/gen_stubs.exe))
  (action
-  (run ./generator/gen_stubs.exe ml %{targets})))
+  (system "./%{exec} %{ocaml-config:system} ./%{gen} ml %{targets}")))
 
 (rule
  (targets posix_socket_generated_stubs.c)
+ (deps
+  (:exec ./generator/exec.sh)
+  (:gen ./generator/gen_stubs.exe))
  (action
-  (run ./generator/gen_stubs.exe c %{targets})))
+  (system "./%{exec} %{ocaml-config:system} ./%{gen} c %{targets}")))
