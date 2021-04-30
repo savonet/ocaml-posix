@@ -8,7 +8,7 @@ type arg =
 
 type 'a opt = { name : 'a; arg : arg }
 
-exception Unknown_option of char
+exception Unknown_option of string
 exception Missing_argument of char
 
 val has_getopt_long : bool

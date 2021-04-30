@@ -11,12 +11,12 @@ type arg =
 
 type 'a opt = { name : 'a; arg : arg }
 
-exception Unknown_option of char
+exception Unknown_option of string
 exception Missing_argument of char
 
 let () =
   Printexc.register_printer (function
-    | Unknown_option c -> Some (Printf.sprintf "Unknown getopt option: %c" c)
+    | Unknown_option s -> Some (Printf.sprintf "Unknown getopt option: %s" s)
     | Missing_argument c ->
         Some (Printf.sprintf "Missing argument for getopt option: %c" c)
     | _ -> None)
@@ -54,8 +54,17 @@ let apply_opt c = function
       if c = ':' then callback None else callback (Some (optarg ()))
   | `Required callback -> callback (optarg ())
 
-let check_result c opts select =
-  if c = '?' then raise (Unknown_option !@optopt);
+let unknown_option _argv =
+  let _optopt = !@optopt in
+  let unknown =
+    if _optopt <> Char.chr 0 then
+      Printf.sprintf "-%c" _optopt
+    else
+      List.nth (CArray.to_list _argv) (!@optind - 1) in
+  raise (Unknown_option unknown)
+
+let check_result _argv c opts select =
+  if c = '?' then unknown_option _argv;
   let _optopt = if c = ':' then !@optopt else c in
   let opt = List.find (select _optopt) opts in
   if c = ':' then begin
@@ -80,7 +89,7 @@ let getopt argv opts =
     if ret = -1 then remaining_argv _argv
     else begin
       let c = Char.chr ret in
-      let { arg; _ } = check_result c opts (fun c { name; _ } -> name = c) in
+      let { arg; _ } = check_result _argv c opts (fun c { name; _ } -> name = c) in
       apply_opt c arg;
       f ()
     end
@@ -120,7 +129,7 @@ let getopt_long_generic fn argv opts =
     else begin
       let c = Char.chr ret in
       let { arg; _ } =
-        check_result c opts (fun c { name; _ } -> snd name = c)
+        check_result _argv c opts (fun c { name; _ } -> snd name = c)
       in
       apply_opt c arg;
       f ()
