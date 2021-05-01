@@ -150,6 +150,52 @@ let test_complex_scenario _ =
   assert_equal true !foo;
   assert_equal [| "bla" |] ret
 
+let test_short_unknown_before _ =
+  reset ();
+  let argv = [| "progname"; "-u"; "-b" |] in
+  let test = ref true in
+  let opt = { name = 'b'; arg = `None (fun () -> test := false) } in
+  try
+    ignore (getopt argv [opt]);
+    assert false
+  with
+  | Unknown_option "-u" -> assert !test
+
+let test_short_unknown_after _ =
+  reset ();
+  let argv = [| "progname"; "-b"; "--unknown" |] in
+  let test = ref false in
+  let opt = { name = 'b'; arg = `None (fun () -> test := true) } in
+  try
+    ignore (getopt argv [opt]);
+    assert false
+  with
+  | Unknown_option "--" -> assert !test
+
+let test_long_unknown_before _ =
+  skip_if (not has_getopt_long) "Doesn't support getopt_long";
+  reset ();
+  let argv = [| "progname"; "--unknown"; "--bla" |] in
+  let test = ref true in
+  let opt = { name = ("bla", 'b'); arg = `None (fun () -> test := false) } in
+  try
+    ignore (getopt_long argv [opt]);
+    assert false
+  with
+  | Unknown_option "--unknown" -> assert !test
+
+let test_long_unknown_after _ =
+  skip_if (not has_getopt_long) "Doesn't support getopt_long";
+  reset ();
+  let argv = [| "progname"; "--bla"; "--unknown" |] in
+  let test = ref false in
+  let opt = { name = ("bla", 'b'); arg = `None (fun () -> test := true) } in
+  try
+    ignore (getopt_long argv [opt]);
+    assert false
+  with
+  | Unknown_option "--unknown" -> assert !test
+
 let suite =
   "getopt tests"
   >::: [
@@ -165,6 +211,10 @@ let suite =
          "test_remaining_arg" >:: test_remaining_arg;
          "test_permuted_remaining_arg" >:: test_permuted_remaining_arg;
          "test_complex_scenario" >:: test_complex_scenario;
+         "test_short_unknown_before" >:: test_short_unknown_before;
+         "test_short_unknown_after" >:: test_short_unknown_after;
+         "test_long_unknown_before" >:: test_long_unknown_before;
+         "test_long_unknown_after" >:: test_long_unknown_after;
        ]
 
 let () = run_test_tt_main suite
