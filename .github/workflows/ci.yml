@@ -10,19 +10,17 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout code
+      uses: actions/checkout@v1
     - name: Setup OCaml
-      uses: avsm/setup-ocaml@master
-    - name: Install depext module
-      run: opam install -y depext
-    - name: Pin locally
+      uses: ocaml/setup-ocaml@v2
+    - name: Pin packages
       run: opam pin -y add --no-action .
-    - name: Install locally
-      run: opam depext -y -i posix-bindings ounit2
-    - name: Build locally
-      run: eval $(opam env) && dune build
+    - name: Install packages
+      run: opam install -y posix-bindings ounit2
     - name: Run tests locally
-      run: eval $(opam env) && dune runtest
+      run: opam exec dune runtest
