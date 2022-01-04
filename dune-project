@@ -15,7 +15,7 @@
  (depends
   (dune (> 2.5))
   integers
-  ctypes)
+  (ctypes (>= 0.12.1)))
 )
 
 (package
