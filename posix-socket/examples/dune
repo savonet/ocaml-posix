@@ -2,9 +2,3 @@
  (name getaddrinfo)
  (modules getaddrinfo)
  (libraries posix-socket))
-
-(rule
- (alias runtest)
- (package posix-socket)
- (action
-  (run ./getaddrinfo.exe www.google.com 80)))
