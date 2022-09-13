@@ -12,6 +12,7 @@ bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
   "dune" {> "2.5"}
   "posix-base" {= version}
+  "odoc" {with-doc}
   "ctypes"
   "unix-errno"
 ]

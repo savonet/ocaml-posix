@@ -10,6 +10,7 @@ homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
   "dune" {> "2.5"}
+  "odoc" {with-doc}
   "ctypes"
   "posix-base" {= version}
   "unix-errno"
