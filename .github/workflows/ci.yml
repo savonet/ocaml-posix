@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -14,13 +18,5 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v1
-    - name: Setup OCaml
-      uses: ocaml/setup-ocaml@v2
-    - name: Pin packages
-      run: opam pin -y add --no-action .
-    - name: Install packages
-      run: opam install -y posix-bindings ounit2
-    - name: Run tests locally
-      run: opam exec dune runtest
+    - name: Build and test module
+      uses: savonet/build-and-test-ocaml-module@main
