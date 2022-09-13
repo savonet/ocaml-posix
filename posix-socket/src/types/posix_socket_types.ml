@@ -50,6 +50,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let ai_flags = S.field t "ai_flags" S.int
     let ai_addrlen = S.field t "ai_addrlen" socklen_t
     let ai_addr = S.field t "ai_addr" (S.ptr Sockaddr.t)
+    let ai_next = S.field t "ai_next" (S.ptr t)
     let () = S.seal t
   end
 

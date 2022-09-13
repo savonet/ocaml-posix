@@ -90,9 +90,10 @@ let getaddrinfo host port =
   let hints = allocate_n Types.Addrinfo.t ~count:1 in
   hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost lor ni_numericserv;
   let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
-  let rec extract_len len = function
-    | o when is_null !@o -> len
-    | o -> extract_len (len + 1) (o +@ 1)
+  let rec extract_len len p =
+    match !@p |-> Types.Addrinfo.ai_next with
+    | p when is_null !@p -> len
+    | p -> extract_len (len + 1) p 
   in
   let copy p =
     let count = extract_len 0 p in

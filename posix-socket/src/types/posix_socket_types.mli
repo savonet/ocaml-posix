@@ -42,6 +42,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val ai_flags : (int, t structure) S.field
     val ai_addrlen : (socklen_t, t structure) S.field
     val ai_addr : (sockaddr ptr, t structure) S.field
+    val ai_next : (t structure ptr, t structure) S.field
   end
 
   module Servent : sig
