@@ -90,19 +90,25 @@ let getaddrinfo host port =
   let hints = allocate_n Types.Addrinfo.t ~count:1 in
   hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost lor ni_numericserv;
   let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
-  let rec extract_len len p =
-    match !@p |-> Types.Addrinfo.ai_next with
-      | p when is_null !@p -> len
-      | p -> extract_len (len + 1) p
+  let rec count len p =
+    match !@p with
+      | p when is_null p -> len
+      | p -> count (len + 1) (p |-> Types.Addrinfo.ai_next)
   in
   let copy p =
-    let count = extract_len 0 p in
-    let ret = allocate_n (ptr Types.Sockaddr.t) ~count in
-    for i = 0 to count - 1 do
-      let elp = p +@ i in
-      let el = allocate Sockaddr.t !@(!@(!@elp |-> Types.Addrinfo.ai_addr)) in
-      ret +@ i <-@ el
-    done;
+    let count = count 0 p in
+    let ret = allocate_n (ptr Types.Sockaddr.t) ~count:(count + 1) in
+    let rec assign_sockaddr pos p =
+      if not (is_null !@p) then (
+        let addrinfo = !@p in
+        let sockaddr = allocate Sockaddr.t !@(!@(addrinfo |-> Types.Addrinfo.ai_addr)) in
+        ret +@ pos <-@ sockaddr;
+        assign_sockaddr (pos+1) (addrinfo |-> Types.Addrinfo.ai_next)
+      ) else (
+        ret +@ pos <-@ (from_voidp (Sockaddr.t) null)
+      )
+    in
+    assign_sockaddr 0 p;
     ret
   in
   match getaddrinfo host port hints p with

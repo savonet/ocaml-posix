@@ -1,7 +1,7 @@
 (env
  (dev
   (flags
-   (:standard -warn-error -A))))
+   (:standard -g -warn-error -A))))
 
 (library
  (name posix_socket)
