@@ -57,11 +57,11 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let select =
     foreign "select"
-      ( int
+      (int
       @-> ptr Posix_time2_types.fd_set
       @-> ptr Posix_time2_types.fd_set
       @-> ptr Posix_time2_types.fd_set
-      @-> ptr Timeval.t @-> returning int )
+      @-> ptr Timeval.t @-> returning int)
 
   let utimes = foreign "utimes" (string @-> ptr Timeval.t @-> returning int)
 end

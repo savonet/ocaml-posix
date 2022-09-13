@@ -62,7 +62,7 @@ module Types = struct
   let mkArithmetic ~name ~size ~is_float : (module Arithmetic) =
     match (is_float, size) with
       | true, _ ->
-          ( module struct
+          (module struct
             type t = float
 
             let t = typedef float name
@@ -71,9 +71,9 @@ module Types = struct
             let of_int64 = Int64.to_float
             let to_float x = x
             let of_float x = x
-          end )
+          end)
       | false, 1 | false, 2 ->
-          ( module struct
+          (module struct
             type t = int
 
             let t = typedef int name
@@ -82,9 +82,9 @@ module Types = struct
             let of_int64 = Int64.to_int
             let to_float = float_of_int
             let of_float = int_of_float
-          end )
+          end)
       | false, 4 ->
-          ( module struct
+          (module struct
             type t = int32
 
             let t = typedef int32_t name
@@ -93,9 +93,9 @@ module Types = struct
             let of_int64 = Int64.to_int32
             let to_float = Int32.to_float
             let of_float = Int32.of_float
-          end )
+          end)
       | false, 8 ->
-          ( module struct
+          (module struct
             type t = int64
 
             let t = typedef int64_t name
@@ -104,7 +104,7 @@ module Types = struct
             let of_int64 x = x
             let to_float = Int64.to_float
             let of_float = Int64.of_float
-          end )
+          end)
       | _ -> assert false
 
   module type Signed = sig
@@ -142,29 +142,29 @@ module Types = struct
   let mkSigned ~name ~size : (module Signed) =
     match size with
       | 1 ->
-          ( module struct
+          (module struct
             include Int8
 
             let t = typedef t name
-          end )
+          end)
       | 2 ->
-          ( module struct
+          (module struct
             include Int16
 
             let t = typedef t name
-          end )
+          end)
       | 4 ->
-          ( module struct
+          (module struct
             include Int32
 
             let t = typedef t name
-          end )
+          end)
       | 8 ->
-          ( module struct
+          (module struct
             include Int64
 
             let t = typedef t name
-          end )
+          end)
       | _ -> assert false
 
   module type Unsigned = sig
@@ -202,28 +202,28 @@ module Types = struct
   let mkUnsigned ~name ~size : (module Unsigned) =
     match size with
       | 1 ->
-          ( module struct
+          (module struct
             include UInt8
 
             let t = typedef t name
-          end )
+          end)
       | 2 ->
-          ( module struct
+          (module struct
             include UInt16
 
             let t = typedef t name
-          end )
+          end)
       | 4 ->
-          ( module struct
+          (module struct
             include UInt32
 
             let t = typedef t name
-          end )
+          end)
       | 8 ->
-          ( module struct
+          (module struct
             include UInt64
 
             let t = typedef t name
-          end )
+          end)
       | _ -> assert false
 end

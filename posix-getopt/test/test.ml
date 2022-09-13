@@ -158,8 +158,7 @@ let test_short_unknown_before _ =
   try
     ignore (getopt argv [opt]);
     assert false
-  with
-  | Unknown_option "-u" -> assert !test
+  with Unknown_option "-u" -> assert !test
 
 let test_short_unknown_after _ =
   reset ();
@@ -169,8 +168,7 @@ let test_short_unknown_after _ =
   try
     ignore (getopt argv [opt]);
     assert false
-  with
-  | Unknown_option "--" -> assert !test
+  with Unknown_option "--" -> assert !test
 
 let test_long_unknown_before _ =
   skip_if (not has_getopt_long) "Doesn't support getopt_long";
@@ -181,8 +179,7 @@ let test_long_unknown_before _ =
   try
     ignore (getopt_long argv [opt]);
     assert false
-  with
-  | Unknown_option "--unknown" -> assert !test
+  with Unknown_option "--unknown" -> assert !test
 
 let test_long_unknown_after _ =
   skip_if (not has_getopt_long) "Doesn't support getopt_long";
@@ -193,8 +190,7 @@ let test_long_unknown_after _ =
   try
     ignore (getopt_long argv [opt]);
     assert false
-  with
-  | Unknown_option "--unknown" -> assert !test
+  with Unknown_option "--unknown" -> assert !test
 
 let suite =
   "getopt tests"

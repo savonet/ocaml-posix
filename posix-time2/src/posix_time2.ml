@@ -168,10 +168,10 @@ module Tm = struct
                         | 0 -> (
                             match compare x.tm_min y.tm_min with
                               | 0 -> compare x.tm_sec y.tm_sec
-                              | d -> d )
-                        | d -> d )
-                  | d -> d )
-            | d -> d )
+                              | d -> d)
+                        | d -> d)
+                  | d -> d)
+            | d -> d)
       | d -> d
 end
 

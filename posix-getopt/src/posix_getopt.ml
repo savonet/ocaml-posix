@@ -57,10 +57,9 @@ let apply_opt c = function
 let unknown_option _argv =
   let _optopt = !@optopt in
   let unknown =
-    if _optopt <> Char.chr 0 then
-      Printf.sprintf "-%c" _optopt
-    else
-      List.nth (CArray.to_list _argv) (!@optind - 1) in
+    if _optopt <> Char.chr 0 then Printf.sprintf "-%c" _optopt
+    else List.nth (CArray.to_list _argv) (!@optind - 1)
+  in
   raise (Unknown_option unknown)
 
 let check_result _argv c opts select =
@@ -89,7 +88,9 @@ let getopt argv opts =
     if ret = -1 then remaining_argv _argv
     else begin
       let c = Char.chr ret in
-      let { arg; _ } = check_result _argv c opts (fun c { name; _ } -> name = c) in
+      let { arg; _ } =
+        check_result _argv c opts (fun c { name; _ } -> name = c)
+      in
       apply_opt c arg;
       f ()
     end

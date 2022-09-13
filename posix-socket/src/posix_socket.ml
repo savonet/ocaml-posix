@@ -80,7 +80,7 @@ let getnameinfo sockaddr_ptr =
               | ptr when is_null ptr -> failwith "getnameinfo"
               | ptr ->
                   Unsigned.UInt16.to_int
-                    (ntohs !@(ptr |-> Types.Servent.s_port)) )
+                    (ntohs !@(ptr |-> Types.Servent.s_port)))
         in
         (host, port)
     | _ -> failwith "getnameinfo"
@@ -92,8 +92,8 @@ let getaddrinfo host port =
   let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
   let rec extract_len len p =
     match !@p |-> Types.Addrinfo.ai_next with
-    | p when is_null !@p -> len
-    | p -> extract_len (len + 1) p 
+      | p when is_null !@p -> len
+      | p -> extract_len (len + 1) p
   in
   let copy p =
     let count = extract_len 0 p in
@@ -126,4 +126,4 @@ let from_unix_sockaddr = function
       let inet_addr = Unix.string_of_inet_addr inet_addr in
       match getaddrinfo inet_addr port with
         | p when is_null !@p -> failwith "Resolution failed!"
-        | p -> !@p )
+        | p -> !@p)
