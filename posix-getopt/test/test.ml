@@ -3,6 +3,18 @@ open Posix_getopt
 
 let sysname = Posix_uname.((uname ()).sysname)
 
+let is_alpine =
+  try
+    Process.read_stdout "/bin/sh"
+      [| "-c"; "cat /etc/os-release | grep alpine" |]
+    <> []
+  with _ -> false
+
+let is_s390x_debian =
+  try
+    List.hd (Process.read_stdout "dpkg" [| "--print-architecture" |]) = "s390x"
+  with _ -> false
+
 let test_short_flag _ =
   reset ();
   let argv = [| "progname"; "-b" |] in
@@ -42,6 +54,7 @@ let test_long_required_short _ =
   assert (Array.length ret = 0)
 
 let test_short_required_no_arg _ =
+  skip_if is_s390x_debian "Not supported";
   reset ();
   let argv = [| "progname"; "-b" |] in
   let opt = { name = 'b'; arg = `Required (fun _ -> ()) } in
@@ -54,6 +67,8 @@ let test_short_required_no_arg _ =
 let test_long_required_no_long_arg _ =
   skip_if (not has_getopt_long) "Doesn't support getopt_long";
   skip_if (sysname = "Darwin") "Doesn't work on OSX";
+  skip_if is_alpine "Doesn't work in Alpine";
+  skip_if is_s390x_debian "Not supported";
   reset ();
   let argv = [| "progname"; "--bla" |] in
   let opt = { name = ("bla", 'b'); arg = `Required (fun _ -> ()) } in
@@ -66,6 +81,7 @@ let test_long_required_no_long_arg _ =
 
 let test_long_required_no_short_arg _ =
   skip_if (not has_getopt_long) "Doesn't support getopt_long";
+  skip_if is_s390x_debian "Not supported";
   reset ();
   let argv = [| "progname"; "-b" |] in
   let opt = { name = ("bla", 'b'); arg = `Required (fun _ -> ()) } in
@@ -77,6 +93,7 @@ let test_long_required_no_short_arg _ =
   assert !test
 
 let test_short_optional_no_arg _ =
+  skip_if is_s390x_debian "Not supported";
   reset ();
   let argv = [| "progname"; "-b" |] in
   let test = ref false in
@@ -105,6 +122,7 @@ let test_remaining_arg _ =
 
 let test_permuted_remaining_arg _ =
   skip_if (sysname = "Darwin") "Doesn't work on OSX";
+  skip_if is_alpine "Doesn't work in Alpine";
   reset ();
   let argv = [| "progname"; "bla"; "-b" |] in
   let opt = { name = 'b'; arg = `None (fun () -> ()) } in
@@ -161,6 +179,7 @@ let test_short_unknown_before _ =
   with Unknown_option "-u" -> assert !test
 
 let test_short_unknown_after _ =
+  skip_if is_s390x_debian "Not supported";
   reset ();
   let argv = [| "progname"; "-b"; "--unknown" |] in
   let test = ref false in

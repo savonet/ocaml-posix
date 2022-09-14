@@ -14,13 +14,14 @@ depends: [
   "odoc" {with-doc}
   "dune-configurator"
   "ounit2" {with-test}
+  "process" {with-test}
   "posix-uname" {with-test & = version}
   "ctypes"
   "posix-base" {= version}
   "unix-errno"
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"

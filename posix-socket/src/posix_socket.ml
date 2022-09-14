@@ -101,12 +101,12 @@ let getaddrinfo host port =
     let rec assign_sockaddr pos p =
       if not (is_null !@p) then (
         let addrinfo = !@p in
-        let sockaddr = allocate Sockaddr.t !@(!@(addrinfo |-> Types.Addrinfo.ai_addr)) in
+        let sockaddr =
+          allocate Sockaddr.t !@(!@(addrinfo |-> Types.Addrinfo.ai_addr))
+        in
         ret +@ pos <-@ sockaddr;
-        assign_sockaddr (pos+1) (addrinfo |-> Types.Addrinfo.ai_next)
-      ) else (
-        ret +@ pos <-@ (from_voidp (Sockaddr.t) null)
-      )
+        assign_sockaddr (pos + 1) (addrinfo |-> Types.Addrinfo.ai_next))
+      else ret +@ pos <-@ from_voidp Sockaddr.t null
     in
     assign_sockaddr 0 p;
     ret
