@@ -45,14 +45,15 @@
 
 (package
  (name posix-time2)
+ (version 2.1.0)
  (synopsis "Bindings for posix time functions")
  (description "posix-time2 provides the types and bindings for posix time APIs.")
  (depends
   (dune (> 2.5))
   ctypes
   (odoc :with-doc)
-  (posix-base (= :version))
-  (posix-types (= :version))
+  (posix-base (>= 2.0.1))
+  (posix-types (>= 2.0.1))
   unix-errno)
 )
 
