@@ -12,6 +12,7 @@ val clock_monotonic : Posix_types.clockid_t
 val clock_realtime : Posix_types.clockid_t
 val clock_process_cputime_id : Posix_types.clockid_t
 val clock_thread_cputime_id : Posix_types.clockid_t
+val timer_abstime : int
 
 module Def (S : Cstubs.Types.TYPE) : sig
   module Tm : sig

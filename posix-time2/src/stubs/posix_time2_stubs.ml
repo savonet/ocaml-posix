@@ -30,6 +30,11 @@ module Def (F : Cstubs.FOREIGN) = struct
   let nanosleep =
     foreign "nanosleep" (ptr Timespec.t @-> ptr void @-> returning int)
 
+  let clock_nanosleep =
+    foreign "clock_nanosleep"
+      (Posix_types.clockid_t @-> int @-> ptr Timespec.t @-> ptr void
+     @-> returning int)
+
   let getitimer = foreign "getitimer" (int @-> ptr Itimerval.t @-> returning int)
 
   let setitimer =

@@ -131,6 +131,7 @@ val gmtime : int64 -> Tm.t
 val localtime : int64 -> Tm.t
 val mktime : Tm.t -> int64
 val nanosleep : Timespec.t -> unit
+val clock_nanosleep : absolute:bool -> clock:clock -> Timespec.t -> unit
 
 type itimer = [ `Real | `Virtual | `Prof ]
 

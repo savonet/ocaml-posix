@@ -268,6 +268,18 @@ let nanosleep timespec =
           let timespec = Timespec.from_timespec timespec in
           match nanosleep (addr timespec) null with 0 -> Some () | _ -> None))
 
+let clock_nanosleep ~absolute ~clock timespec =
+  Errno_unix.with_unix_exn (fun () ->
+      Errno_unix.raise_on_errno (fun () ->
+          let timespec = Timespec.from_timespec timespec in
+          let absolute =
+            if absolute then Posix_time2_types.timer_abstime else 0
+          in
+          let clock_id = clock_id_of_clock clock in
+          match clock_nanosleep clock_id absolute (addr timespec) null with
+            | 0 -> Some ()
+            | _ -> None))
+
 type itimer = [ `Real | `Virtual | `Prof ]
 
 let int_of_itimer = function
