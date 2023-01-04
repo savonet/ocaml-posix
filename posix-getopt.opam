@@ -21,7 +21,7 @@ depends: [
   "unix-errno"
 ]
 build: [
-  ["dune" "subst"] {dev}
+  ["dune" "subst"] {pinned}
   [
     "dune"
     "build"

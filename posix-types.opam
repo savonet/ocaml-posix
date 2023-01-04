@@ -17,7 +17,7 @@ depends: [
   "ctypes"
 ]
 build: [
-  ["dune" "subst"] {dev}
+  ["dune" "subst"] {pinned}
   [
     "dune"
     "build"
