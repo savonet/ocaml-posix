@@ -234,13 +234,14 @@ let clock_settime clock timespec =
             | 0 -> Some ()
             | _ -> None))
 
-let ctime time = ctime (Posix_types.Time.of_int64 time)
+let ctime time =
+  ctime (Ctypes.allocate Posix_types.time_t (Posix_types.Time.of_int64 time))
 
 let gmtime time =
   Errno_unix.with_unix_exn (fun () ->
       Errno_unix.raise_on_errno (fun () ->
           let time = Posix_types.Time.of_int64 time in
-          match gmtime time with
+          match gmtime (Ctypes.allocate Posix_types.time_t time) with
             | ptr when is_null ptr -> None
             | ptr -> Some (Tm.to_tm !@ptr)))
 
@@ -248,7 +249,7 @@ let localtime time =
   Errno_unix.with_unix_exn (fun () ->
       Errno_unix.raise_on_errno (fun () ->
           let time = Posix_types.Time.of_int64 time in
-          match localtime time with
+          match localtime (Ctypes.allocate Posix_types.time_t time) with
             | ptr when is_null ptr -> None
             | ptr -> Some (Tm.to_tm !@ptr)))
 

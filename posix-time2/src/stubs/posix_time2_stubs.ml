@@ -19,11 +19,11 @@ module Def (F : Cstubs.FOREIGN) = struct
     foreign "clock_settime"
       (Posix_types.clockid_t @-> ptr Timespec.t @-> returning int)
 
-  let ctime = foreign "ctime" (Posix_types.time_t @-> returning string)
-  let gmtime = foreign "gmtime" (Posix_types.time_t @-> returning (ptr Tm.t))
+  let ctime = foreign "ctime" (ptr Posix_types.time_t @-> returning string)
+  let gmtime = foreign "gmtime" (ptr Posix_types.time_t @-> returning (ptr Tm.t))
 
   let localtime =
-    foreign "localtime" (Posix_types.time_t @-> returning (ptr Tm.t))
+    foreign "localtime" (ptr Posix_types.time_t @-> returning (ptr Tm.t))
 
   let mktime = foreign "mktime" (ptr Tm.t @-> returning Posix_types.time_t)
 
