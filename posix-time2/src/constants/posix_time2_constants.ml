@@ -10,4 +10,5 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let fd_setsize = S.constant "FD_SETSIZE" S.int
   let fd_set_size = S.constant "FD_SET_SIZE" S.int
   let fd_set_alignment = S.constant "FD_SET_ALIGNMENT" S.int
+  let timer_abstime = S.constant "TIMER_ABSTIME" S.int
 end
