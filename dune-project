@@ -13,6 +13,7 @@
  (synopsis "Base module for the posix bindings")
  (description "posix-base provides base tools for the posix binding modules.")
  (depends
+  (ocaml (>= 4.08))
   (dune (> 2.5))
   integers
   (odoc :with-doc)
