@@ -7,7 +7,7 @@
  (name posix_uname)
  (public_name posix-uname)
  (synopsis
-   "posix-uname provides access to the features exposed in sys/utsname.h")
+  "posix-uname provides access to the features exposed in sys/utsname.h")
  (foreign_stubs
   (language c)
   (names posix_uname_generated_stubs))

@@ -1,5 +1,5 @@
-(lang dune 2.5)
-(version 2.0.1)
+(lang dune 2.9)
+(version 2.0.2)
 (name posix-bindings)
 (source (github savonet/ocaml-posix))
 (license MIT)
@@ -45,15 +45,14 @@
 
 (package
  (name posix-time2)
- (version 2.1.0)
  (synopsis "Bindings for posix time functions")
  (description "posix-time2 provides the types and bindings for posix time APIs.")
  (depends
   (dune (> 2.5))
   ctypes
   (odoc :with-doc)
-  (posix-base (>= 2.0.1))
-  (posix-types (>= 2.0.1))
+  (posix-base (= :version))
+  (posix-types (= :version))
   unix-errno)
 )
 

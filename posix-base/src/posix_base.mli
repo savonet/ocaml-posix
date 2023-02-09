@@ -12,7 +12,7 @@ module Generators : sig
     val c_headers : string
   end
 
-  module Types (Def : TypesDef) : sig
+  module Types (_ : TypesDef) : sig
     val gen : unit -> unit
   end
 
@@ -24,7 +24,7 @@ module Generators : sig
     val prefix : string
   end
 
-  module Stubs (Def : StubsDef) : sig
+  module Stubs (_ : StubsDef) : sig
     val gen : unit -> unit
   end
 end

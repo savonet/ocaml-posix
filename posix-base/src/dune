@@ -2,5 +2,5 @@
  (name posix_base)
  (public_name posix-base)
  (synopsis
-   "posix-base provides the base tools to generate the various posix bindings")
+  "posix-base provides the base tools to generate the various posix bindings")
  (libraries ctypes.stubs integers))

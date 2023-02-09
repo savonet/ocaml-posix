@@ -28,7 +28,7 @@ val sig_block : int
 val sig_setmask : int
 val sig_unblock : int
 
-module Def (S : Cstubs.Types.TYPE) : sig
+module Def (_ : Cstubs.Types.TYPE) : sig
   type sigset_t
 
   val sigset_t : sigset_t Ctypes.typ

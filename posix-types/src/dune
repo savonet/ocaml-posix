@@ -7,7 +7,7 @@
  (name posix_types)
  (public_name posix-types)
  (synopsis
-   "posix-types provides access to POSIX's types defined in <sys/types.h>")
+  "posix-types provides access to POSIX's types defined in <sys/types.h>")
  (libraries ctypes posix-types.constants posix-base))
 
 (rule

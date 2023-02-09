@@ -7,7 +7,7 @@
  (name posix_socket)
  (public_name posix-socket)
  (synopsis
-   "posix-socket provides access to the features exposed in sys/socket.h")
+  "posix-socket provides access to the features exposed in sys/socket.h")
  (foreign_stubs
   (language c)
   (names posix_socket_generated_stubs))

@@ -6,7 +6,8 @@
 (library
  (name posix_getopt)
  (public_name posix-getopt)
- (synopsis "posix-getopt provides access to the features exposed in unistd.h")
+ (synopsis
+  "posix-getopt provides access to the features exposed in unistd.h")
  (foreign_stubs
   (language c)
   (names posix_getopt_generated_stubs))
