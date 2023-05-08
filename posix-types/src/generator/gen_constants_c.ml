@@ -9,7 +9,7 @@ module Constants = Posix_base.Generators.Types (struct
            Printf.sprintf
              "\n\
               #define %s_SIZE sizeof(%s)\n\
-              #define IS_%s_FLOAT ((float)((%s)1.23) == 1.23)" name t name t)
+              #define IS_%s_FLOAT ((float)((%s)1.23f) == 1.23f)" name t name t)
          Posix_types_constants.number_types
       @ List.map
           (fun t ->
