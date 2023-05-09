@@ -9,11 +9,11 @@ license: "MIT"
 homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
+  "dune" {>= "2.9"}
   "ocaml" {>= "4.08"}
-  "dune" {>= "2.9" & > "2.5"}
   "integers"
-  "odoc" {with-doc}
   "ctypes" {>= "0.12.1"}
+  "odoc" {with-doc}
 ]
 build: [
   ["dune" "subst"] {dev}
