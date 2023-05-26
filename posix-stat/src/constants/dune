@@ -1,0 +1,4 @@
+(library
+ (name posix_stat_constants)
+ (public_name posix-stat.constants)
+ (libraries ctypes.stubs))

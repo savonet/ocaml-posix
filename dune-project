@@ -94,6 +94,18 @@
 )
 
 (package
+ (name posix-stat)
+ (synopsis "Bindings for posix stat/statvfs")
+ (description "posix-stat provides a simple interface for POSIX stat and statvfs.")
+ (authors "Antonin Décimo <antonin@tarides.com>")
+ (depends
+  ctypes
+  (posix-base (= :version))
+  (posix-time2 (= :version))
+  unix-errno)
+)
+
+(package
  (name posix-bindings)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
@@ -104,5 +116,6 @@
   (posix-socket (= :version))
   (posix-socket-unix (= :version))
   (posix-uname (= :version))
-  (posix-getopt (= :version)))
+  (posix-getopt (= :version))
+  (posix-stat (= :version)))
 )
