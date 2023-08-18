@@ -1,0 +1,4 @@
+(library
+ (name posix_math_constants)
+ (public_name posix-math2.constants)
+ (libraries ctypes.stubs))

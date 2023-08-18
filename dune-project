@@ -94,6 +94,16 @@
 )
 
 (package
+ (name posix-math2)
+ (synopsis "Bindings for posix math")
+ (description "posix-math2 provides a simple interface for POSIX math functions.")
+ (depends
+  ctypes
+  (posix-base (= :version))
+  unix-errno)
+)
+
+(package
  (name posix-bindings)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
@@ -104,5 +114,6 @@
   (posix-socket (= :version))
   (posix-socket-unix (= :version))
   (posix-uname (= :version))
+  (posix-math2 (= :version))
   (posix-getopt (= :version)))
 )
