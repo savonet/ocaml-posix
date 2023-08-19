@@ -1,0 +1,16 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_math_types)
+ (public_name posix-math2.types)
+ (libraries posix-math2.constants posix-base ctypes.stubs))
+
+(rule
+ (targets posix_math_generated_constants.ml)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_constants_c))))

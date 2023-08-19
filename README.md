@@ -43,7 +43,6 @@ dune install
 
 ## TODO
 
-* Convert [posix-math](https://github.com/mwweissmann/ocaml-posix-math)
 * Convert [posix-mqueue](https://github.com/mwweissmann/ocaml-posix-mqueue)
 * Convert [posix-semaphore](https://github.com/mwweissmann/ocaml-posix-semaphore)
 * Convert [unix-sys-resource](https://github.com/dsheets/ocaml-unix-sys-resource)
