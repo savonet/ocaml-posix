@@ -91,7 +91,11 @@ let getnameinfo sockaddr_ptr =
         (host, port)
     | _ -> failwith "getnameinfo"
 
-let getaddrinfo ?port host =
+let getaddrinfo ?(numerichost = false) ?port host =
+  let flags =
+    (if numerichost then ni_numerichost else 0)
+    lor match port with Some (`Int _) -> ni_numericserv | _ -> 0
+  in
   let port =
     match port with
       | Some (`Int port) ->
@@ -104,7 +108,7 @@ let getaddrinfo ?port host =
       | None -> from_voidp char null
   in
   let hints = allocate_n Types.Addrinfo.t ~count:1 in
-  hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost lor ni_numericserv;
+  hints |-> Types.Addrinfo.ai_flags <-@ flags;
   let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
   let rec count len p =
     match !@p with
