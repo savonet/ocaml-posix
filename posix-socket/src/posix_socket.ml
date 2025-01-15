@@ -150,6 +150,6 @@ let from_unix_sockaddr = function
   | Unix.ADDR_UNIX _ -> failwith "Not implemented"
   | Unix.ADDR_INET (inet_addr, port) -> (
       let inet_addr = Unix.string_of_inet_addr inet_addr in
-      match getaddrinfo ~port:(`Int port) inet_addr with
+      match getaddrinfo ~numerichost:true ~port:(`Int port) inet_addr with
         | p when is_null !@p -> failwith "Resolution failed!"
         | p -> !@p)
