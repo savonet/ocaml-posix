@@ -48,6 +48,12 @@ type sockaddr_in6 = SockaddrInet6.t structure
 
 let sockaddr_in6_t = SockaddrInet6.t
 
+let sockaddr_len s =
+  match !@(s |-> Sockaddr.sa_family) with
+    | id when id = af_inet -> sizeof sockaddr_in_t
+    | id when id = af_inet6 -> sizeof sockaddr_in6_t
+    | _ -> failwith "Not implemented"
+
 let getnameinfo sockaddr_ptr =
   let s = allocate_n char ~count:ni_maxhost in
   let p = allocate_n char ~count:ni_maxserv in

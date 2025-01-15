@@ -63,6 +63,7 @@ end
 type sockaddr = Sockaddr.t structure
 
 val sockaddr_t : sockaddr typ
+val sockaddr_len : sockaddr ptr -> int
 
 (** Type for inet/inet6 socket port. *)
 type in_port = Unsigned.uint16
