@@ -13,7 +13,7 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let getaddrinfo =
     foreign "getaddrinfo"
-      (string @-> string @-> ptr Addrinfo.t
+      (string @-> ptr char @-> ptr Addrinfo.t
       @-> ptr (ptr Addrinfo.t)
       @-> returning int)
 

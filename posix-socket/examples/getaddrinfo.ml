@@ -5,8 +5,7 @@ let from_ptr t ptr = from_voidp t (to_voidp ptr)
 
 let () =
   let host = Sys.argv.(1) in
-  let port = int_of_string Sys.argv.(2) in
-  let p = getaddrinfo host port in
+  let p = getaddrinfo ~port:(`String Sys.argv.(2)) host in
   let rec print_sockaddr pos =
     if not (is_null !@(p +@ pos)) then (
       let sockaddr = !@p in

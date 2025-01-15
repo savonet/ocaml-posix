@@ -91,8 +91,18 @@ let getnameinfo sockaddr_ptr =
         (host, port)
     | _ -> failwith "getnameinfo"
 
-let getaddrinfo host port =
-  let port = string_of_int port in
+let getaddrinfo ?port host =
+  let port =
+    match port with
+      | Some (`Int port) ->
+          let s = string_of_int port in
+          let c = CArray.of_string s in
+          CArray.start c
+      | Some (`String s) ->
+          let c = CArray.of_string s in
+          CArray.start c
+      | None -> from_voidp char null
+  in
   let hints = allocate_n Types.Addrinfo.t ~count:1 in
   hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost lor ni_numericserv;
   let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
@@ -136,6 +146,6 @@ let from_unix_sockaddr = function
   | Unix.ADDR_UNIX _ -> failwith "Not implemented"
   | Unix.ADDR_INET (inet_addr, port) -> (
       let inet_addr = Unix.string_of_inet_addr inet_addr in
-      match getaddrinfo inet_addr port with
+      match getaddrinfo ~port:(`Int port) inet_addr with
         | p when is_null !@p -> failwith "Resolution failed!"
         | p -> !@p)

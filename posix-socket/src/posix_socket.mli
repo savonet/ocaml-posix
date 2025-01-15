@@ -116,7 +116,7 @@ val sockaddr_in6_t : sockaddr_in6 typ
 (** IP address conversion functions. *)
 val getnameinfo : sockaddr ptr -> string * int
 
-val getaddrinfo : string -> int -> sockaddr ptr ptr
+val getaddrinfo : ?port:[`Int of int | `String of string] -> string -> sockaddr ptr ptr
 
 (** Misc *)
 val strnlen : char ptr -> Unsigned.size_t -> Unsigned.size_t
