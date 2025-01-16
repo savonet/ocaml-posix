@@ -1,10 +1,11 @@
-2.1.0 (unreleased)
+2.1.0 (2025-01-16)
 =====
 * Added `posix-math2`
 * Invoke `wine64` only when available.
 * Added `sockaddr_len` in `ocaml-posix`.
-* Made `port` optional in `getaddrinfo`, added support
-  for string values.
+* Made `port` and `numerichost` optional
+  params in `getaddrinfo`, added support
+  for `port` string values.
 
 2.0.2 (2023-02-08)
 =====
