@@ -18,6 +18,7 @@ Currently, it contains:
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
 * `posix-signal`
+* `posix-math2`
 
 ## API
 
