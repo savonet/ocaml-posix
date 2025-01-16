@@ -15,7 +15,7 @@
  (depends
   (ocaml (>= 4.08))
   integers
-  (ctypes (>= 0.12.1)))
+  (ctypes (>= 0.14.0)))
 )
 
 (package
