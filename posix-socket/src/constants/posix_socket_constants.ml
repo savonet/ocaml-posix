@@ -13,4 +13,10 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let ni_maxhost = S.constant "NI_MAXHOST" S.int
   let ni_numerichost = S.constant "NI_NUMERICHOST" S.int
   let ni_numericserv = S.constant "NI_NUMERICSERV" S.int
+  let ipproto_ip = S.constant "IPPROTO_IP" S.int
+  let ipproto_ipv6 = S.constant "IPPROTO_IPV6" S.int
+  let ipproto_icmp = S.constant "IPPROTO_ICMP" S.int
+  let ipproto_raw = S.constant "IPPROTO_RAW" S.int
+  let ipproto_tcp = S.constant "IPPROTO_TCP" S.int
+  let ipproto_udp = S.constant "IPPROTO_UDP" S.int
 end

@@ -27,6 +27,16 @@ val af_inet : sa_family_t
 
 val af_inet6 : sa_family_t
 val af_unspec : sa_family_t
+val ni_maxserv : int
+val ni_maxhost : int
+val ni_numerichost : int
+val ni_numericserv : int
+val ipproto_ip : int
+val ipproto_ipv6 : int
+val ipproto_icmp : int
+val ipproto_raw : int
+val ipproto_tcp : int
+val ipproto_udp : int
 
 (** Ctypes routines for C type socklen_t. *)
 module Socklen : Unsigned.S
@@ -64,6 +74,20 @@ type sockaddr = Sockaddr.t structure
 
 val sockaddr_t : sockaddr typ
 val sockaddr_len : sockaddr ptr -> int
+
+(* Socket addrinfo module. *)
+module Addrinfo : sig
+  type t
+
+  val t : t structure typ
+  val ai_flags : (int, t structure) field
+  val ai_family : (sa_family_t, t structure) field
+  val ai_socktype : (socket_type, t structure) field
+  val ai_protocol : (int, t structure) field
+  val ai_addrlen : (socklen_t, t structure) field
+  val ai_addr : (sockaddr ptr, t structure) field
+  val ai_next : (t structure ptr, t structure) field
+end
 
 (** Type for inet/inet6 socket port. *)
 type in_port = Unsigned.uint16
@@ -117,7 +141,7 @@ val sockaddr_in6_t : sockaddr_in6 typ
 val getnameinfo : sockaddr ptr -> string * int
 
 val getaddrinfo :
-  ?numerichost:bool ->
+  ?hints:Addrinfo.t structure ptr ->
   ?port:[ `Int of int | `String of string ] ->
   string ->
   sockaddr ptr ptr

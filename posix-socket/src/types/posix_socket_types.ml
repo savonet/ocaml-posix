@@ -48,6 +48,9 @@ module Def (S : Cstubs.Types.TYPE) = struct
 
     let t = S.structure "addrinfo"
     let ai_flags = S.field t "ai_flags" S.int
+    let ai_family = S.field t "ai_family" sa_family_t
+    let ai_socktype = S.field t "ai_socktype" S.int
+    let ai_protocol = S.field t "ai_protocol" S.int
     let ai_addrlen = S.field t "ai_addrlen" socklen_t
     let ai_addr = S.field t "ai_addr" (S.ptr Sockaddr.t)
     let ai_next = S.field t "ai_next" (S.ptr t)

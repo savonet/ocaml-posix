@@ -3,9 +3,8 @@
 * Added `posix-math2`
 * Invoke `wine64` only when available.
 * Added `sockaddr_len` in `ocaml-posix`.
-* Made `port` and `numerichost` optional
-  params in `getaddrinfo`, added support
-  for `port` string values.
+* Add support for string and optional `port.
+* Add support for `hints`.
 
 2.0.2 (2023-02-08)
 =====

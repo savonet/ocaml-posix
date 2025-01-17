@@ -8,13 +8,19 @@ val af_inet : sa_family_t
 val af_inet6 : sa_family_t
 val af_unspec : sa_family_t
 val sa_data_len : int
-val sock_dgram : int
 val sock_stream : int
+val sock_dgram : int
 val sock_seqpacket : int
 val ni_maxserv : int
 val ni_maxhost : int
 val ni_numerichost : int
 val ni_numericserv : int
+val ipproto_ip : int
+val ipproto_ipv6 : int
+val ipproto_icmp : int
+val ipproto_raw : int
+val ipproto_tcp : int
+val ipproto_udp : int
 
 module Socklen : Unsigned.S
 
@@ -40,6 +46,9 @@ module Def (S : Cstubs.Types.TYPE) : sig
 
     val t : t structure S.typ
     val ai_flags : (int, t structure) S.field
+    val ai_family : (sa_family_t, t structure) S.field
+    val ai_socktype : (int, t structure) S.field
+    val ai_protocol : (int, t structure) S.field
     val ai_addrlen : (socklen_t, t structure) S.field
     val ai_addr : (sockaddr ptr, t structure) S.field
     val ai_next : (t structure ptr, t structure) S.field

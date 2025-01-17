@@ -8,6 +8,7 @@ let socket_type_t = int
 let from_sockaddr_storage t ptr = from_voidp t (to_voidp ptr)
 
 module SockaddrStorage = Types.SockaddrStorage
+module Addrinfo = Types.Addrinfo
 
 type sockaddr_storage = SockaddrStorage.t structure
 
@@ -93,11 +94,7 @@ let getnameinfo sockaddr_ptr =
         (host, port)
     | _ -> failwith "getnameinfo"
 
-let getaddrinfo ?(numerichost = false) ?port host =
-  let flags =
-    (if numerichost then ni_numerichost else 0)
-    lor match port with Some (`Int _) -> ni_numericserv | _ -> 0
-  in
+let getaddrinfo ?hints ?port host =
   let port =
     match port with
       | Some (`Int port) ->
@@ -109,9 +106,7 @@ let getaddrinfo ?(numerichost = false) ?port host =
           CArray.start c
       | None -> from_voidp char null
   in
-  let hints = allocate_n Types.Addrinfo.t ~count:1 in
-  hints |-> Types.Addrinfo.ai_flags <-@ flags;
-  let p = allocate_n (ptr Types.Addrinfo.t) ~count:1 in
+  let p = allocate_n (ptr Addrinfo.t) ~count:1 in
   let rec count len p =
     match !@p with
       | p when is_null p -> len
@@ -133,6 +128,7 @@ let getaddrinfo ?(numerichost = false) ?port host =
     assign_sockaddr 0 p;
     ret
   in
+  let hints = Option.value ~default:(from_voidp Types.Addrinfo.t null) hints in
   match getaddrinfo host port hints p with
     | 0 ->
         let ret = copy p in
@@ -151,7 +147,12 @@ let to_unix_sockaddr s =
 let from_unix_sockaddr = function
   | Unix.ADDR_UNIX _ -> failwith "Not implemented"
   | Unix.ADDR_INET (inet_addr, port) -> (
+      let hints = allocate_n Types.Addrinfo.t ~count:1 in
+      hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost;
+      hints |-> Types.Addrinfo.ai_family
+      <-@ if Unix.is_inet6_addr inet_addr then af_inet6 else af_inet;
+      hints |-> Types.Addrinfo.ai_socktype <-@ sock_stream;
       let inet_addr = Unix.string_of_inet_addr inet_addr in
-      match getaddrinfo ~numerichost:true ~port:(`Int port) inet_addr with
+      match getaddrinfo ~hints ~port:(`Int port) inet_addr with
         | p when is_null !@p -> failwith "Resolution failed!"
         | p -> !@p)
