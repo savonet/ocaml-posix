@@ -52,7 +52,9 @@ let sockaddr_len s =
   match !@(s |-> Sockaddr.sa_family) with
     | id when id = af_inet -> sizeof sockaddr_in_t
     | id when id = af_inet6 -> sizeof sockaddr_in6_t
-    | _ -> failwith "Not implemented"
+    | id ->
+        failwith
+          (Printf.sprintf "Unsupported socket family: %x" (Sa_family.to_int id))
 
 let getnameinfo sockaddr_ptr =
   let s = allocate_n char ~count:ni_maxhost in
