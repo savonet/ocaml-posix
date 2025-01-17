@@ -7,7 +7,9 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let const_string_ptr = typedef (ptr string) "char * const *"
 
-  let getopt = foreign "getopt" (int @-> const_string_ptr @-> string @-> returning int)
+  let getopt =
+    foreign "getopt" (int @-> const_string_ptr @-> string @-> returning int)
+
   let has_getopt_long = foreign "has_getopt_long" (void @-> returning bool)
 
   let getopt_long =
@@ -20,7 +22,7 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let getopt_long_only =
     foreign "getopt_long_only"
-      (int @-> ptr string @-> string @-> ptr Option.t @-> ptr int
+      (int @-> const_string_ptr @-> string @-> ptr Option.t @-> ptr int
      @-> returning int)
 
   let getoptarg = foreign "getoptarg" (void @-> returning (ptr char))
