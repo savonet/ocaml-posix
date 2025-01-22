@@ -1,3 +1,7 @@
+2.1.1 (unreleased)
+=====
+* Fix copy code in `getaddrinfo`.
+
 2.1.0 (2025-01-16)
 =====
 * Added `posix-math2`

@@ -118,10 +118,14 @@ let getaddrinfo ?hints ?port host =
     let rec assign_sockaddr pos p =
       if not (is_null !@p) then (
         let addrinfo = !@p in
-        let sockaddr =
-          allocate Sockaddr.t !@(!@(addrinfo |-> Types.Addrinfo.ai_addr))
+        let sockaddr_len =
+          Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)
         in
-        ret +@ pos <-@ sockaddr;
+        let sockaddr = to_voidp (allocate_n char ~count:sockaddr_len) in
+        memcpy sockaddr
+          (to_voidp !@(addrinfo |-> Types.Addrinfo.ai_addr))
+          (Unsigned.Size_t.of_int sockaddr_len);
+        ret +@ pos <-@ from_voidp Types.Sockaddr.t sockaddr;
         assign_sockaddr (pos + 1) (addrinfo |-> Types.Addrinfo.ai_next))
       else ret +@ pos <-@ from_voidp Sockaddr.t null
     in

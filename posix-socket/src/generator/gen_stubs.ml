@@ -14,6 +14,7 @@ module Stubs = Posix_base.Generators.Stubs (struct
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 |}
 
   let concurrency = Cstubs.unlocked
