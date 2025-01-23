@@ -144,7 +144,7 @@ val getaddrinfo :
   ?hints:Addrinfo.t structure ptr ->
   ?port:[ `Int of int | `String of string ] ->
   string ->
-  sockaddr ptr ptr
+  sockaddr ptr list
 
 (** Misc *)
 val strnlen : char ptr -> Unsigned.size_t -> Unsigned.size_t

@@ -94,51 +94,44 @@ let getnameinfo sockaddr_ptr =
         (host, port)
     | _ -> failwith "getnameinfo"
 
-let getaddrinfo ?hints ?port host =
-  let port =
-    match port with
-      | Some (`Int port) ->
-          let s = string_of_int port in
-          let c = CArray.of_string s in
-          CArray.start c
-      | Some (`String s) ->
-          let c = CArray.of_string s in
-          CArray.start c
-      | None -> from_voidp char null
+let getaddrinfo =
+  let rec get_sockaddr ~cur p =
+    if is_null !@p then List.rev cur
+    else (
+      let addrinfo = !@p in
+      let sockaddr_len =
+        Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)
+      in
+      let sockaddr = to_voidp (allocate_n char ~count:sockaddr_len) in
+      memcpy sockaddr
+        (to_voidp !@(addrinfo |-> Types.Addrinfo.ai_addr))
+        (Unsigned.Size_t.of_int sockaddr_len);
+      get_sockaddr
+        ~cur:(from_voidp Types.Sockaddr.t sockaddr :: cur)
+        (addrinfo |-> Types.Addrinfo.ai_next))
   in
-  let p = allocate_n (ptr Addrinfo.t) ~count:1 in
-  let rec count len p =
-    match !@p with
-      | p when is_null p -> len
-      | p -> count (len + 1) (p |-> Types.Addrinfo.ai_next)
-  in
-  let copy p =
-    let count = count 0 p in
-    let ret = allocate_n (ptr Types.Sockaddr.t) ~count:(count + 1) in
-    let rec assign_sockaddr pos p =
-      if not (is_null !@p) then (
-        let addrinfo = !@p in
-        let sockaddr_len =
-          Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)
-        in
-        let sockaddr = to_voidp (allocate_n char ~count:sockaddr_len) in
-        memcpy sockaddr
-          (to_voidp !@(addrinfo |-> Types.Addrinfo.ai_addr))
-          (Unsigned.Size_t.of_int sockaddr_len);
-        ret +@ pos <-@ from_voidp Types.Sockaddr.t sockaddr;
-        assign_sockaddr (pos + 1) (addrinfo |-> Types.Addrinfo.ai_next))
-      else ret +@ pos <-@ from_voidp Sockaddr.t null
+  fun ?hints ?port host ->
+    let port =
+      match port with
+        | Some (`Int port) ->
+            let s = string_of_int port in
+            let c = CArray.of_string s in
+            CArray.start c
+        | Some (`String s) ->
+            let c = CArray.of_string s in
+            CArray.start c
+        | None -> from_voidp char null
     in
-    assign_sockaddr 0 p;
-    ret
-  in
-  let hints = Option.value ~default:(from_voidp Types.Addrinfo.t null) hints in
-  match getaddrinfo host port hints p with
-    | 0 ->
-        let ret = copy p in
-        freeaddrinfo !@p;
-        ret
-    | _ -> failwith "getaddrinfo"
+    let p = allocate_n (ptr Addrinfo.t) ~count:1 in
+    let hints =
+      Option.value ~default:(from_voidp Types.Addrinfo.t null) hints
+    in
+    match getaddrinfo host port hints p with
+      | 0 ->
+          let ret = get_sockaddr ~cur:[] p in
+          freeaddrinfo !@p;
+          ret
+      | _ -> failwith "getaddrinfo"
 
 let to_unix_sockaddr s =
   match !@(s |-> Sockaddr.sa_family) with
@@ -158,5 +151,5 @@ let from_unix_sockaddr = function
       hints |-> Types.Addrinfo.ai_socktype <-@ sock_stream;
       let inet_addr = Unix.string_of_inet_addr inet_addr in
       match getaddrinfo ~hints ~port:(`Int port) inet_addr with
-        | p when is_null !@p -> failwith "Resolution failed!"
-        | p -> !@p)
+        | [] -> failwith "Resolution failed!"
+        | sockaddr :: _ -> sockaddr)
