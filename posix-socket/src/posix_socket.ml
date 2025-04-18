@@ -4,7 +4,7 @@ include Posix_socket_stubs.Def (Posix_socket_generated_stubs)
 
 type sockaddr_storage = unit
 
-let sockaddr_storage () = allocate_n void ~count:sockaddr_storage_len
+let sockaddr_storage () = to_voidp (allocate_n char ~count:sockaddr_storage_len)
 
 type socket_type = int
 
