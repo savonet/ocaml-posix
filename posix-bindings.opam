@@ -13,8 +13,8 @@ depends: [
   "ctypes"
   "posix-base" {= version}
   "posix-types" {= version}
-  "posix-socket" {= version}
-  "posix-socket-unix" {= version}
+  "posix-socket" {= "2.2.1"}
+  "posix-socket-unix" {= "2.2.1"}
   "posix-uname" {= version}
   "posix-math2" {= version}
   "posix-getopt" {= version}

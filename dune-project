@@ -51,22 +51,24 @@
 
 (package
  (name posix-socket)
+ (version 2.2.1)
  (synopsis "Bindings for posix sockets")
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
  (depends
   (ocaml (>= 4.12))
-  (posix-base (= :version))
+  (posix-base (= 2.2.0))
   ctypes)
 )
 
 (package
  (name posix-socket-unix)
+ (version 2.2.1)
  (synopsis "Bindings for posix sockets")
  (description "posix-socket-unix provides unix-specific types and bindings for posix sockets.")
  (depends
   ctypes
-  (posix-base (= :version))
-  (posix-socket (= :version))
+  (posix-base (= 2.2.0))
+  (posix-socket (= 2.2.1))
   unix-errno)
 )
 
@@ -112,8 +114,8 @@
   ctypes
   (posix-base (= :version))
   (posix-types (= :version))
-  (posix-socket (= :version))
-  (posix-socket-unix (= :version))
+  (posix-socket (= 2.2.1))
+  (posix-socket-unix (= 2.2.1))
   (posix-uname (= :version))
   (posix-math2 (= :version))
   (posix-getopt (= :version)))
