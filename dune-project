@@ -108,7 +108,7 @@
 
 (package
  (name posix-bindings)
- (version 2.2.1)
+ (version 3)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
  (depends
