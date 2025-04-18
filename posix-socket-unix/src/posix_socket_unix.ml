@@ -33,9 +33,7 @@ let to_unix_sockaddr s =
 
 let from_unix_sockaddr = function
   | Unix.ADDR_UNIX path ->
-      let ss =
-        allocate_n SockaddrStorage.t ~count:(sizeof sockaddr_storage_t)
-      in
+      let ss = sockaddr_storage () in
       let path =
         if String.length path > sun_path_len then String.sub path 0 sun_path_len
         else path

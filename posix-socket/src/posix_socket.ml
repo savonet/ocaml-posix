@@ -2,17 +2,16 @@ open Ctypes
 include Posix_socket_types
 include Posix_socket_stubs.Def (Posix_socket_generated_stubs)
 
+type sockaddr_storage = unit
+
+let sockaddr_storage () = to_voidp (allocate_n char ~count:sockaddr_storage_len)
+
 type socket_type = int
 
 let socket_type_t = int
 let from_sockaddr_storage t ptr = from_voidp t (to_voidp ptr)
 
-module SockaddrStorage = Types.SockaddrStorage
 module Addrinfo = Types.Addrinfo
-
-type sockaddr_storage = SockaddrStorage.t structure
-
-let sockaddr_storage_t = SockaddrStorage.t
 
 module Sockaddr = struct
   include Types.Sockaddr

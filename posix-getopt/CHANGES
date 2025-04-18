@@ -1,0 +1,16 @@
+2.2.0 (2025-01-30)
+=====
+* Fix copy code in `getaddrinfo`.
+
+2.1.0 (2025-01-16)
+=====
+* Added `posix-math2`
+* Invoke `wine64` only when available.
+* Added `sockaddr_len` in `ocaml-posix`.
+* Add support for string and optional `port.
+* Add support for `hints`.
+
+2.0.2 (2023-02-08)
+=====
+**posix-time2**
+* Added `clock_nanosleep`

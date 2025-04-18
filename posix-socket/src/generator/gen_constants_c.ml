@@ -17,6 +17,7 @@ module Types = Posix_base.Generators.Types (struct
 #define SA_DATA_LEN (sizeof(((struct sockaddr*)0)->sa_data))
 #define SA_FAMILY_T_LEN (sizeof(((struct sockaddr*)0)->sa_family))
 #define SOCKLEN_T_LEN (sizeof(socklen_t))
+#define SOCKADDR_STORAGE_LEN (sizeof(struct sockaddr_storage))
 
 #ifndef NI_MAXHOST
   #define NI_MAXHOST 1025
