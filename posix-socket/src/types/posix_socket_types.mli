@@ -3,6 +3,8 @@ module Sa_family : Unsigned.S
 
 type sa_family_t = Sa_family.t
 
+val sockaddr_storage_len : int
+
 val sa_family_t : sa_family_t typ
 val af_inet : sa_family_t
 val af_inet6 : sa_family_t
@@ -60,17 +62,6 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val t : t structure S.typ
     val s_port : (Unsigned.uint16, t structure) S.field
   end
-
-  module SockaddrStorage : sig
-    type t
-
-    val t : t structure S.typ
-    val ss_family : (sa_family_t, t structure) S.field
-  end
-
-  type sockaddr_storage = SockaddrStorage.t structure
-
-  val sockaddr_storage_t : sockaddr_storage S.typ
 
   type in_port = Unsigned.uint16
 

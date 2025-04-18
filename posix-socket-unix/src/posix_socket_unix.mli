@@ -12,7 +12,7 @@ module SockaddrUnix : sig
   val sun_family : (sa_family_t, t structure) field
   val sun_path : (char carray, t structure) field
   val sun_path_len : int
-  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
+  val from_sockaddr_storage : sockaddr_storage ptr -> t structure ptr
 end
 
 type sockaddr_un = SockaddrUnix.t structure
