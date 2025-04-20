@@ -4,6 +4,8 @@ module Constants = Posix_socket_constants.Def (Posix_socket_generated_constants)
 let socklen : (module Posix_base.Types.Unsigned) =
   Posix_base.Types.mkUnsigned ~name:"socklen_t" ~size:Constants.socklen_t_len
 
+let sockaddr_storage_len = Constants.sockaddr_storage_len
+
 module Socklen = (val socklen : Posix_base.Types.Unsigned)
 
 type socklen_t = Socklen.t
@@ -64,18 +66,6 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let s_port = S.field t "s_port" S.uint16_t
     let () = S.seal t
   end
-
-  module SockaddrStorage = struct
-    type t = unit
-
-    let t = S.structure "sockaddr_storage"
-    let ss_family = S.field t "ss_family" sa_family_t
-    let () = S.seal t
-  end
-
-  type sockaddr_storage = SockaddrStorage.t structure
-
-  let sockaddr_storage_t : sockaddr_storage S.typ = SockaddrStorage.t
 
   type in_port = Unsigned.uint16
 

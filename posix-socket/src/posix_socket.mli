@@ -45,19 +45,9 @@ type socklen_t
 
 val socklen_t : socklen_t typ
 
-(** Storage-safe overall structure. Used to allocate
-    a structure large enough for any of the sub-types
-    below. *)
-module SockaddrStorage : sig
-  type t
-
-  val t : t structure typ
-  val ss_family : (sa_family_t, t structure) field
-end
-
-type sockaddr_storage = SockaddrStorage.t structure
-
-val sockaddr_storage_t : sockaddr_storage typ
+type sockaddr_storage
+val sockaddr_storage : unit -> sockaddr_storage ptr
+val sockaddr_storage_len : int
 
 (** Generic sockaddr_t structure. *)
 module Sockaddr : sig
@@ -67,7 +57,7 @@ module Sockaddr : sig
   val sa_family : (sa_family_t, t structure) field
   val sa_data : (char carray, t structure) field
   val sa_data_len : int
-  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
+  val from_sockaddr_storage : sockaddr_storage ptr -> t structure ptr
 end
 
 type sockaddr = Sockaddr.t structure
@@ -108,7 +98,7 @@ module SockaddrInet : sig
   val sin_family : (sa_family_t, t structure) field
   val sin_port : (in_port, t structure) field
   val sin_addr : (in_addr structure, t structure) field
-  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
+  val from_sockaddr_storage : sockaddr_storage ptr -> t structure ptr
 end
 
 type sockaddr_in = SockaddrInet.t structure
@@ -130,7 +120,7 @@ module SockaddrInet6 : sig
   val sin6_flowinfo : (Unsigned.uint32, t structure) field
   val sin6_addr : (in6_addr structure, t structure) field
   val sin6_scope_id : (Unsigned.uint32, t structure) field
-  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
+  val from_sockaddr_storage : sockaddr_storage ptr -> t structure ptr
 end
 
 type sockaddr_in6 = SockaddrInet6.t structure
