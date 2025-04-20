@@ -1,4 +1,4 @@
-2.2.1 (unreleased)
+3.0.0 (2025-04-20)
 =====
 * Remove full struct support for `SockaddrStorage`,
   only allocate by size.
