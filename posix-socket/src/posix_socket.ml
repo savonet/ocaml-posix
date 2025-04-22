@@ -132,27 +132,17 @@ let getaddrinfo =
           ret
       | _ -> failwith "getaddrinfo"
 
-external alloc_sockaddr : unit Ctypes.ptr -> int -> Unix.sockaddr = "posix_socket_alloc_sockaddr"
+external alloc_sockaddr : _ Cstubs_internals.fatptr -> int -> Unix.sockaddr
+  = "posix_socket_alloc_sockaddr"
 
-let to_unix_sockaddr s =
-  match !@(s |-> Sockaddr.sa_family) with
-    | id when id = af_inet || id = af_inet6 ->
-        let inet_addr, port = getnameinfo s in
-        let inet_addr = Unix.inet_addr_of_string inet_addr in
-        Unix.ADDR_INET (inet_addr, port)
-    | _ -> failwith "Not implemented"
+let fatptr = function Cstubs_internals.CPointer s -> s
 
-external get_sockaddr : Unix.sockaddr -> unit Ctypes.ptr -> unit = "posix_socket_get_sockaddr"
+let to_unix_sockaddr s = alloc_sockaddr (fatptr s) (sockaddr_len s)
 
-let from_unix_sockaddr = function
-  | Unix.ADDR_UNIX _ -> failwith "Not implemented"
-  | Unix.ADDR_INET (inet_addr, port) -> (
-      let hints = allocate_n Types.Addrinfo.t ~count:1 in
-      hints |-> Types.Addrinfo.ai_flags <-@ ni_numerichost;
-      hints |-> Types.Addrinfo.ai_family
-      <-@ if Unix.is_inet6_addr inet_addr then af_inet6 else af_inet;
-      hints |-> Types.Addrinfo.ai_socktype <-@ sock_stream;
-      let inet_addr = Unix.string_of_inet_addr inet_addr in
-      match getaddrinfo ~hints ~port:(`Int port) inet_addr with
-        | [] -> failwith "Resolution failed!"
-        | sockaddr :: _ -> sockaddr)
+external get_sockaddr : Unix.sockaddr -> _ Cstubs_internals.fatptr -> unit
+  = "posix_socket_get_sockaddr"
+
+let from_unix_sockaddr s =
+  let storage = sockaddr_storage () in
+  get_sockaddr s (fatptr storage);
+  Sockaddr.from_sockaddr_storage storage
