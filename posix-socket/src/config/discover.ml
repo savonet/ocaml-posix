@@ -2,6 +2,10 @@ module C = Configurator.V1
 
 let has_caml_unix_get_sockaddr_c =
   {|
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#endif
+
 #include <caml/mlvalues.h>
 #include <caml/socketaddr.h>
 
