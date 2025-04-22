@@ -2,6 +2,7 @@
 =====
 * Remove full struct support for `SockaddrStorage`,
   only allocate by size.
+* Use native API to convert back and forth to OCaml socketaddr
 
 2.2.0 (2025-01-30)
 =====

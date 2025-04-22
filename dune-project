@@ -59,6 +59,7 @@
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
  (depends
   (ocaml (>= 4.12))
+  dune-configurator
   (posix-base (>= 2.2))
   ctypes)
 )

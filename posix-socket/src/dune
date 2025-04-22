@@ -10,8 +10,14 @@
   "posix-socket provides access to the features exposed in sys/socket.h")
  (foreign_stubs
   (language c)
-  (names posix_socket_generated_stubs))
+  (names posix_socket_generated_stubs posix_socket_stubs)
+  (extra_deps posix_socket_stubs.h))
  (libraries unix ctypes posix-socket.types posix-socket.stubs))
+
+(rule
+ (targets posix_socket_stubs.h)
+ (action
+  (run ./config/discover.exe)))
 
 (rule
  (targets posix_socket_generated_stubs.ml)

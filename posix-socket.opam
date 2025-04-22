@@ -12,6 +12,7 @@ bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
   "dune" {>= "2.9"}
   "ocaml" {>= "4.12"}
+  "dune-configurator"
   "posix-base" {>= "2.2"}
   "ctypes"
   "odoc" {with-doc}

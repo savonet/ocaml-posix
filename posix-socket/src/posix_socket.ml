@@ -132,6 +132,8 @@ let getaddrinfo =
           ret
       | _ -> failwith "getaddrinfo"
 
+external alloc_sockaddr : unit Ctypes.ptr -> int -> Unix.sockaddr = "posix_socket_alloc_sockaddr"
+
 let to_unix_sockaddr s =
   match !@(s |-> Sockaddr.sa_family) with
     | id when id = af_inet || id = af_inet6 ->
@@ -139,6 +141,8 @@ let to_unix_sockaddr s =
         let inet_addr = Unix.inet_addr_of_string inet_addr in
         Unix.ADDR_INET (inet_addr, port)
     | _ -> failwith "Not implemented"
+
+external get_sockaddr : Unix.sockaddr -> unit Ctypes.ptr -> unit = "posix_socket_get_sockaddr"
 
 let from_unix_sockaddr = function
   | Unix.ADDR_UNIX _ -> failwith "Not implemented"
