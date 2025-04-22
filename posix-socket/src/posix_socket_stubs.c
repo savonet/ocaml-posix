@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#endif
+
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
 #include <caml/socketaddr.h>
