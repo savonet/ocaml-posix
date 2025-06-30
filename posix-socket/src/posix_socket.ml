@@ -98,11 +98,13 @@ let getaddrinfo =
     if is_null !@p then List.rev cur
     else (
       let addrinfo = !@p in
-      let sockaddr = sockaddr_storage () in
+      let sockaddr_len =
+        Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)
+      in
+      let sockaddr = to_voidp (allocate_n char ~count:sockaddr_len) in
       memcpy sockaddr
         (to_voidp !@(addrinfo |-> Types.Addrinfo.ai_addr))
-        (Unsigned.Size_t.of_int
-           (Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)));
+        (Unsigned.Size_t.of_int sockaddr_len);
       get_sockaddr
         ~cur:(from_voidp Types.Sockaddr.t sockaddr :: cur)
         (addrinfo |-> Types.Addrinfo.ai_next))
@@ -134,6 +136,7 @@ external alloc_sockaddr : _ Cstubs_internals.fatptr -> int -> Unix.sockaddr
   = "posix_socket_alloc_sockaddr"
 
 let fatptr = function Cstubs_internals.CPointer s -> s
+
 let to_unix_sockaddr s = alloc_sockaddr (fatptr s) (sockaddr_len s)
 
 external get_sockaddr : Unix.sockaddr -> _ Cstubs_internals.fatptr -> unit
