@@ -25,7 +25,6 @@ module Def (F : Cstubs.FOREIGN) = struct
     foreign "getservbyname" (ptr char @-> ptr void @-> returning (ptr Servent.t))
 
   let strnlen = foreign "strnlen" (ptr char @-> size_t @-> returning size_t)
-  let memcpy = foreign "memcpy" (ptr void @-> const_void_ptr @-> size_t @-> returning void)
   let htonl = foreign "htonl" (uint32_t @-> returning uint32_t)
   let htons = foreign "htons" (uint16_t @-> returning uint16_t)
   let ntohs = foreign "ntohs" (uint16_t @-> returning uint16_t)
