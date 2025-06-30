@@ -94,20 +94,17 @@ let getnameinfo sockaddr_ptr =
     | _ -> failwith "getnameinfo"
 
 let getaddrinfo =
-  let rec get_sockaddr ~cur p =
-    if is_null !@p then List.rev cur
-    else (
-      let addrinfo = !@p in
-      let sockaddr_len =
-        Socklen.to_int !@(addrinfo |-> Types.Addrinfo.ai_addrlen)
-      in
-      let sockaddr = to_voidp (allocate_n char ~count:sockaddr_len) in
-      memcpy sockaddr
-        (to_voidp !@(addrinfo |-> Types.Addrinfo.ai_addr))
-        (Unsigned.Size_t.of_int sockaddr_len);
-      get_sockaddr
-        ~cur:(from_voidp Types.Sockaddr.t sockaddr :: cur)
-        (addrinfo |-> Types.Addrinfo.ai_next))
+  let get_sockaddr p =
+    let finalise () = ignore (Sys.opaque_identity p) in
+    let rec get_ptrs ~cur p =
+      if is_null !@p then List.rev cur
+      else (
+        let addrinfo = !@p in
+        let sockaddr = !@(addrinfo |-> Types.Addrinfo.ai_addr) in
+        Gc.finalise_last finalise sockaddr;
+        get_ptrs ~cur:(sockaddr :: cur) (addrinfo |-> Types.Addrinfo.ai_next))
+    in
+    get_ptrs ~cur:[] p
   in
   fun ?hints ?port host ->
     let port =
@@ -121,22 +118,24 @@ let getaddrinfo =
             CArray.start c
         | None -> from_voidp char null
     in
-    let p = allocate_n (ptr Addrinfo.t) ~count:1 in
+    let p =
+      allocate_n
+        ~finalise:(fun p ->
+          let p = !@p in
+          if not (is_null p) then freeaddrinfo p)
+        (ptr Addrinfo.t) ~count:1
+    in
     let hints =
       Option.value ~default:(from_voidp Types.Addrinfo.t null) hints
     in
     match getaddrinfo host port hints p with
-      | 0 ->
-          let ret = get_sockaddr ~cur:[] p in
-          freeaddrinfo !@p;
-          ret
+      | 0 -> get_sockaddr p
       | _ -> failwith "getaddrinfo"
 
 external alloc_sockaddr : _ Cstubs_internals.fatptr -> int -> Unix.sockaddr
   = "posix_socket_alloc_sockaddr"
 
 let fatptr = function Cstubs_internals.CPointer s -> s
-
 let to_unix_sockaddr s = alloc_sockaddr (fatptr s) (sockaddr_len s)
 
 external get_sockaddr : Unix.sockaddr -> _ Cstubs_internals.fatptr -> unit

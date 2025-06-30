@@ -20,3 +20,14 @@ let () =
           (Unix.string_of_inet_addr inet_addr)
           port
     | _ -> assert false
+
+let () =
+  match getaddrinfo "google.com" with
+    | sockaddr :: _ ->
+        let name, port = getnameinfo sockaddr in
+        Printf.printf "Socket name: %s, port: %d\n%!" name port
+    | _ -> assert false
+
+let () =
+  Gc.full_major ();
+  Gc.full_major ()
