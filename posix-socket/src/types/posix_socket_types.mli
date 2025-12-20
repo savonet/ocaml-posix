@@ -48,7 +48,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
 
     val t : t structure S.typ
     val ai_flags : (int, t structure) S.field
-    val ai_family : (sa_family_t, t structure) S.field
+    val ai_family : (int, t structure) S.field
     val ai_socktype : (int, t structure) S.field
     val ai_protocol : (int, t structure) S.field
     val ai_addrlen : (socklen_t, t structure) S.field
