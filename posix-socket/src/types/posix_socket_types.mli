@@ -9,7 +9,6 @@ val sa_family_t : sa_family_t typ
 val af_inet : sa_family_t
 val af_inet6 : sa_family_t
 val af_unspec : sa_family_t
-val sa_data_len : int
 val sock_stream : int
 val sock_dgram : int
 val sock_seqpacket : int
@@ -36,7 +35,6 @@ module Def (S : Cstubs.Types.TYPE) : sig
 
     val t : t structure S.typ
     val sa_family : (sa_family_t, t structure) S.field
-    val sa_data : (char carray, t structure) S.field
   end
 
   type sockaddr = Sockaddr.t structure
