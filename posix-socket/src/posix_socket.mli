@@ -71,7 +71,7 @@ module Addrinfo : sig
 
   val t : t structure typ
   val ai_flags : (int, t structure) field
-  val ai_family : (sa_family_t, t structure) field
+  val ai_family : (int, t structure) field
   val ai_socktype : (socket_type, t structure) field
   val ai_protocol : (int, t structure) field
   val ai_addrlen : (socklen_t, t structure) field
