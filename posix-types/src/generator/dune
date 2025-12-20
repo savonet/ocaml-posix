@@ -9,6 +9,12 @@
   (run ./gen_constants_c.exe %{targets})))
 
 (rule
+ (target clibs_include_path)
+ (action
+  (with-stdout-to %{target}
+    (system "dirname %{lib:ctypes:ctypes_cstubs_internals.h}"))))
+
+(rule
  (targets gen_constants_c)
  (deps
   (:c_code ./gen_constants.c))
@@ -16,7 +22,7 @@
   (run
    %{ocaml-config:c_compiler}
    -I
-   %{lib:ctypes:}
+   %{read-lines:clibs_include_path}
    -I
    %{ocaml-config:standard_library}
    -o

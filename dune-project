@@ -1,4 +1,4 @@
-(lang dune 2.9)
+(lang dune 3.8)
 (name posix-bindings)
 (source (github savonet/ocaml-posix))
 (license MIT)
@@ -6,6 +6,7 @@
 (maintainers "romain.beauxis@gmail.com")
 
 (generate_opam_files true)
+(opam_file_location inside_opam_directory)
 
 (package
  (name posix-base)
@@ -118,6 +119,7 @@
  (version 3)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
+ (allow_empty)
  (depends
   posix-types
   posix-socket

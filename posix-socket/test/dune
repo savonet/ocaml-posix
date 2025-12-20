@@ -1,5 +1,4 @@
 (test
  (name test)
- (modes native)
  (package posix-socket)
  (libraries posix-socket))

@@ -10,7 +10,7 @@ license: "MIT"
 homepage: "https://github.com/savonet/ocaml-posix"
 bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
-  "dune" {>= "2.9"}
+  "dune" {>= "3.8"}
   "ctypes"
   "posix-base" {= version}
   "posix-types" {= version}
@@ -26,12 +26,9 @@ build: [
     name
     "-j"
     jobs
-    "--promote-install-files=false"
     "@install"
     "@runtest" {with-test}
     "@doc" {with-doc}
   ]
-  ["dune" "install" "-p" name "--create-install-files" name]
 ]
 dev-repo: "git+https://github.com/savonet/ocaml-posix.git"
-available: os != "win32"
