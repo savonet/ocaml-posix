@@ -17,7 +17,6 @@ module Sockaddr = struct
   include Types.Sockaddr
 
   let from_sockaddr_storage = from_sockaddr_storage t
-  let sa_data_len = sa_data_len
 end
 
 type sockaddr = Sockaddr.t structure

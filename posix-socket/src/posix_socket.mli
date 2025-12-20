@@ -55,8 +55,6 @@ module Sockaddr : sig
 
   val t : t structure typ
   val sa_family : (sa_family_t, t structure) field
-  val sa_data : (char carray, t structure) field
-  val sa_data_len : int
   val from_sockaddr_storage : sockaddr_storage ptr -> t structure ptr
 end
 

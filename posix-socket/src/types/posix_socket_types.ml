@@ -37,7 +37,6 @@ module Def (S : Cstubs.Types.TYPE) = struct
 
     let t = S.structure "sockaddr"
     let sa_family = S.field t "sa_family" sa_family_t
-    let sa_data = S.field t "sa_data" (S.array sa_data_len S.char)
     let () = S.seal t
   end
 
