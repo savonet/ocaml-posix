@@ -9,3 +9,12 @@
 (executable
  (modules posix_base_dirname_internal)
  (name posix_base_dirname_internal))
+
+(rule
+ (target clibs_include_path)
+ (action
+  (with-stdout-to
+   %{target}
+   (run
+    %{exe:posix_base_dirname_internal.exe}
+    %{lib:ctypes:ctypes_cstubs_internals.h}))))

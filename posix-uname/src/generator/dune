@@ -14,15 +14,6 @@
   (run ./gen_types_c.exe %{targets})))
 
 (rule
- (target clibs_include_path)
- (action
-  (with-stdout-to
-   %{target}
-   (run
-    %{exe:../../../posix-base/src/posix_base_dirname_internal.exe}
-    %{lib:ctypes:ctypes_cstubs_internals.h}))))
-
-(rule
  (targets gen_types_c)
  (deps
   (:c_code ./gen_types.c))
@@ -30,7 +21,7 @@
   (run
    %{ocaml-config:c_compiler}
    -I
-   %{read-lines:clibs_include_path}
+   %{read-lines:../../../posix-base/src/clibs_include_path}
    -I
    %{ocaml-config:standard_library}
    -o
@@ -55,7 +46,7 @@
   (run
    %{ocaml-config:c_compiler}
    -I
-   %{read-lines:clibs_include_path}
+   %{read-lines:../../../posix-base/src/clibs_include_path}
    -I
    %{ocaml-config:standard_library}
    -o
