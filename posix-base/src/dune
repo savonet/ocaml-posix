@@ -1,6 +1,11 @@
 (library
  (name posix_base)
  (public_name posix-base)
+ (modules posix_base)
  (synopsis
   "posix-base provides the base tools to generate the various posix bindings")
  (libraries ctypes.stubs integers))
+
+(executable
+ (modules posix_base_dirname_internal)
+ (name posix_base_dirname_internal))
