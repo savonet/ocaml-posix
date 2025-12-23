@@ -2,9 +2,8 @@ open Ctypes
 
 (** Utilities modules to build ctypes bindings. *)
 
-(** Module used to define stubs generators.
-   See: {!Posix_uname_stubs} and {!Posix_uname_constants}
-   For some examples. *)
+(** Module used to define stubs generators. See: {!Posix_uname_stubs} and
+    {!Posix_uname_constants} For some examples. *)
 module Generators : sig
   module type TypesDef = sig
     module Types : Cstubs.Types.BINDINGS
@@ -29,8 +28,8 @@ module Generators : sig
   end
 end
 
-(** Module used to define generic types using their
-    size. See {!Posix_types} for an example. *)
+(** Module used to define generic types using their size. See {!Posix_types} for
+    an example. *)
 module Types : sig
   (** Module type for signed integers. *)
   module type Signed = sig
@@ -54,9 +53,8 @@ module Types : sig
 
   val mkUnsigned : name:string -> size:int -> (module Unsigned)
 
-  (** Module type for arithmetic numbers. In POSIX world,
-      an arithmetic type can be either a floating point number
-      or an integer (of unknown size). *)
+  (** Module type for arithmetic numbers. In POSIX world, an arithmetic type can
+      be either a floating point number or an integer (of unknown size). *)
   module type Arithmetic = sig
     type t
 

@@ -59,8 +59,8 @@ let test_short_required_no_arg _ =
   let argv = [| "progname"; "-b" |] in
   let opt = { name = 'b'; arg = `Required (fun _ -> ()) } in
   let test = ref false in
-  begin
-    try ignore (getopt argv [opt]) with Missing_argument 'b' -> test := true
+  begin try ignore (getopt argv [opt])
+  with Missing_argument 'b' -> test := true
   end;
   assert !test
 
@@ -73,9 +73,8 @@ let test_long_required_no_long_arg _ =
   let argv = [| "progname"; "--bla" |] in
   let opt = { name = ("bla", 'b'); arg = `Required (fun _ -> ()) } in
   let test = ref false in
-  begin
-    try ignore (getopt_long argv [opt])
-    with Missing_argument 'b' -> test := true
+  begin try ignore (getopt_long argv [opt])
+  with Missing_argument 'b' -> test := true
   end;
   assert !test
 
@@ -86,9 +85,8 @@ let test_long_required_no_short_arg _ =
   let argv = [| "progname"; "-b" |] in
   let opt = { name = ("bla", 'b'); arg = `Required (fun _ -> ()) } in
   let test = ref false in
-  begin
-    try ignore (getopt_long argv [opt])
-    with Missing_argument 'b' -> test := true
+  begin try ignore (getopt_long argv [opt])
+  with Missing_argument 'b' -> test := true
   end;
   assert !test
 

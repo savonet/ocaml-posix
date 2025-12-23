@@ -11,8 +11,9 @@
 (rule
  (target clibs_include_path)
  (action
-  (with-stdout-to %{target}
-    (system "dirname %{lib:ctypes:ctypes_cstubs_internals.h}"))))
+  (with-stdout-to
+   %{target}
+   (system "dirname %{lib:ctypes:ctypes_cstubs_internals.h}"))))
 
 (rule
  (targets gen_constants_c)

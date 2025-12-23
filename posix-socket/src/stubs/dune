@@ -10,7 +10,8 @@
 
 (rule
  (targets posix_socket_generated_types.ml)
- (enabled_if (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps
   (:exec ../generator/exec.sh)
   (:gen ../generator/gen_types_c_target.exe))
@@ -21,7 +22,8 @@
 
 (rule
  (targets posix_socket_generated_types.ml)
- (enabled_if (= %{ocaml-config:host} %{ocaml-config:target}))
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
  (deps
   (:gen ../generator/gen_types_c_target.exe))
  (action

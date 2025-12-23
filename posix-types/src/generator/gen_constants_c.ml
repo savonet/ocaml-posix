@@ -9,7 +9,8 @@ module Constants = Posix_base.Generators.Types (struct
            Printf.sprintf
              "\n\
               #define %s_SIZE sizeof(%s)\n\
-              #define IS_%s_FLOAT ((float)((%s)1.23f) == 1.23f)" name t name t)
+              #define IS_%s_FLOAT ((float)((%s)1.23f) == 1.23f)"
+             name t name t)
          Posix_types_constants.number_types
       @ List.map
           (fun t ->
@@ -17,8 +18,8 @@ module Constants = Posix_base.Generators.Types (struct
             Printf.sprintf
               "\n\
                #define %s_SIZE sizeof(%s)\n\
-               #define %s_ALIGNMENT offsetof(struct { char c; %s x; }, x)" name
-              t name t)
+               #define %s_ALIGNMENT offsetof(struct { char c; %s x; }, x)"
+              name t name t)
           Posix_types_constants.abstract_types)
 
   let c_headers =

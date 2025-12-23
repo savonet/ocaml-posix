@@ -46,6 +46,7 @@ type socklen_t
 val socklen_t : socklen_t typ
 
 type sockaddr_storage
+
 val sockaddr_storage : unit -> sockaddr_storage ptr
 val sockaddr_storage_len : int
 

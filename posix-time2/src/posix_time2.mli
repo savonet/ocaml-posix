@@ -1,7 +1,8 @@
-(** High-level API to <time.h> and <sys/time.h>.
-    See: {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html} time.h}
-    and {{:https://pubs.opengroup.org/onlinepubs/7908799/xsh/systime.h.html} systime.h}
-    for an explanation about the data structures and functions. *)
+(** High-level API to <time.h> and <sys/time.h>. See:
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html}
+     time.h} and
+    {{:https://pubs.opengroup.org/onlinepubs/7908799/xsh/systime.h.html}
+     systime.h} for an explanation about the data structures and functions. *)
 
 module Timespec : sig
   (** POSIX timespec time specifier with seconds and nanoseconds. A normalized
@@ -9,8 +10,8 @@ module Timespec : sig
       [1000000000] (exclusive). *)
   type t = private { tv_sec : int64; tv_nsec : int64 }
 
-  (** [create sec nsec] creates a new normalized timespec with [sec] seconds
-      and [nsec] nanoseconds. *)
+  (** [create sec nsec] creates a new normalized timespec with [sec] seconds and
+      [nsec] nanoseconds. *)
   val create : int64 -> int64 -> t
 
   (** [add t1 t2] adds the two timespec values, returning a normalized value *)
@@ -35,9 +36,9 @@ module Timespec : sig
   (** [to_string t] creates a string of the form "sec.nsec". *)
   val to_string : t -> string
 
-  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns
-      [0] if [t1] is equal to [2], a negative integer if [t1] is less than [t2],
-      and a positive integer if [t1] is greater than [t2]. *)
+  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns [0]
+      if [t1] is equal to [2], a negative integer if [t1] is less than [t2], and
+      a positive integer if [t1] is greater than [t2]. *)
   val compare : t -> t -> int
 end
 
@@ -46,13 +47,13 @@ module Itimerspec : sig
 end
 
 module Timeval : sig
-  (** POSIX timeval time value with seconds and microseconds. A normalized
-      value of type [t] must have a value of [tv_usec] between [0] and
-      [1000000] (exclusive). *)
+  (** POSIX timeval time value with seconds and microseconds. A normalized value
+      of type [t] must have a value of [tv_usec] between [0] and [1000000]
+      (exclusive). *)
   type t = private { tv_sec : int64; tv_usec : int64 }
 
-  (** [create sec usec] creates a new normalized timespec with [sec] seconds
-      and [usec] microseconds. *)
+  (** [create sec usec] creates a new normalized timespec with [sec] seconds and
+      [usec] microseconds. *)
   val create : int64 -> int64 -> t
 
   (** [add t1 t2] adds the two timespec values, returning a normalized value *)
@@ -77,19 +78,18 @@ module Timeval : sig
   (** [to_string t] creates a string of the form "sec.usec". *)
   val to_string : t -> string
 
-  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns
-      [0] if [t1] is equal to [2], a negative integer if [t1] is less than [t2],
-      and a positive integer if [t1] is greater than [t2]. *)
+  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns [0]
+      if [t1] is equal to [2], a negative integer if [t1] is less than [t2], and
+      a positive integer if [t1] is greater than [t2]. *)
   val compare : t -> t -> int
 end
 
 module Tm : sig
   (** POSIX tm value with seconds [0,61], minutes [0,59], hours [0,23], day of
-    month [0,31], month of year [0,11], years since 1900, day of week [0,6]
-    (Sunday = 0), day of year [0,365] and daylight saving flag.
-    The daylight saving flag is positive if daylight saving is in effect and 0
-    if not. In case this information is not available, it has a negative value.
-  *)
+      month [0,31], month of year [0,11], years since 1900, day of week [0,6]
+      (Sunday = 0), day of year [0,365] and daylight saving flag. The daylight
+      saving flag is positive if daylight saving is in effect and 0 if not. In
+      case this information is not available, it has a negative value. *)
   type t = private {
     tm_sec : int;
     tm_min : int;
@@ -102,17 +102,16 @@ module Tm : sig
     tm_isdst : int;
   }
 
-  (** [create tm_sec tm_min tm_hour tm_mday rm_mon tm_year tm_wday tm_yday tm_isdst]
-    creates a new time value if the all arguments suffice the aforementioned
-    predicates. Otherwise [create] will return [None]. *)
+  (** [create tm_sec tm_min tm_hour tm_mday rm_mon tm_year tm_wday tm_yday
+       tm_isdst] creates a new time value if the all arguments suffice the
+      aforementioned predicates. Otherwise [create] will return [None]. *)
   val create :
     int -> int -> int -> int -> int -> int -> int -> int -> int -> t option
 
-  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns
-    [0] if [t1] is equal to [2], a negative integer if [t1] is less than [t2],
-    and a positive integer if [t1] is greater than [t2].
-    [compare] considers tm_year, tm_mon, tm_mday, tm_hour, tm_min, tm_sec in
-    the given order. *)
+  (** [compare t1 t2] compares the two time values [t1] and [t2]. It returns [0]
+      if [t1] is equal to [2], a negative integer if [t1] is less than [t2], and
+      a positive integer if [t1] is greater than [t2]. [compare] considers
+      tm_year, tm_mon, tm_mday, tm_hour, tm_min, tm_sec in the given order. *)
   val compare : t -> t -> int
 end
 

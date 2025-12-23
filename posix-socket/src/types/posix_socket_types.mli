@@ -4,7 +4,6 @@ module Sa_family : Unsigned.S
 type sa_family_t = Sa_family.t
 
 val sockaddr_storage_len : int
-
 val sa_family_t : sa_family_t typ
 val af_inet : sa_family_t
 val af_inet6 : sa_family_t
