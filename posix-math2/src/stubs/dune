@@ -10,7 +10,23 @@
 
 (rule
  (targets posix_math_generated_types.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../../posix-base/src/exec.sh)
+  (:gen ../generator/gen_types_c_target.exe))
  (action
   (with-stdout-to
    %{targets}
-   (run ../generator/gen_types_c))))
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_math_generated_types.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen ../generator/gen_types_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
