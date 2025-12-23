@@ -1,0 +1,10 @@
+3.2.0 (unreleased)
+* Initial release of posix-resource module
+* Provides bindings to sys/resource.h
+* Includes getrlimit/setrlimit for resource limit management
+* Includes getrusage for detailed resource usage statistics
+* Includes getpriority/setpriority for process priority control
+* Support for struct rlimit with cur/max limits
+* Support for struct rusage with comprehensive statistics
+* Integration with posix-time2 for timeval timestamps
+* Unix-only module (not available on Windows)

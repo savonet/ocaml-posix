@@ -1,0 +1,14 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_resource_stubs)
+ (public_name posix-resource.stubs)
+ (libraries posix-resource.types ctypes.stubs))
+
+(rule
+ (targets posix_resource_generated_types.ml)
+ (action
+  (with-stdout-to %{targets} (run ../generator/gen_types_c))))

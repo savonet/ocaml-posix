@@ -1,0 +1,8 @@
+(executable
+ (name test)
+ (libraries posix-resource unix))
+
+(rule
+ (alias runtest)
+ (action
+  (run %{exe:test.exe})))

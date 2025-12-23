@@ -141,5 +141,9 @@
   posix-uname
   posix-math2
   posix-getopt
+<<<<<<< HEAD
   posix-stat)
+=======
+  posix-resource)
+>>>>>>> 6bfbe8c (Add posix-resource.)
 )

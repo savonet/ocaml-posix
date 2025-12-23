@@ -1,0 +1,15 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_resource_types)
+ (public_name posix-resource.types)
+ (libraries posix-resource.constants posix-base posix-time2.types
+   ctypes.stubs))
+
+(rule
+ (targets posix_resource_generated_constants.ml)
+ (action
+  (with-stdout-to %{targets} (run ../generator/gen_constants_c))))
