@@ -6,6 +6,6 @@
 * Includes mkdir/mkfifo for file creation
 * Includes umask for permission mask control
 * Includes modern *at family of functions (fstatat, fchmodat, mkdirat, mkfifoat)
-* Full cross-compilation support via exec.sh
 * Integration with posix-time2 for timespec timestamps
 * Comprehensive file type test functions (s_isreg, s_isdir, etc.)
+* Unix-only module (not available on Windows)

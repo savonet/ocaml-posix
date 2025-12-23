@@ -11,21 +11,7 @@
 
 (rule
  (targets posix_stat_generated_constants.ml)
- (enabled_if
-  (<> %{ocaml-config:host} %{ocaml-config:target}))
- (deps
-  (:exec ../../../posix-base/src/exec.sh)
-  (:gen ../generator/gen_constants_c_target.exe))
  (action
   (with-stdout-to
    %{targets}
-   (system "%{exec} %{ocaml-config:system} %{gen}"))))
-
-(rule
- (targets posix_stat_generated_constants.ml)
- (enabled_if
-  (= %{ocaml-config:host} %{ocaml-config:target}))
- (deps
-  (:gen ../generator/gen_constants_c_target.exe))
- (action
-  (with-stdout-to %{targets} (run %{gen}))))
+   (run ../generator/gen_constants_c))))
