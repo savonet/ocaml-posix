@@ -24,7 +24,9 @@
  (action
   (with-stdout-to
    %{target}
-   (run %{exe:../../../posix-base/src/posix_base_dirname_internal.exe} %{lib:ctypes:ctypes_cstubs_internals.h}))))
+   (run
+    %{exe:../../../posix-base/src/posix_base_dirname_internal.exe}
+    %{lib:ctypes:ctypes_cstubs_internals.h}))))
 
 (rule
  (targets gen_types_c)
