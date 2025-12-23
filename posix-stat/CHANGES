@@ -1,0 +1,11 @@
+3.2.0 (unreleased)
+* Initial release of posix-stat module
+* Provides bindings to sys/stat.h
+* Includes stat/fstat/lstat for file status queries
+* Includes chmod/fchmod for permission changes
+* Includes mkdir/mkfifo for file creation
+* Includes umask for permission mask control
+* Includes modern *at family of functions (fstatat, fchmodat, mkdirat, mkfifoat)
+* Full cross-compilation support via exec.sh
+* Integration with posix-time2 for timespec timestamps
+* Comprehensive file type test functions (s_isreg, s_isdir, etc.)

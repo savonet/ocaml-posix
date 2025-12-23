@@ -1,0 +1,31 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_stat_types)
+ (public_name posix-stat.types)
+ (libraries posix-stat.constants posix-base posix-types posix-time2.types
+   ctypes.stubs))
+
+(rule
+ (targets posix_stat_generated_constants.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../../posix-base/src/exec.sh)
+  (:gen ../generator/gen_constants_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_stat_generated_constants.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen ../generator/gen_constants_c_target.exe))
+ (action
+  (with-stdout-to %{targets} (run %{gen}))))
