@@ -6,12 +6,19 @@
 (library
  (name posix_stat)
  (public_name posix-stat)
- (synopsis "posix-stat provides access to the features exposed in sys/stat.h")
+ (synopsis
+  "posix-stat provides access to the features exposed in sys/stat.h")
  (foreign_stubs
   (language c)
   (names posix_stat_generated_stubs))
- (libraries unix unix-errno.unix ctypes posix-types posix-time2
-   posix-stat.types posix-stat.stubs))
+ (libraries
+  unix
+  unix-errno.unix
+  ctypes
+  posix-types
+  posix-time2
+  posix-stat.types
+  posix-stat.stubs))
 
 (rule
  (targets posix_stat_generated_stubs.ml)

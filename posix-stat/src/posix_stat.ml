@@ -10,52 +10,34 @@ let s_ifchr = Posix_stat_types.s_ifchr
 let s_ifblk = Posix_stat_types.s_ifblk
 let s_ififo = Posix_stat_types.s_ififo
 let s_ifsock = Posix_stat_types.s_ifsock
-
 let s_isuid = Posix_stat_types.s_isuid
 let s_isgid = Posix_stat_types.s_isgid
 let s_isvtx = Posix_stat_types.s_isvtx
-
 let s_irwxu = Posix_stat_types.s_irwxu
 let s_irusr = Posix_stat_types.s_irusr
 let s_iwusr = Posix_stat_types.s_iwusr
 let s_ixusr = Posix_stat_types.s_ixusr
-
 let s_irwxg = Posix_stat_types.s_irwxg
 let s_irgrp = Posix_stat_types.s_irgrp
 let s_iwgrp = Posix_stat_types.s_iwgrp
 let s_ixgrp = Posix_stat_types.s_ixgrp
-
 let s_irwxo = Posix_stat_types.s_irwxo
 let s_iroth = Posix_stat_types.s_iroth
 let s_iwoth = Posix_stat_types.s_iwoth
 let s_ixoth = Posix_stat_types.s_ixoth
-
 let at_fdcwd = Posix_stat_types.at_fdcwd
 let at_symlink_nofollow = Posix_stat_types.at_symlink_nofollow
 let at_removedir = Posix_stat_types.at_removedir
 let at_eaccess = Posix_stat_types.at_eaccess
 
 (* File type test functions - implement as OCaml functions *)
-let s_isreg mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ifreg)
-
-let s_isdir mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ifdir)
-
-let s_islnk mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_iflnk)
-
-let s_ischr mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ifchr)
-
-let s_isblk mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ifblk)
-
-let s_isfifo mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ififo)
-
-let s_issock mode =
-  Posix_types.Mode.(equal (logand mode s_ifmt) s_ifsock)
+let s_isreg mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifreg)
+let s_isdir mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifdir)
+let s_islnk mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_iflnk)
+let s_ischr mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifchr)
+let s_isblk mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifblk)
+let s_isfifo mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ififo)
+let s_issock mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifsock)
 
 (* High-level stat type *)
 type stat = {
@@ -79,8 +61,12 @@ let from_stat stat_ptr =
   let get f = getf stat_ptr f in
   let get_timespec f =
     let ts = get f in
-    let tv_sec = Posix_types.Time.to_int64 (getf ts Types.Time2_types.Timespec.tv_sec) in
-    let tv_nsec = Signed.Long.to_int64 (getf ts Types.Time2_types.Timespec.tv_nsec) in
+    let tv_sec =
+      Posix_types.Time.to_int64 (getf ts Types.Time2_types.Timespec.tv_sec)
+    in
+    let tv_nsec =
+      Signed.Long.to_int64 (getf ts Types.Time2_types.Timespec.tv_nsec)
+    in
     Posix_time2.Timespec.create tv_sec tv_nsec
   in
   {
@@ -111,7 +97,7 @@ let wrap_int_result f =
 let wrap_stat_result f =
   Errno_unix.with_unix_exn (fun () ->
       Errno_unix.raise_on_errno (fun () ->
-          let (ret, result) = f () in
+          let ret, result = f () in
           match ret with x when x < 0 -> None | _ -> Some result))
 
 (* stat functions *)

@@ -1,5 +1,4 @@
 open Ctypes
-
 module Constants = Posix_stat_constants.Def (Posix_stat_generated_constants)
 
 (* Re-export constants *)
@@ -11,26 +10,21 @@ let s_ifchr = Constants.s_ifchr
 let s_ifblk = Constants.s_ifblk
 let s_ififo = Constants.s_ififo
 let s_ifsock = Constants.s_ifsock
-
 let s_isuid = Constants.s_isuid
 let s_isgid = Constants.s_isgid
 let s_isvtx = Constants.s_isvtx
-
 let s_irwxu = Constants.s_irwxu
 let s_irusr = Constants.s_irusr
 let s_iwusr = Constants.s_iwusr
 let s_ixusr = Constants.s_ixusr
-
 let s_irwxg = Constants.s_irwxg
 let s_irgrp = Constants.s_irgrp
 let s_iwgrp = Constants.s_iwgrp
 let s_ixgrp = Constants.s_ixgrp
-
 let s_irwxo = Constants.s_irwxo
 let s_iroth = Constants.s_iroth
 let s_iwoth = Constants.s_iwoth
 let s_ixoth = Constants.s_ixoth
-
 let at_fdcwd = Constants.at_fdcwd
 let at_symlink_nofollow = Constants.at_symlink_nofollow
 let at_removedir = Constants.at_removedir
@@ -63,7 +57,6 @@ module Def (S : Cstubs.Types.TYPE) = struct
     (* XSI optional fields *)
     let st_blksize = S.field t "st_blksize" (S.lift_typ Posix_types.blksize_t)
     let st_blocks = S.field t "st_blocks" (S.lift_typ Posix_types.blkcnt_t)
-
     let () = S.seal t
   end
 

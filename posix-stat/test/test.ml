@@ -18,18 +18,14 @@ let test_file_type_tests () =
 
 let test_constants () =
   Printf.printf "\nTesting permission constants...\n%!";
-  let mode =
-    Posix_types.Mode.(logor s_irusr (logor s_iwusr s_irgrp))
-  in
+  let mode = Posix_types.Mode.(logor s_irusr (logor s_iwusr s_irgrp)) in
   assert (Posix_types.Mode.(compare mode zero) > 0);
   Printf.printf "  ✓ Permission constants work\n%!"
 
 let test_mkdir () =
   Printf.printf "\nTesting mkdir and rmdir...\n%!";
   let temp_dir = "test_dir_" ^ string_of_int (Unix.getpid ()) in
-  let mode =
-    Posix_types.Mode.(logor s_irwxu (logor s_irgrp s_ixgrp))
-  in
+  let mode = Posix_types.Mode.(logor s_irwxu (logor s_irgrp s_ixgrp)) in
   mkdir temp_dir mode;
   let st = stat temp_dir in
   assert (s_isdir st.st_mode);
@@ -39,7 +35,7 @@ let test_mkdir () =
 let test_chmod () =
   Printf.printf "\nTesting chmod...\n%!";
   let temp_file = "test_file_" ^ string_of_int (Unix.getpid ()) in
-  let fd = Unix.openfile temp_file [ Unix.O_CREAT; Unix.O_WRONLY ] 0o644 in
+  let fd = Unix.openfile temp_file [Unix.O_CREAT; Unix.O_WRONLY] 0o644 in
   Unix.close fd;
   let mode_rw = Posix_types.Mode.(logor s_irusr s_iwusr) in
   chmod temp_file mode_rw;
@@ -50,7 +46,7 @@ let test_chmod () =
 
 let test_fstat () =
   Printf.printf "\nTesting fstat...\n%!";
-  let fd = Unix.openfile "." [ Unix.O_RDONLY ] 0 in
+  let fd = Unix.openfile "." [Unix.O_RDONLY] 0 in
   let st = fstat fd in
   assert (s_isdir st.st_mode);
   Unix.close fd;
@@ -71,9 +67,7 @@ let test_umask () =
 let test_at_functions () =
   Printf.printf "\nTesting *at functions...\n%!";
   let temp_dir = "test_at_dir_" ^ string_of_int (Unix.getpid ()) in
-  let mode =
-    Posix_types.Mode.(logor s_irwxu (logor s_irgrp s_ixgrp))
-  in
+  let mode = Posix_types.Mode.(logor s_irwxu (logor s_irgrp s_ixgrp)) in
   (* Test fstatat with AT_FDCWD *)
   mkdirat temp_dir mode;
   let st = fstatat temp_dir in
