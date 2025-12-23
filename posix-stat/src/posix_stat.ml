@@ -102,104 +102,69 @@ let from_stat stat_ptr =
 (* Helper to convert Unix.file_descr to int *)
 external fd_to_int : Unix.file_descr -> int = "%identity"
 
+(* Error handling helpers *)
+let wrap_int_result f =
+  Errno_unix.with_unix_exn (fun () ->
+      Errno_unix.raise_on_errno (fun () ->
+          match f () with x when x < 0 -> None | _ -> Some ()))
+
+let wrap_stat_result f =
+  Errno_unix.with_unix_exn (fun () ->
+      Errno_unix.raise_on_errno (fun () ->
+          let (ret, result) = f () in
+          match ret with x when x < 0 -> None | _ -> Some result))
+
 (* stat functions *)
 let stat path =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let st = make Types.Stat.t in
-          match stat path (addr st) with
-          | x when x < 0 -> None
-          | _ -> Some (from_stat st)))
+  wrap_stat_result (fun () ->
+      let st = make Types.Stat.t in
+      let ret = stat path (addr st) in
+      (ret, from_stat st))
 
 let fstat fd =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let st = make Types.Stat.t in
-          match fstat (fd_to_int fd) (addr st) with
-          | x when x < 0 -> None
-          | _ -> Some (from_stat st)))
+  wrap_stat_result (fun () ->
+      let st = make Types.Stat.t in
+      let ret = fstat (fd_to_int fd) (addr st) in
+      (ret, from_stat st))
 
 let lstat path =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let st = make Types.Stat.t in
-          match lstat path (addr st) with
-          | x when x < 0 -> None
-          | _ -> Some (from_stat st)))
+  wrap_stat_result (fun () ->
+      let st = make Types.Stat.t in
+      let ret = lstat path (addr st) in
+      (ret, from_stat st))
 
 (* chmod functions *)
-let chmod path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match chmod path mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
-
-let fchmod fd mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match fchmod (fd_to_int fd) mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
+let chmod path mode = wrap_int_result (fun () -> chmod path mode)
+let fchmod fd mode = wrap_int_result (fun () -> fchmod (fd_to_int fd) mode)
 
 (* Directory and special file creation *)
-let mkdir path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match mkdir path mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
-
-let mkfifo path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match mkfifo path mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
+let mkdir path mode = wrap_int_result (fun () -> mkdir path mode)
+let mkfifo path mode = wrap_int_result (fun () -> mkfifo path mode)
 
 (* umask - note: doesn't fail, returns previous mask *)
 let umask mask = umask mask
 
 (* *at functions with optional arguments *)
 let fstatat ?(dirfd = Unix.stdin) ?(flags = []) path =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let st = make Types.Stat.t in
-          let fd_int =
-            if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd
-          in
-          let flags_int = List.fold_left ( lor ) 0 flags in
-          match fstatat fd_int path (addr st) flags_int with
-          | x when x < 0 -> None
-          | _ -> Some (from_stat st)))
+  wrap_stat_result (fun () ->
+      let st = make Types.Stat.t in
+      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+      let flags_int = List.fold_left ( lor ) 0 flags in
+      let ret = fstatat fd_int path (addr st) flags_int in
+      (ret, from_stat st))
 
 let fchmodat ?(dirfd = Unix.stdin) ?(flags = []) path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let fd_int =
-            if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd
-          in
-          let flags_int = List.fold_left ( lor ) 0 flags in
-          match fchmodat fd_int path mode flags_int with
-          | x when x < 0 -> None
-          | _ -> Some ()))
+  wrap_int_result (fun () ->
+      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+      let flags_int = List.fold_left ( lor ) 0 flags in
+      fchmodat fd_int path mode flags_int)
 
 let mkdirat ?(dirfd = Unix.stdin) path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let fd_int =
-            if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd
-          in
-          match mkdirat fd_int path mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
+  wrap_int_result (fun () ->
+      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+      mkdirat fd_int path mode)
 
 let mkfifoat ?(dirfd = Unix.stdin) path mode =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let fd_int =
-            if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd
-          in
-          match mkfifoat fd_int path mode with
-          | x when x < 0 -> None
-          | _ -> Some ()))
+  wrap_int_result (fun () ->
+      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+      mkfifoat fd_int path mode)
