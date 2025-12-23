@@ -14,7 +14,7 @@ module Types = Posix_base.Generators.Types (struct
   #include <netdb.h>
 #endif
 
-#define SA_FAMILY_T_LEN sizeof(sa_family_t)
+#define SA_FAMILY_T_LEN (sizeof(((struct sockaddr*)0)->sa_family))
 #define SOCKLEN_T_LEN (sizeof(socklen_t))
 #define SOCKADDR_STORAGE_LEN (sizeof(struct sockaddr_storage))
 
