@@ -1,16 +1,17 @@
-(lang dune 3.8)
+(lang dune 3.20)
 (name posix-bindings)
 (source (github savonet/ocaml-posix))
 (license MIT)
 (authors "Romain Beauxis")
 (maintainers "romain.beauxis@gmail.com")
+(maintenance_intent "(latest)")
 
+(version 4.0.0)
 (generate_opam_files true)
 (opam_file_location inside_opam_directory)
 
 (package
  (name posix-base)
- (version 2.2.0)
  (synopsis "Base module for the posix bindings")
  (description "posix-base provides base tools for the posix binding modules.")
  (depends
@@ -21,7 +22,6 @@
 
 (package
  (name posix-signal)
- (version 2.2.0)
  (synopsis "Bindings for the types defined in <signal.h>")
  (description "posix-signal provides an API to the types and bindings defined in <signal.h>")
  (depends
@@ -32,7 +32,6 @@
 
 (package
  (name posix-types)
- (version 2.2.0)
  (synopsis "Bindings for the types defined in <sys/types.h>")
  (description "posix-types provides an API to the types defined in <sys/types.h>")
  (depends
@@ -43,7 +42,6 @@
 
 (package
  (name posix-time2)
- (version 2.2.0)
  (synopsis "Bindings for posix time functions")
  (description "posix-time2 provides the types and bindings for posix time APIs.")
  (depends
@@ -55,7 +53,6 @@
 
 (package
  (name posix-socket)
- (version 3.0.0)
  (synopsis "Bindings for posix sockets")
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
  (depends
@@ -67,7 +64,6 @@
 
 (package
  (name posix-socket-unix)
- (version 3.0.0)
  (synopsis "Bindings for posix sockets")
  (description "posix-socket-unix provides unix-specific types and bindings for posix sockets.")
  (depends
@@ -79,7 +75,6 @@
 
 (package
  (name posix-uname)
- (version 2.2.0)
  (synopsis "Bindings for posix uname")
  (description "posix-uname provides a simple interface for POSIX uname.")
  (depends
@@ -90,7 +85,6 @@
 
 (package
  (name posix-getopt)
- (version 2.2.0)
  (synopsis "Bindings for posix getopt/getopt_long")
  (description "posix-getopt provides a simple interface for the POSIX getopt and its extensions, getopt_long and getopt_long_only.")
  (depends
@@ -105,7 +99,6 @@
 
 (package
  (name posix-math2)
- (version 2.2.0)
  (synopsis "Bindings for posix math")
  (description "posix-math2 provides a simple interface for POSIX math functions.")
  (depends
@@ -116,7 +109,6 @@
 
 (package
  (name posix-bindings)
- (version 3)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
  (allow_empty)
