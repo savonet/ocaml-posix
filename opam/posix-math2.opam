@@ -13,7 +13,6 @@ depends: [
   "dune" {>= "3.20"}
   "ctypes"
   "posix-base" {= version}
-  "unix-errno"
   "odoc" {with-doc}
 ]
 build: [

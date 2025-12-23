@@ -103,8 +103,7 @@
  (description "posix-math2 provides a simple interface for POSIX math functions.")
  (depends
   ctypes
-  (posix-base (= :version))
-  unix-errno)
+  (posix-base (= :version)))
 )
 
 (package

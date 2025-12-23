@@ -10,7 +10,7 @@
  (foreign_stubs
   (language c)
   (names posix_math_generated_stubs))
- (libraries unix unix-errno.unix ctypes posix-math2.types posix-math2.stubs))
+ (libraries unix ctypes posix-math2.types posix-math2.stubs))
 
 (rule
  (targets posix_math_generated_stubs.ml)
