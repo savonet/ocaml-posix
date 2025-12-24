@@ -23,7 +23,7 @@
 (package
  (name posix-errno)
  (synopsis "POSIX errno handling and Unix error conversion")
- (description "posix-errno provides comprehensive errno handling with support for Linux, BSD, macOS, and Windows errno values. Includes APIs for error checking and Unix error conversion.")
+ (description "posix-errno provides comprehensive errno handling.")
  (depends
   (ocaml (>= 4.08))
   (posix-base (= :version))
