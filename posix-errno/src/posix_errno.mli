@@ -218,3 +218,21 @@ val to_unix_error : t -> Unix.error
 
 (** Convert errno int to Unix.error *)
 val int_to_unix_error : int -> Unix.error
+
+(** {1 Error String Functions} *)
+
+(** Get error message string for an errno value using strerror_r.
+
+    @param buflen Optional buffer length for error message (default: 1024)
+    @param errnum The errno value to get the message for
+    @return Error message string
+    @raise Unix_error if strerror_r fails *)
+val strerror : ?buflen:int -> int -> string
+
+(** Get error message string for an errno variant.
+
+    @param buflen Optional buffer length for error message (default: 1024)
+    @param err The errno variant to get the message for
+    @return Error message string
+    @raise Unix_error if strerror_r fails *)
+val strerror_of_t : ?buflen:int -> t -> string

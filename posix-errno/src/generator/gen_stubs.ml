@@ -3,7 +3,9 @@ module Stubs = Posix_base.Generators.Stubs (struct
 
   let c_headers =
     {|
+#define _POSIX_C_SOURCE 200112L
 #include <errno.h>
+#include <string.h>
 
 /* Get current errno value */
 static inline int posix_errno_get_errno(void) {

@@ -581,3 +581,21 @@ let raise_on_zero ?call f = raise_on_error ?call f (fun x -> x = 0)
 
 let raise_on_none ?call f =
   Option.get (raise_on_error ?call f (fun x -> x = None))
+
+(** Get error string from errno using strerror_r *)
+let strerror ?(buflen = 1024) errnum =
+  let open Ctypes in
+  let buf = CArray.make char buflen in
+  let buf_ptr = CArray.start buf in
+  let result = Stubs.strerror_r errnum buf_ptr (Unsigned.Size_t.of_int buflen) in
+  if result = 0 then
+    (* Success - get actual string length and convert to OCaml string *)
+    let len = Stubs.strlen buf_ptr in
+    string_from_ptr buf_ptr ~length:len
+  else
+    (* Error - strerror_r returned an error code, raise Unix error *)
+    let err = int_to_unix_error result in
+    raise (Unix.Unix_error (err, "strerror_r", ""))
+
+(** Get error string from errno variant *)
+let strerror_of_t ?buflen err = strerror ?buflen (to_int err)
