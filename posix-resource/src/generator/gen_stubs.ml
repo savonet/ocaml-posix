@@ -1,8 +1,7 @@
 module Stubs = Posix_base.Generators.Stubs (struct
   module Stubs = Posix_resource_stubs.Def
 
-  let c_headers =
-    {|
+  let c_headers = {|
 #include <sys/resource.h>
 #include <sys/time.h>
 |}

@@ -11,14 +11,11 @@ let rlimit_stack = Constants.rlimit_stack
 let rlimit_core = Constants.rlimit_core
 let rlimit_nofile = Constants.rlimit_nofile
 let rlimit_as = Constants.rlimit_as
-
 let rusage_self = Constants.rusage_self
 let rusage_children = Constants.rusage_children
-
 let prio_process = Constants.prio_process
 let prio_pgrp = Constants.prio_pgrp
 let prio_user = Constants.prio_user
-
 let rlim_infinity = Constants.rlim_infinity
 
 module Def (S : Cstubs.Types.TYPE) = struct

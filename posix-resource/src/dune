@@ -11,8 +11,14 @@
  (foreign_stubs
   (language c)
   (names posix_resource_generated_stubs))
- (libraries unix unix-errno.unix ctypes posix-types posix-time2
-   posix-resource.types posix-resource.stubs))
+ (libraries
+  unix
+  unix-errno.unix
+  ctypes
+  posix-types
+  posix-time2
+  posix-resource.types
+  posix-resource.stubs))
 
 (rule
  (targets posix_resource_generated_stubs.ml)

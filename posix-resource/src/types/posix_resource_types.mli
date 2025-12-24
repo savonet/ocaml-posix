@@ -2,6 +2,7 @@ open Ctypes
 
 (** Resource limit constants *)
 val rlimit_cpu : int
+
 val rlimit_fsize : int
 val rlimit_data : int
 val rlimit_stack : int
@@ -11,10 +12,12 @@ val rlimit_as : int
 
 (** rusage who constants *)
 val rusage_self : int
+
 val rusage_children : int
 
 (** Priority who constants *)
 val prio_process : int
+
 val prio_pgrp : int
 val prio_user : int
 

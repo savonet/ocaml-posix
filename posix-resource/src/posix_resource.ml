@@ -1,30 +1,9 @@
 open Ctypes
 include Posix_resource_stubs.Def (Posix_resource_generated_stubs)
-module Types = Posix_resource_types.Def (Posix_resource_generated_types)
-
-(* Re-export constants *)
-let rlimit_cpu = Posix_resource_types.rlimit_cpu
-let rlimit_fsize = Posix_resource_types.rlimit_fsize
-let rlimit_data = Posix_resource_types.rlimit_data
-let rlimit_stack = Posix_resource_types.rlimit_stack
-let rlimit_core = Posix_resource_types.rlimit_core
-let rlimit_nofile = Posix_resource_types.rlimit_nofile
-let rlimit_as = Posix_resource_types.rlimit_as
-
-let rusage_self = Posix_resource_types.rusage_self
-let rusage_children = Posix_resource_types.rusage_children
-
-let prio_process = Posix_resource_types.prio_process
-let prio_pgrp = Posix_resource_types.prio_pgrp
-let prio_user = Posix_resource_types.prio_user
-
-let rlim_infinity = Posix_resource_types.rlim_infinity
+include Posix_resource_types
 
 (* High-level types *)
-type rlimit = {
-  rlim_cur : Unsigned.uint64;
-  rlim_max : Unsigned.uint64;
-}
+type rlimit = { rlim_cur : Unsigned.uint64; rlim_max : Unsigned.uint64 }
 
 type rusage = {
   ru_utime : Posix_time2.Timeval.t;
@@ -54,7 +33,7 @@ let wrap_int_result f =
 let wrap_result f =
   Errno_unix.with_unix_exn (fun () ->
       Errno_unix.raise_on_errno (fun () ->
-          let (ret, result) = f () in
+          let ret, result = f () in
           match ret with x when x < 0 -> None | _ -> Some result))
 
 (* Conversion helpers *)
@@ -120,10 +99,9 @@ let getrusage who =
 
 (* Priority functions *)
 let getpriority which who =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno ~call:"getpriority" (fun () ->
-          let ret = getpriority which who in
-          Some ret))
+  wrap_result (fun () ->
+      let ret = getpriority which who in
+      (ret, ret))
 
 let setpriority which who prio =
   wrap_int_result (fun () -> setpriority which who prio)

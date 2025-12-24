@@ -4,48 +4,48 @@
 
 (** {2 Resource limit constants} *)
 
-val rlimit_cpu : int
 (** CPU time limit in seconds *)
+val rlimit_cpu : int
 
-val rlimit_fsize : int
 (** Maximum file size *)
+val rlimit_fsize : int
 
-val rlimit_data : int
 (** Maximum data segment size *)
+val rlimit_data : int
 
-val rlimit_stack : int
 (** Maximum stack size *)
+val rlimit_stack : int
 
-val rlimit_core : int
 (** Maximum core file size *)
+val rlimit_core : int
 
-val rlimit_nofile : int
 (** Maximum number of open files *)
+val rlimit_nofile : int
 
-val rlimit_as : int
 (** Maximum address space size *)
+val rlimit_as : int
 
-val rlim_infinity : Unsigned.uint64
 (** Special value meaning no limit *)
+val rlim_infinity : Unsigned.uint64
 
 (** {2 Resource usage constants} *)
 
-val rusage_self : int
 (** Current process *)
+val rusage_self : int
 
-val rusage_children : int
 (** All terminated and waited-for children *)
+val rusage_children : int
 
 (** {2 Priority constants} *)
 
-val prio_process : int
 (** Process priority *)
+val prio_process : int
 
-val prio_pgrp : int
 (** Process group priority *)
+val prio_pgrp : int
 
-val prio_user : int
 (** User priority *)
+val prio_user : int
 
 (** {2 Resource limit types} *)
 
@@ -77,28 +77,28 @@ type rusage = {
 
 (** {2 Resource limit functions} *)
 
-val getrlimit : int -> rlimit
 (** [getrlimit resource] returns the current resource limits for [resource].
     @raise Unix.Unix_error on failure *)
+val getrlimit : int -> rlimit
 
-val setrlimit : int -> rlimit -> unit
 (** [setrlimit resource limits] sets the resource limits for [resource].
     @raise Unix.Unix_error on failure *)
+val setrlimit : int -> rlimit -> unit
 
 (** {2 Resource usage functions} *)
 
-val getrusage : int -> rusage
-(** [getrusage who] returns resource usage statistics.
-    [who] should be {!rusage_self} or {!rusage_children}.
+(** [getrusage who] returns resource usage statistics. [who] should be
+    {!rusage_self} or {!rusage_children}.
     @raise Unix.Unix_error on failure *)
+val getrusage : int -> rusage
 
 (** {2 Priority functions} *)
 
-val getpriority : int -> int -> int
-(** [getpriority which who] returns the priority of process, process group, or user.
-    [which] should be {!prio_process}, {!prio_pgrp}, or {!prio_user}.
+(** [getpriority which who] returns the priority of process, process group, or
+    user. [which] should be {!prio_process}, {!prio_pgrp}, or {!prio_user}.
     @raise Unix.Unix_error on failure *)
+val getpriority : int -> int -> int
 
-val setpriority : int -> int -> int -> unit
 (** [setpriority which who prio] sets the priority.
     @raise Unix.Unix_error on failure *)
+val setpriority : int -> int -> int -> unit

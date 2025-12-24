@@ -6,11 +6,8 @@ module Def (F : Cstubs.FOREIGN) = struct
   open Types
 
   (* Resource limit functions *)
-  let getrlimit =
-    foreign "getrlimit" (int @-> ptr Rlimit.t @-> returning int)
-
-  let setrlimit =
-    foreign "setrlimit" (int @-> ptr Rlimit.t @-> returning int)
+  let getrlimit = foreign "getrlimit" (int @-> ptr Rlimit.t @-> returning int)
+  let setrlimit = foreign "setrlimit" (int @-> ptr Rlimit.t @-> returning int)
 
   (* Resource usage functions *)
   let getrusage = foreign "getrusage" (int @-> ptr Rusage.t @-> returning int)

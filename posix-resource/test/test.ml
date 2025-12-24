@@ -21,7 +21,8 @@ let test_setrlimit () =
 let test_getrusage () =
   Printf.printf "\nTesting getrusage...\n%!";
   let ru = getrusage rusage_self in
-  Printf.printf "  ✓ User time: %s\n%!" (Posix_time2.Timeval.to_string ru.ru_utime);
+  Printf.printf "  ✓ User time: %s\n%!"
+    (Posix_time2.Timeval.to_string ru.ru_utime);
   Printf.printf "  ✓ System time: %s\n%!"
     (Posix_time2.Timeval.to_string ru.ru_stime);
   Printf.printf "  ✓ Max RSS: %Ld KB\n%!" ru.ru_maxrss;

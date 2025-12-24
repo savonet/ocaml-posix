@@ -18,9 +18,15 @@
  (deps
   (:c_code ./gen_types.c))
  (action
-  (run %{ocaml-config:c_compiler} -I
-    %{read-lines:../../../posix-base/src/clibs_include_path} -I
-    %{ocaml-config:standard_library} -o %{targets} %{c_code})))
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
 
 (executable
  (name gen_constants_c)
@@ -37,6 +43,12 @@
  (deps
   (:c_code ./gen_constants.c))
  (action
-  (run %{ocaml-config:c_compiler} -I
-    %{read-lines:../../../posix-base/src/clibs_include_path} -I
-    %{ocaml-config:standard_library} -o %{targets} %{c_code})))
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
