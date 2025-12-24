@@ -24,9 +24,8 @@ let from_utsname p =
   }
 
 let uname () =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let p = make Types.Utsname.t in
-          match uname (addr p) with
-            | x when x < 0 -> None
-            | _ -> Some (from_utsname p)))
+  Posix_errno.raise_on_none ~call:"uname" (fun () ->
+      let p = make Types.Utsname.t in
+      match uname (addr p) with
+        | x when x < 0 -> None
+        | _ -> Some (from_utsname p))

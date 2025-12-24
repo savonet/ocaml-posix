@@ -9,7 +9,7 @@
  (synopsis "posix-socket-unix provides access to unix-specific sockaddr_un")
  (enabled_if
   (= %{os_type} Unix))
- (libraries unix unix-errno.unix ctypes posix-socket posix-socket-unix.types))
+ (libraries unix posix-errno ctypes posix-socket posix-socket-unix.types))
 
 (rule
  (targets posix_socket_unix_generated_types.ml)

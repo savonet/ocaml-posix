@@ -1,0 +1,9 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_errno_constants)
+ (public_name posix-errno.constants)
+ (libraries posix-base ctypes.stubs))

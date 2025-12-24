@@ -10,7 +10,7 @@
  (foreign_stubs
   (language c)
   (names posix_time2_generated_stubs))
- (libraries unix unix-errno.unix ctypes posix-time2.types posix-time2.stubs))
+ (libraries unix ctypes posix-errno posix-time2.types posix-time2.stubs))
 
 (rule
  (targets posix_time2_generated_stubs.ml)

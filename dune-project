@@ -21,13 +21,23 @@
 )
 
 (package
+ (name posix-errno)
+ (synopsis "POSIX errno handling and Unix error conversion")
+ (description "posix-errno provides comprehensive errno handling with support for Linux, BSD, macOS, and Windows errno values. Includes APIs for error checking and Unix error conversion.")
+ (depends
+  (ocaml (>= 4.08))
+  (posix-base (= :version))
+  ctypes)
+)
+
+(package
  (name posix-signal)
  (synopsis "Bindings for the types defined in <signal.h>")
  (description "posix-signal provides an API to the types and bindings defined in <signal.h>")
  (depends
   (posix-base (= :version))
-  ctypes
-  unix-errno)
+  (posix-errno (= :version))
+  ctypes)
 )
 
 (package
@@ -48,7 +58,7 @@
   ctypes
   (posix-base (= :version))
   (posix-types (= :version))
-  unix-errno)
+  (posix-errno (= :version)))
 )
 
 (package
@@ -70,7 +80,7 @@
   ctypes
   (posix-base (>= 2.2))
   (posix-socket (= :version))
-  unix-errno)
+  (posix-errno (= :version)))
 )
 
 (package
@@ -80,7 +90,7 @@
  (depends
   ctypes
   (posix-base (= :version))
-  unix-errno)
+  (posix-errno (= :version)))
 )
 
 (package
@@ -94,7 +104,7 @@
   (posix-uname (and :with-test (= :version)))
   ctypes
   (posix-base (= :version))
-  unix-errno)
+  (posix-errno (= :version)))
 )
 
 (package

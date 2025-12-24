@@ -12,12 +12,7 @@
   (language c)
   (names posix_signal_generated_stubs))
  (c_library_flags %{ocaml-config:bytecomp_c_libraries})
- (libraries
-  unix
-  unix-errno.unix
-  ctypes
-  posix-signal.types
-  posix-signal.stubs))
+ (libraries unix ctypes posix-errno posix-signal.types posix-signal.stubs))
 
 (rule
  (targets posix_signal_generated_stubs.ml)

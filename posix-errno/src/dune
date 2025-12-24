@@ -1,0 +1,47 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_errno)
+ (public_name posix-errno)
+ (synopsis
+  "posix-errno provides POSIX errno handling and Unix error conversion")
+ (foreign_stubs
+  (language c)
+  (names posix_errno_generated_stubs))
+ (libraries unix ctypes posix-errno.constants posix-errno.stubs))
+
+(rule
+ (targets posix_errno_generated_constants.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../posix-base/src/exec.sh)
+  (:gen ./generator/gen_constants_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_errno_generated_constants.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen ./generator/gen_constants_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
+
+(rule
+ (targets posix_errno_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_errno_generated_stubs.c)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))

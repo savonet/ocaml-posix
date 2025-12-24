@@ -208,77 +208,67 @@ let clock_id_of_clock = function
 let asctime tm = asctime (addr (Tm.from_tm tm))
 
 let clock_getres clock =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let clock_id = clock_id_of_clock clock in
-          let v = allocate_n Types.Timespec.t ~count:1 in
-          match clock_getres clock_id v with
-            | 0 -> Some (Timespec.to_timespec !@v)
-            | _ -> None))
+  Posix_errno.raise_on_none ~call:"clock_getres" (fun () ->
+      let clock_id = clock_id_of_clock clock in
+      let v = allocate_n Types.Timespec.t ~count:1 in
+      match clock_getres clock_id v with
+        | 0 -> Some (Timespec.to_timespec !@v)
+        | _ -> None)
 
 let clock_gettime clock =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let clock_id = clock_id_of_clock clock in
-          let v = allocate_n Types.Timespec.t ~count:1 in
-          match clock_gettime clock_id v with
-            | 0 -> Some (Timespec.to_timespec !@v)
-            | _ -> None))
+  Posix_errno.raise_on_none ~call:"clock_gettime" (fun () ->
+      let clock_id = clock_id_of_clock clock in
+      let v = allocate_n Types.Timespec.t ~count:1 in
+      match clock_gettime clock_id v with
+        | 0 -> Some (Timespec.to_timespec !@v)
+        | _ -> None)
 
 let clock_settime clock timespec =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let clock_id = clock_id_of_clock clock in
-          let timespec = Timespec.from_timespec timespec in
-          match clock_settime clock_id (addr timespec) with
-            | 0 -> Some ()
-            | _ -> None))
+  Posix_errno.raise_on_none ~call:"clock_settime" (fun () ->
+      let clock_id = clock_id_of_clock clock in
+      let timespec = Timespec.from_timespec timespec in
+      match clock_settime clock_id (addr timespec) with
+        | 0 -> Some ()
+        | _ -> None)
 
 let ctime time =
   ctime (Ctypes.allocate Posix_types.time_t (Posix_types.Time.of_int64 time))
 
 let gmtime time =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let time = Posix_types.Time.of_int64 time in
-          match gmtime (Ctypes.allocate Posix_types.time_t time) with
-            | ptr when is_null ptr -> None
-            | ptr -> Some (Tm.to_tm !@ptr)))
+  Posix_errno.raise_on_none ~call:"gmtime" (fun () ->
+      let time = Posix_types.Time.of_int64 time in
+      match gmtime (Ctypes.allocate Posix_types.time_t time) with
+        | ptr when is_null ptr -> None
+        | ptr -> Some (Tm.to_tm !@ptr))
 
 let localtime time =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let time = Posix_types.Time.of_int64 time in
-          match localtime (Ctypes.allocate Posix_types.time_t time) with
-            | ptr when is_null ptr -> None
-            | ptr -> Some (Tm.to_tm !@ptr)))
+  Posix_errno.raise_on_none ~call:"localtime" (fun () ->
+      let time = Posix_types.Time.of_int64 time in
+      match localtime (Ctypes.allocate Posix_types.time_t time) with
+        | ptr when is_null ptr -> None
+        | ptr -> Some (Tm.to_tm !@ptr))
 
 let mktime tm =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let tm = Tm.from_tm tm in
-          let time = mktime (addr tm) in
-          match Posix_types.Time.to_int64 time with
-            | -1L -> None
-            | time -> Some time))
+  Posix_errno.raise_on_none ~call:"mktime" (fun () ->
+      let tm = Tm.from_tm tm in
+      let time = mktime (addr tm) in
+      match Posix_types.Time.to_int64 time with
+        | -1L -> None
+        | time -> Some time)
 
 let nanosleep timespec =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let timespec = Timespec.from_timespec timespec in
-          match nanosleep (addr timespec) null with 0 -> Some () | _ -> None))
+  Posix_errno.raise_on_none ~call:"nanosleep" (fun () ->
+      let timespec = Timespec.from_timespec timespec in
+      match nanosleep (addr timespec) null with 0 -> Some () | _ -> None)
 
 let clock_nanosleep ~absolute ~clock timespec =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let timespec = Timespec.from_timespec timespec in
-          let absolute =
-            if absolute then Posix_time2_types.timer_abstime else 0
-          in
-          let clock_id = clock_id_of_clock clock in
-          match clock_nanosleep clock_id absolute (addr timespec) null with
-            | 0 -> Some ()
-            | _ -> None))
+  Posix_errno.raise_on_none ~call:"clock_nanosleep" (fun () ->
+      let timespec = Timespec.from_timespec timespec in
+      let absolute = if absolute then Posix_time2_types.timer_abstime else 0 in
+      let clock_id = clock_id_of_clock clock in
+      match clock_nanosleep clock_id absolute (addr timespec) null with
+        | 0 -> Some ()
+        | _ -> None)
 
 type itimer = [ `Real | `Virtual | `Prof ]
 
@@ -288,67 +278,62 @@ let int_of_itimer = function
   | `Prof -> Posix_time2_types.itimer_prof
 
 let setitimer timer v =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let v = Itimerval.from_itimerval v in
-          let old = allocate_n Types.Itimerval.t ~count:1 in
-          match setitimer (int_of_itimer timer) (addr v) old with
-            | x when x < 0 -> None
-            | _ -> Some (Itimerval.to_itimerval !@old)))
+  Posix_errno.raise_on_none ~call:"setitimer" (fun () ->
+      let v = Itimerval.from_itimerval v in
+      let old = allocate_n Types.Itimerval.t ~count:1 in
+      match setitimer (int_of_itimer timer) (addr v) old with
+        | x when x < 0 -> None
+        | _ -> Some (Itimerval.to_itimerval !@old))
 
 let getitimer timer =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let v = allocate_n Types.Itimerval.t ~count:1 in
-          match getitimer (int_of_itimer timer) v with
-            | x when x < 0 -> None
-            | _ -> Some (Itimerval.to_itimerval !@v)))
+  Posix_errno.raise_on_none ~call:"getitimer" (fun () ->
+      let v = allocate_n Types.Itimerval.t ~count:1 in
+      match getitimer (int_of_itimer timer) v with
+        | x when x < 0 -> None
+        | _ -> Some (Itimerval.to_itimerval !@v))
 
 let gettimeofday () =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let timeval = allocate_n Types.Timeval.t ~count:1 in
-          match gettimeofday timeval null with
-            | x when x < 0 -> None
-            | _ -> Some (Timeval.to_timeval !@timeval)))
+  Posix_errno.raise_on_none ~call:"gettimeofday" (fun () ->
+      let timeval = allocate_n Types.Timeval.t ~count:1 in
+      match gettimeofday timeval null with
+        | x when x < 0 -> None
+        | _ -> Some (Timeval.to_timeval !@timeval))
 
 let select r w e timeval =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let maxfd = ref (-1) in
-          let mk_fd_set l =
-            let set = allocate_n Posix_time2_types.fd_set ~count:1 in
-            fd_zero set;
-            List.iter
-              (fun fd ->
-                let fd = Obj.magic fd in
-                if fd > Posix_time2_types.fd_setsize then
-                  failwith "invalid Unix.file_descriptor!";
-                if fd > !maxfd then maxfd := fd;
-                fd_set fd set)
-              l;
-            set
-          in
-          let r_set = mk_fd_set r in
-          let w_set = mk_fd_set w in
-          let e_set = mk_fd_set e in
-          let timeval =
-            match timeval with
-              | None -> from_voidp Types.Timeval.t null
-              | Some timeval -> addr (Timeval.from_timeval timeval)
-          in
-          match select (!maxfd + 1) r_set w_set e_set timeval with
-            | x when x < 0 -> None
-            | _ ->
-                let get_fd_set l fd_set =
-                  List.filter (fun fd -> fd_isset (Obj.magic fd) fd_set <> 0) l
-                in
-                Some (get_fd_set r r_set, get_fd_set w w_set, get_fd_set e e_set)))
+  Posix_errno.raise_on_none ~call:"select" (fun () ->
+      let maxfd = ref (-1) in
+      let mk_fd_set l =
+        let set = allocate_n Posix_time2_types.fd_set ~count:1 in
+        fd_zero set;
+        List.iter
+          (fun fd ->
+            let fd = Obj.magic fd in
+            if fd > Posix_time2_types.fd_setsize then
+              failwith "invalid Unix.file_descriptor!";
+            if fd > !maxfd then maxfd := fd;
+            fd_set fd set)
+          l;
+        set
+      in
+      let r_set = mk_fd_set r in
+      let w_set = mk_fd_set w in
+      let e_set = mk_fd_set e in
+      let timeval =
+        match timeval with
+          | None -> from_voidp Types.Timeval.t null
+          | Some timeval -> addr (Timeval.from_timeval timeval)
+      in
+      match select (!maxfd + 1) r_set w_set e_set timeval with
+        | x when x < 0 -> None
+        | _ ->
+            let get_fd_set l fd_set =
+              List.filter (fun fd -> fd_isset (Obj.magic fd) fd_set <> 0) l
+            in
+            Some (get_fd_set r r_set, get_fd_set w w_set, get_fd_set e e_set))
 
 let utimes path timeval =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let timeval = Timeval.from_timeval timeval in
-          match utimes path (addr timeval) with
-            | x when x < 0 -> None
-            | _ -> Some ()))
+  Posix_errno.raise_on_none ~call:"utimes" (fun () ->
+      let timeval = Timeval.from_timeval timeval in
+      match utimes path (addr timeval) with
+        | x when x < 0 -> None
+        | _ -> Some ())
