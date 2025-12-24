@@ -481,12 +481,6 @@ let get_errno () = of_int (Stubs.posix_errno_get_errno ())
 (** Get current errno as int *)
 let get_errno_int () = Stubs.posix_errno_get_errno ()
 
-(** Set errno value *)
-let set_errno e = Stubs.posix_errno_set_errno (to_int e)
-
-(** Set errno from int *)
-let set_errno_int n = Stubs.posix_errno_set_errno n
-
 (** Reset errno to 0 *)
 let reset_errno () = Stubs.posix_errno_set_errno 0
 

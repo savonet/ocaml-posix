@@ -176,12 +176,6 @@ val get_errno : unit -> t
 (** Get current errno as int *)
 val get_errno_int : unit -> int
 
-(** Set errno value *)
-val set_errno : t -> unit
-
-(** Set errno from int *)
-val set_errno_int : int -> unit
-
 (** Reset errno to 0 *)
 val reset_errno : unit -> unit
 
