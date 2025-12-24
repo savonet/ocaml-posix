@@ -4,5 +4,6 @@
 
 (rule
  (alias runtest)
+ (package posix-stat)
  (action
   (run %{exe:test.exe})))
