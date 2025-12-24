@@ -3,8 +3,16 @@ module Stubs = Posix_base.Generators.Stubs (struct
 
   let c_headers =
     {|
-#include <time.h>
-#include <sys/time.h>
+#ifdef _WIN32
+  #include <winsock2.h>
+  #include <time.h>
+
+  // On Windows, link with winpthread for clock functions
+  // MinGW-w64 provides these via winpthreads
+#else
+  #include <time.h>
+  #include <sys/time.h>
+#endif
 
 static inline void ocaml_posix_time2_fd_zero(fd_set *fdset) {
   FD_ZERO(fdset);

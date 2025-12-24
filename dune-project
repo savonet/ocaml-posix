@@ -55,6 +55,7 @@
  (synopsis "Bindings for posix time functions")
  (description "posix-time2 provides the types and bindings for posix time APIs.")
  (depends
+  dune-configurator
   ctypes
   (posix-base (= :version))
   (posix-types (= :version))

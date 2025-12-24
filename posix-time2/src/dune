@@ -3,14 +3,23 @@
   (flags
    (:standard -warn-error -A))))
 
+(rule
+ (targets c_library_flags.sexp c_flags.sexp)
+ (action
+  (run ./config/discover.exe)))
+
 (library
  (name posix_time2)
  (public_name posix-time2)
  (synopsis "posix-time2 provides access to POSIX's time-related APIs")
  (foreign_stubs
   (language c)
-  (names posix_time2_generated_stubs))
- (libraries unix ctypes posix-errno posix-time2.types posix-time2.stubs))
+  (names posix_time2_generated_stubs)
+  (flags :standard
+   (:include c_flags.sexp)))
+ (c_library_flags :standard
+  (:include c_library_flags.sexp))
+ (libraries unix posix-errno ctypes posix-time2.types posix-time2.stubs))
 
 (rule
  (targets posix_time2_generated_stubs.ml)
