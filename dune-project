@@ -115,6 +115,7 @@
   posix-types
   posix-socket
   posix-socket-unix
+  posix-time2
   posix-uname
   posix-math2
   posix-getopt)
