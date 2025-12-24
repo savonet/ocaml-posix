@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (package posix-errno)
+ (libraries posix-errno))
