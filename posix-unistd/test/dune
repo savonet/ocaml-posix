@@ -1,0 +1,23 @@
+(test
+ (name test)
+ (package posix-unistd)
+ (modules
+  test_helpers
+  test_constants
+  test_file_descriptors
+  test_files
+  test_directories
+  test_io
+  test_sync
+  test_process
+  test_terminal
+  test_sysinfo
+  test_io_errors
+  test_file_descriptors_errors
+  test_files_errors
+  test_directories_errors
+  test_process_errors
+  test_terminal_errors
+  test_sysinfo_errors
+  test)
+ (libraries unix posix-unistd ounit2))

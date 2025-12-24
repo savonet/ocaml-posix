@@ -1,0 +1,34 @@
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries posix-unistd.stubs posix-base))
+
+(executable
+ (name gen_stubs_unlocked)
+ (modules gen_stubs_unlocked)
+ (libraries posix-unistd.stubs_unlocked posix-base))
+
+(executable
+ (name gen_constants_c)
+ (modules gen_constants_c)
+ (libraries posix-unistd.constants posix-base))
+
+(rule
+ (targets gen_constants.c)
+ (action
+  (run ./gen_constants_c.exe %{targets})))
+
+(rule
+ (targets gen_constants_c)
+ (deps
+  (:c_code ./gen_constants.c))
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))

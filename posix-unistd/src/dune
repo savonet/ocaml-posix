@@ -1,0 +1,46 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_unistd)
+ (public_name posix-unistd)
+ (synopsis "posix-unistd provides access to POSIX unistd.h APIs")
+ (foreign_stubs
+  (language c)
+  (names posix_unistd_generated_stubs posix_unistd_generated_stubs_unlocked))
+ (libraries
+  unix
+  posix-errno
+  ctypes
+  posix-unistd.constants
+  posix-unistd.stubs
+  posix-unistd.stubs_unlocked))
+
+(rule
+ (targets posix_unistd_generated_stubs.c)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))
+
+(rule
+ (targets posix_unistd_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_unistd_generated_stubs_unlocked.c)
+ (action
+  (run ./generator/gen_stubs_unlocked.exe c %{targets})))
+
+(rule
+ (targets posix_unistd_generated_stubs_unlocked.ml)
+ (action
+  (run ./generator/gen_stubs_unlocked.exe ml %{targets})))
+
+(rule
+ (targets posix_unistd_generated_constants.ml)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./generator/gen_constants_c))))
