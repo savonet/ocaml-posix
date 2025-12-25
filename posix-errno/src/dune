@@ -45,3 +45,19 @@
  (targets posix_errno_generated_stubs.c)
  (action
   (run ./generator/gen_stubs.exe c %{targets})))
+
+(rule
+ (targets posix_errno_type.ml)
+ (deps ./generator/gen_errno_type.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./generator/gen_errno_type.exe))))
+
+(rule
+ (targets posix_errno_conversions.ml)
+ (deps ./generator/gen_errno_conversions.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./generator/gen_errno_conversions.exe))))

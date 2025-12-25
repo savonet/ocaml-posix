@@ -9,51 +9,51 @@ let () =
   let test_errno errnum err_variant =
     Printf.printf "  %s (errno %d): %s\n"
       (match err_variant with
-        | EPERM -> "EPERM"
-        | ENOENT -> "ENOENT"
-        | ESRCH -> "ESRCH"
-        | EINTR -> "EINTR"
-        | EIO -> "EIO"
-        | ENXIO -> "ENXIO"
-        | EBADF -> "EBADF"
-        | EAGAIN -> "EAGAIN"
-        | ENOMEM -> "ENOMEM"
-        | EACCES -> "EACCES"
-        | EFAULT -> "EFAULT"
-        | EBUSY -> "EBUSY"
-        | EEXIST -> "EEXIST"
-        | ENOTDIR -> "ENOTDIR"
-        | EISDIR -> "EISDIR"
-        | EINVAL -> "EINVAL"
-        | EMFILE -> "EMFILE"
-        | ENOSPC -> "ENOSPC"
-        | EPIPE -> "EPIPE"
-        | ERANGE -> "ERANGE"
+        | `EPERM -> "EPERM"
+        | `ENOENT -> "ENOENT"
+        | `ESRCH -> "ESRCH"
+        | `EINTR -> "EINTR"
+        | `EIO -> "EIO"
+        | `ENXIO -> "ENXIO"
+        | `EBADF -> "EBADF"
+        | `EAGAIN -> "EAGAIN"
+        | `ENOMEM -> "ENOMEM"
+        | `EACCES -> "EACCES"
+        | `EFAULT -> "EFAULT"
+        | `EBUSY -> "EBUSY"
+        | `EEXIST -> "EEXIST"
+        | `ENOTDIR -> "ENOTDIR"
+        | `EISDIR -> "EISDIR"
+        | `EINVAL -> "EINVAL"
+        | `EMFILE -> "EMFILE"
+        | `ENOSPC -> "ENOSPC"
+        | `EPIPE -> "EPIPE"
+        | `ERANGE -> "ERANGE"
         | _ -> "OTHER")
       errnum (strerror errnum)
   in
 
   (* Test common POSIX errors *)
-  test_errno (to_int EPERM) EPERM;
-  test_errno (to_int ENOENT) ENOENT;
-  test_errno (to_int ESRCH) ESRCH;
-  test_errno (to_int EINTR) EINTR;
-  test_errno (to_int EIO) EIO;
-  test_errno (to_int ENXIO) ENXIO;
-  test_errno (to_int EBADF) EBADF;
-  test_errno (to_int EAGAIN) EAGAIN;
-  test_errno (to_int ENOMEM) ENOMEM;
-  test_errno (to_int EACCES) EACCES;
-  test_errno (to_int EFAULT) EFAULT;
-  test_errno (to_int EBUSY) EBUSY;
-  test_errno (to_int EEXIST) EEXIST;
-  test_errno (to_int ENOTDIR) ENOTDIR;
-  test_errno (to_int EISDIR) EISDIR;
-  test_errno (to_int EINVAL) EINVAL;
-  test_errno (to_int EMFILE) EMFILE;
-  test_errno (to_int ENOSPC) ENOSPC;
-  test_errno (to_int EPIPE) EPIPE;
-  test_errno (to_int ERANGE) ERANGE;
+  test_errno (to_int `EPERM) `EPERM;
+  test_errno (to_int `ENOENT) `ENOENT;
+  test_errno (to_int `ESRCH) `ESRCH;
+  test_errno (to_int `EINTR) `EINTR;
+  test_errno (to_int `EIO) `EIO;
+  test_errno (to_int `ENXIO) `ENXIO;
+  test_errno (to_int `EBADF) `EBADF;
+  test_errno (to_int `EAGAIN) `EAGAIN;
+  test_errno (to_int `ENOMEM) `ENOMEM;
+  test_errno (to_int `EACCES) `EACCES;
+  test_errno (to_int `EFAULT) `EFAULT;
+  test_errno (to_int `EBUSY) `EBUSY;
+  test_errno (to_int `EEXIST) `EEXIST;
+  test_errno (to_int `ENOTDIR) `ENOTDIR;
+  test_errno (to_int `EISDIR) `EISDIR;
+  test_errno (to_int `EINVAL) `EINVAL;
+  test_errno (to_int `EMFILE) `EMFILE;
+  test_errno (to_int `ENOSPC) `ENOSPC;
+  test_errno (to_int `EPIPE) `EPIPE;
+  test_errno (to_int `ERANGE) `ERANGE;
 
   Printf.printf "\nTesting strerror_of_t with errno variants:\n";
 
@@ -62,22 +62,22 @@ let () =
     Printf.printf "  %s: %s\n" name (strerror_of_t err)
   in
 
-  test_errno_t ECONNREFUSED "ECONNREFUSED";
-  test_errno_t EADDRINUSE "EADDRINUSE";
-  test_errno_t ETIMEDOUT "ETIMEDOUT";
-  test_errno_t ENOTCONN "ENOTCONN";
-  test_errno_t EHOSTUNREACH "EHOSTUNREACH";
+  test_errno_t `ECONNREFUSED "ECONNREFUSED";
+  test_errno_t `EADDRINUSE "EADDRINUSE";
+  test_errno_t `ETIMEDOUT "ETIMEDOUT";
+  test_errno_t `ENOTCONN "ENOTCONN";
+  test_errno_t `EHOSTUNREACH "EHOSTUNREACH";
 
   Printf.printf "\nTesting strerror (cross-platform, not thread-safe):\n";
-  Printf.printf "  EPERM: %s\n" (strerror (to_int EPERM));
-  Printf.printf "  ENOENT: %s\n" (strerror (to_int ENOENT));
+  Printf.printf "  EPERM: %s\n" (strerror (to_int `EPERM));
+  Printf.printf "  ENOENT: %s\n" (strerror (to_int `ENOENT));
 
   Printf.printf "\nTesting strerror_r with custom buffer length:\n";
 
   (* Test with small buffer *)
   Printf.printf "  EPERM (buflen=50): %s\n"
-    (strerror_r ~buflen:50 (to_int EPERM));
+    (strerror_r ~buflen:50 (to_int `EPERM));
   Printf.printf "  EACCES (buflen=50): %s\n"
-    (strerror_r ~buflen:50 (to_int EACCES));
+    (strerror_r ~buflen:50 (to_int `EACCES));
 
   Printf.printf "\n✓ All strerror tests completed successfully!\n"

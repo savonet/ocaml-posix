@@ -7,8 +7,12 @@
  (targets target_system_detect.exe)
  (deps target_system_detect.c)
  (action
-  (bash
-   "%{ocaml-config:c_compiler} -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system} -DOCAML_POSIX_ERRNO_OS_TYPE=ocaml_posix_%{os_type} -o %{targets} target_system_detect.c")))
+  (run
+   %{ocaml-config:c_compiler}
+   -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system}
+   -o
+   %{targets}
+   target_system_detect.c)))
 
 (rule
  (targets system_detect.ml)
@@ -62,3 +66,13 @@
    -o
    %{targets}
    %{c_code})))
+
+(executable
+ (name gen_errno_type)
+ (modules gen_errno_type)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_errno_conversions)
+ (modules gen_errno_conversions)
+ (libraries errno_defaults))
