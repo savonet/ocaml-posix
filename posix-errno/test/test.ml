@@ -69,10 +69,14 @@ let () =
   test_errno_t ENOTCONN "ENOTCONN";
   test_errno_t EHOSTUNREACH "EHOSTUNREACH";
 
-  Printf.printf "\nTesting strerror with custom buffer length:\n";
+  Printf.printf "\nTesting strerror (cross-platform, not thread-safe):\n";
+  Printf.printf "  EPERM: %s\n" (strerror (to_int EPERM));
+  Printf.printf "  ENOENT: %s\n" (strerror (to_int ENOENT));
+
+  Printf.printf "\nTesting strerror_r with custom buffer length:\n";
 
   (* Test with small buffer *)
-  Printf.printf "  EPERM (buflen=50): %s\n" (strerror ~buflen:50 (to_int EPERM));
-  Printf.printf "  EACCES (buflen=50): %s\n" (strerror ~buflen:50 (to_int EACCES));
+  Printf.printf "  EPERM (buflen=50): %s\n" (strerror_r ~buflen:50 (to_int EPERM));
+  Printf.printf "  EACCES (buflen=50): %s\n" (strerror_r ~buflen:50 (to_int EACCES));
 
   Printf.printf "\n✓ All strerror tests completed successfully!\n"

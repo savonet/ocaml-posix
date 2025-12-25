@@ -10,9 +10,13 @@ module Def (F : Cstubs.FOREIGN) = struct
   let posix_errno_set_errno =
     foreign "posix_errno_set_errno" (int @-> returning void)
 
+  (* strerror function - returns OCaml string (cross-platform, not thread-safe) *)
+  let strerror = foreign "strerror" (int @-> returning string)
+
   (* strerror_r function - POSIX version returns int (0 on success) *)
+  (* Raises Invalid_argument on Windows *)
   let strerror_r =
-    foreign "strerror_r" (int @-> ptr char @-> size_t @-> returning int)
+    foreign "posix_errno_strerror_r" (int @-> ptr char @-> size_t @-> returning int)
 
   (* strlen function to get string length *)
   let strlen = foreign "strlen" (ptr char @-> returning int)

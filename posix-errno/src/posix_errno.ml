@@ -582,8 +582,11 @@ let raise_on_zero ?call f = raise_on_error ?call f (fun x -> x = 0)
 let raise_on_none ?call f =
   Option.get (raise_on_error ?call f (fun x -> x = None))
 
-(** Get error string from errno using strerror_r *)
-let strerror ?(buflen = 1024) errnum =
+let strerror = Stubs.strerror
+
+(** Get error string from errno using strerror_r (thread-safe, POSIX only)
+    @raise Invalid_argument on Windows where strerror_r is not available *)
+let strerror_r ?(buflen = 1024) errnum =
   let open Ctypes in
   let buf = CArray.make char buflen in
   let buf_ptr = CArray.start buf in
@@ -598,4 +601,4 @@ let strerror ?(buflen = 1024) errnum =
     raise (Unix.Unix_error (err, "strerror_r", ""))
 
 (** Get error string from errno variant *)
-let strerror_of_t ?buflen err = strerror ?buflen (to_int err)
+let strerror_of_t err = strerror (to_int err)
