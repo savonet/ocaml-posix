@@ -16,14 +16,7 @@ let generate_of_int_function () =
   in
   let aliases = Errno_defaults.errno_aliases in
 
-  let lines =
-    [
-      "(** Convert errno code to variant *)";
-      "let of_int n =";
-      "  let open Int64 in";
-      "  let n64 = of_int n in";
-    ]
-  in
+  let lines = ["(** Convert errno code to variant *)"; "let of_int n ="] in
 
   (* First errno without 'else' *)
   let first_name = List.hd variants in
@@ -32,7 +25,7 @@ let generate_of_int_function () =
       (String.sub first_name 1 (String.length first_name - 1))
   in
   let first_line =
-    Printf.sprintf "  if n64 = Constants.e_%s then `%s" const_name first_name
+    Printf.sprintf "  if n = Constants.e_%s then `%s" const_name first_name
   in
 
   (* Rest of the errnos *)
@@ -43,7 +36,7 @@ let generate_of_int_function () =
         let const_name =
           String.lowercase_ascii (String.sub name 1 (String.length name - 1))
         in
-        Printf.sprintf "  else if n64 = Constants.e_%s then `%s" const_name name)
+        Printf.sprintf "  else if n = Constants.e_%s then `%s" const_name name)
       rest_variants
   in
 
@@ -54,7 +47,7 @@ let generate_of_int_function () =
         let const_name =
           String.lowercase_ascii (String.sub name 1 (String.length name - 1))
         in
-        Printf.sprintf "  else if n64 = Constants.e_%s then `%s" const_name name)
+        Printf.sprintf "  else if n = Constants.e_%s then `%s" const_name name)
       aliases
   in
 
@@ -78,7 +71,7 @@ let generate_to_int_function () =
         let const_name =
           String.lowercase_ascii (String.sub name 1 (String.length name - 1))
         in
-        Printf.sprintf "  | `%s -> Int64.to_int Constants.e_%s" name const_name)
+        Printf.sprintf "  | `%s -> Constants.e_%s" name const_name)
       variants
   in
 
@@ -88,7 +81,7 @@ let generate_to_int_function () =
         let const_name =
           String.lowercase_ascii (String.sub name 1 (String.length name - 1))
         in
-        Printf.sprintf "  | `%s -> Int64.to_int Constants.e_%s" name const_name)
+        Printf.sprintf "  | `%s -> Constants.e_%s" name const_name)
       aliases
   in
 

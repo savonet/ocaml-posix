@@ -10,8 +10,7 @@ let generate_get_value () =
   let alias_cases =
     List.map
       (fun (alias_name, _target) ->
-        Printf.sprintf "  | \"%s\" -> `%s" alias_name
-          alias_name)
+        Printf.sprintf "  | \"%s\" -> `%s" alias_name alias_name)
       Errno_defaults.errno_aliases
   in
   let all_cases = regular_cases @ alias_cases in

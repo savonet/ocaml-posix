@@ -135,9 +135,7 @@ let strerror_r ?(buflen = 1024) err =
   let open Ctypes in
   let buf = CArray.make char buflen in
   let buf_ptr = CArray.start buf in
-  let result =
-    Stubs.strerror_r (to_int err) buf_ptr buflen
-  in
+  let result = Stubs.strerror_r (to_int err) buf_ptr buflen in
   if result = 0 then (
     (* Success - get actual string length and convert to OCaml string *)
     let len = Stubs.strlen buf_ptr in

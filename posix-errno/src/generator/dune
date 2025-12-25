@@ -68,6 +68,11 @@
    %{c_code})))
 
 (executable
+ (name gen_errno_constants)
+ (modules gen_errno_constants)
+ (libraries errno_defaults))
+
+(executable
  (name gen_errno_type)
  (modules gen_errno_type)
  (libraries errno_defaults))

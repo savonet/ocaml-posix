@@ -7,3 +7,11 @@
  (name posix_errno_constants)
  (public_name posix-errno.constants)
  (libraries posix-base ctypes.stubs))
+
+(rule
+ (targets posix_errno_constants.ml)
+ (deps ../generator/gen_errno_constants.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_errno_constants.exe))))
