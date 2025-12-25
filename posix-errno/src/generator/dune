@@ -1,0 +1,124 @@
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries posix-errno.stubs posix-base))
+
+(rule
+ (targets target_system_detect.exe)
+ (deps target_system_detect.c)
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system}
+   -o
+   %{targets}
+   target_system_detect.c)))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../../posix-base/src/exec.sh)
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
+
+(library
+ (name errno_defaults)
+ (libraries str)
+ (modules errno_defaults system_detect))
+
+(executable
+ (name gen_constants_c)
+ (modules gen_constants_c)
+ (libraries errno_defaults posix-errno.constants posix-base))
+
+(rule
+ (targets gen_constants.c)
+ (action
+  (run ./gen_constants_c.exe %{targets})))
+
+(rule
+ (targets gen_constants_c_target.exe)
+ (deps
+  (:c_code ./gen_constants.c))
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
+
+(executable
+ (name gen_errno_type)
+ (modules gen_errno_type)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_errno_conversions)
+ (modules gen_errno_conversions)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_is_native_detector)
+ (modules gen_is_native_detector)
+ (libraries errno_defaults))
+
+(rule
+ (targets target_is_native_detector.c)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_is_native_detector.exe))))
+
+(executable
+ (name gen_get_value)
+ (modules gen_get_value)
+ (libraries errno_defaults posix-errno))
+
+(rule
+ (targets target_is_native_detector.exe)
+ (deps target_is_native_detector.c)
+ (action
+  (run %{ocaml-config:c_compiler} -o %{targets} target_is_native_detector.c)))
+
+(rule
+ (targets posix_errno_is_native_impl.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../../posix-base/src/exec.sh)
+  (:gen target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_errno_is_native_impl.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))

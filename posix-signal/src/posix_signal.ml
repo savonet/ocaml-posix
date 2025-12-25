@@ -64,52 +64,41 @@ let int_of_action = function
   | `Sig_unblock -> sig_unblock
 
 let sigemptyset () =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let p = allocate_n Types.sigset_t ~count:1 in
-          match sigemptyset p with x when x < 0 -> None | _ -> Some p))
+  Posix_errno.raise_on_none ~call:"sigemptyset" (fun () ->
+      let p = allocate_n Types.sigset_t ~count:1 in
+      match sigemptyset p with x when x < 0 -> None | _ -> Some p)
 
 let sigaddset sigset signal =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let signal = int_of_signal signal in
-          match sigaddset sigset signal with
-            | x when x < 0 -> None
-            | _ -> Some ()))
+  Posix_errno.raise_on_none ~call:"sigaddset" (fun () ->
+      let signal = int_of_signal signal in
+      match sigaddset sigset signal with x when x < 0 -> None | _ -> Some ())
 
 let sigismember sigset signal =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let signal = int_of_signal signal in
-          match sigismember sigset signal with
-            | x when x < 0 -> None
-            | 1 -> Some true
-            | _ -> Some false))
+  Posix_errno.raise_on_none ~call:"sigismember" (fun () ->
+      let signal = int_of_signal signal in
+      match sigismember sigset signal with
+        | x when x < 0 -> None
+        | 1 -> Some true
+        | _ -> Some false)
 
 let pthread_sigmask action sigset =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let action = int_of_action action in
-          let sigset =
-            match sigset with
-              | Some p -> p
-              | None -> from_voidp Types.sigset_t null
-          in
-          let old_sigset = allocate_n Types.sigset_t ~count:1 in
-          match pthread_sigmask action sigset old_sigset with
-            | x when x < 0 -> None
-            | _ -> Some old_sigset))
+  Posix_errno.raise_on_none ~call:"pthread_sigmask" (fun () ->
+      let action = int_of_action action in
+      let sigset =
+        match sigset with Some p -> p | None -> from_voidp Types.sigset_t null
+      in
+      let old_sigset = allocate_n Types.sigset_t ~count:1 in
+      match pthread_sigmask action sigset old_sigset with
+        | x when x < 0 -> None
+        | _ -> Some old_sigset)
 
 let sigprocmask action sigset =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let action = int_of_action action in
-          let sigset =
-            match sigset with
-              | Some p -> p
-              | None -> from_voidp Types.sigset_t null
-          in
-          let old_sigset = allocate_n Types.sigset_t ~count:1 in
-          match sigprocmask action sigset old_sigset with
-            | x when x < 0 -> None
-            | _ -> Some old_sigset))
+  Posix_errno.raise_on_none ~call:"sigprocmask" (fun () ->
+      let action = int_of_action action in
+      let sigset =
+        match sigset with Some p -> p | None -> from_voidp Types.sigset_t null
+      in
+      let old_sigset = allocate_n Types.sigset_t ~count:1 in
+      match sigprocmask action sigset old_sigset with
+        | x when x < 0 -> None
+        | _ -> Some old_sigset)

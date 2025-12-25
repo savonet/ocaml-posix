@@ -14,7 +14,7 @@ depends: [
   "ctypes"
   "posix-base" {= version}
   "posix-types" {= version}
-  "unix-errno"
+  "posix-errno" {= version}
   "odoc" {with-doc}
 ]
 build: [

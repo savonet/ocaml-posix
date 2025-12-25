@@ -11,7 +11,7 @@
  (foreign_stubs
   (language c)
   (names posix_getopt_generated_stubs))
- (libraries ctypes unix-errno.unix posix-getopt.stubs))
+ (libraries ctypes posix-errno posix-getopt.stubs))
 
 (rule
  (targets posix_getopt_generated_stubs.ml)

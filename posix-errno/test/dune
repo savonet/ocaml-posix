@@ -1,0 +1,19 @@
+(rule
+ (targets test_get_value.ml)
+ (deps
+  (:gen ../src/generator/gen_get_value.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
+
+(test
+ (name test)
+ (package posix-errno)
+ (libraries posix-errno))
+
+(test
+ (name test_errno_defaults)
+ (package posix-errno)
+ (modules test_errno_defaults test_get_value)
+ (libraries posix-errno errno_defaults unix))
