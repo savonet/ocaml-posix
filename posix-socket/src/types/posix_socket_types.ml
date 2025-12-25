@@ -4,8 +4,6 @@ module Constants = Posix_socket_constants.Def (Posix_socket_generated_constants)
 let socklen : (module Posix_base.Types.Unsigned) =
   Posix_base.Types.mkUnsigned ~name:"socklen_t" ~size:Constants.socklen_t_len
 
-let sockaddr_storage_len = Constants.sockaddr_storage_len
-
 module Socklen = (val socklen : Posix_base.Types.Unsigned)
 
 type socklen_t = Socklen.t
