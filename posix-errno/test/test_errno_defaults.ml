@@ -47,16 +47,20 @@ let () =
 
   (* Handle aliases *)
   Printf.printf "\nErrno aliases:\n";
-  Printf.printf "%-20s | %-15s | %-10s | %-10s\n" "Alias" "Target" "Value" "Native";
-  Printf.printf "%s\n" (String.make 62 '-');
+  Printf.printf "%-20s | %-10s | %-10s | %-15s | %-10s | %-10s\n" "Alias"
+    "Value" "Native" "Target" "Value" "Native";
+  Printf.printf "%s\n" (String.make 82 '-');
 
   List.iter
     (fun (alias_name, target_name) ->
-      let value = get_alias_value alias_name target_name in
-      if value >= 0 then (
-        let is_native_val = is_native value in
-        let native_str = if is_native_val then "YES" else "NO" in
-        Printf.printf "  %-20s | %-15s | %-10d | %-10s\n" alias_name target_name value native_str))
+      let target_value = get_alias_value alias_name target_name in
+      let alias_value = Test_get_system_value.get_system_value alias_name in
+      let alias_native = if is_native alias_value then "YES" else "NO" in
+      let target_native = if is_native target_value then "YES" else "NO" in
+
+      Printf.printf "  %-20s | %-10d | %-10s | %-15s | %-10d | %-10s\n"
+        alias_name alias_value alias_native target_name target_value
+        target_native)
     Errno_defaults.errno_aliases;
 
   (* Summary *)

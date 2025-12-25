@@ -1,6 +1,9 @@
 (* Generate C program that outputs OCaml is_native pattern matching *)
 let generate_is_native_detector_c () =
-  let all_names = List.map fst Errno_defaults.errno_defaults @ List.map fst Errno_defaults.errno_aliases in
+  let all_names =
+    List.map fst Errno_defaults.errno_defaults
+    @ List.map fst Errno_defaults.errno_aliases
+  in
   let cases =
     List.map
       (fun name ->

@@ -10,7 +10,8 @@ let generate_get_system_value () =
   let alias_cases =
     List.map
       (fun (alias_name, _target) ->
-        Printf.sprintf "  | \"%s\" -> Posix_errno.to_int `%s" alias_name alias_name)
+        Printf.sprintf "  | \"%s\" -> Posix_errno.to_int `%s" alias_name
+          alias_name)
       Errno_defaults.errno_aliases
   in
   let all_cases = regular_cases @ alias_cases in
@@ -25,5 +26,4 @@ let get_system_value = function
 |}
     (String.concat "\n" all_cases)
 
-let () =
-  print_endline (generate_get_system_value ())
+let () = print_endline (generate_get_system_value ())
