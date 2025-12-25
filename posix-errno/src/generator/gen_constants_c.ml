@@ -1,3 +1,19 @@
+(* Generate C code with #ifndef/#define/#endif for errno defaults *)
+let generate_errno_defaults_c () =
+  let regular_defs =
+    List.map
+      (fun (name, value) ->
+        Printf.sprintf "#ifndef %s\n#define %s %d\n#endif\n" name name value)
+      Errno_defaults.errno_defaults
+  in
+  let alias_defs =
+    List.map
+      (fun (name, alias) ->
+        Printf.sprintf "#ifndef %s\n#define %s %s\n#endif\n" name name alias)
+      Errno_defaults.errno_aliases
+  in
+  String.concat "\n" (regular_defs @ alias_defs)
+
 module Constants = Posix_base.Generators.Types (struct
   module Types = Posix_errno_constants.Def
 
@@ -10,7 +26,7 @@ module Constants = Posix_base.Generators.Types (struct
 
 %s
 |}
-      (Errno_defaults.generate_errno_defaults_c ())
+      (generate_errno_defaults_c ())
 end)
 
 let () = Constants.gen ()

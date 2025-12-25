@@ -89,6 +89,11 @@
    %{targets}
    (run ./gen_is_native_detector.exe))))
 
+(executable
+ (name gen_get_system_value)
+ (modules gen_get_system_value)
+ (libraries errno_defaults posix-errno))
+
 (rule
  (targets target_is_native_detector.exe)
  (deps target_is_native_detector.c)

@@ -10,8 +10,4 @@ type errno_def = {
 
 val errno_defs : errno_def list
 val errno_aliases : (string * string) list
-val get_value_for_system : string -> errno_def -> int
-val get_errno_defaults : string -> (string * int) list
 val errno_defaults : (string * int) list
-val generate_errno_defaults_c : unit -> string
-val generate_is_native_detector_c : unit -> string
