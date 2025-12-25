@@ -16,8 +16,7 @@ module Def (F : Cstubs.FOREIGN) = struct
   (* strerror_r function - POSIX version returns int (0 on success) *)
   (* Raises Invalid_argument on Windows *)
   let strerror_r =
-    foreign "posix_errno_strerror_r"
-      (int @-> ptr char @-> size_t @-> returning int)
+    foreign "posix_errno_strerror_r" (int @-> ptr char @-> int @-> returning int)
 
   (* strlen function to get string length *)
   let strlen = foreign "strlen" (ptr char @-> returning int)

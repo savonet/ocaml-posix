@@ -1,12 +1,12 @@
 open Posix_errno
 
-(* get_system_value is now generated from errno_defaults.mli in Test_get_system_value module *)
+(* get_value is now generated from errno_defaults.mli in Test_get_value module *)
 
 let get_alias_value _name target_name =
-  try Test_get_system_value.get_system_value target_name
+  try Test_get_value.get_value target_name
   with _ ->
     Printf.printf "    (alias target %s not found)\n" target_name;
-    -1
+    assert false
 
 let () =
   Printf.printf "=== POSIX Errno Default Values Test ===\n\n";
@@ -28,21 +28,21 @@ let () =
 
   List.iter
     (fun (name, default_value) ->
-      let system_value = Test_get_system_value.get_system_value name in
-      let is_native_val = is_native system_value in
+      let value = Test_get_value.get_value name in
+      let int_value = Posix_errno.to_int value in
+      let is_native_val = is_native value in
       let native_str = if is_native_val then "YES" else "NO" in
       let status, mark =
-        if system_value = default_value then (
+        if int_value = default_value then (
           incr matching;
           ("MATCH", "  "))
         else (
           incr different;
-          different_list :=
-            (name, default_value, system_value) :: !different_list;
+          different_list := (name, default_value, int_value) :: !different_list;
           ("DIFFERENT", "**"))
       in
       Printf.printf "%s%-20s | %-10d | %-10d | %-10s | %s\n" mark name
-        default_value system_value native_str status)
+        default_value int_value native_str status)
     Errno_defaults.errno_defaults;
 
   (* Handle aliases *)
@@ -54,12 +54,15 @@ let () =
   List.iter
     (fun (alias_name, target_name) ->
       let target_value = get_alias_value alias_name target_name in
-      let alias_value = Test_get_system_value.get_system_value alias_name in
+      let alias_value = Test_get_value.get_value alias_name in
       let alias_native = if is_native alias_value then "YES" else "NO" in
       let target_native = if is_native target_value then "YES" else "NO" in
 
       Printf.printf "  %-20s | %-10d | %-10s | %-15s | %-10d | %-10s\n"
-        alias_name alias_value alias_native target_name target_value
+        alias_name
+        (Posix_errno.to_int alias_value)
+        alias_native target_name
+        (Posix_errno.to_int target_value)
         target_native)
     Errno_defaults.errno_aliases;
 

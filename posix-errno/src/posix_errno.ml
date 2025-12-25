@@ -2,12 +2,9 @@ open Ctypes
 
 (* Errno C bindings *)
 module Stubs = Posix_errno_stubs.Def (Posix_errno_generated_stubs)
-
-(* Include generated errno type *)
 include Posix_errno_type
-
-(* Include generated conversion functions (includes Constants module) *)
 include Posix_errno_conversions
+include Posix_errno_is_native_impl
 
 (** Get current errno value *)
 let get_errno () = of_int (Stubs.posix_errno_get_errno ())
@@ -130,16 +127,16 @@ let raise_on_zero ?call f = raise_on_error ?call f (fun x -> x = 0)
 let raise_on_none ?call f =
   Option.get (raise_on_error ?call f (fun x -> x = None))
 
-let strerror = Stubs.strerror
+let strerror err = Stubs.strerror (to_int err)
 
 (** Get error string from errno using strerror_r (thread-safe, POSIX only)
     @raise Invalid_argument on Windows where strerror_r is not available *)
-let strerror_r ?(buflen = 1024) errnum =
+let strerror_r ?(buflen = 1024) err =
   let open Ctypes in
   let buf = CArray.make char buflen in
   let buf_ptr = CArray.start buf in
   let result =
-    Stubs.strerror_r errnum buf_ptr (Unsigned.Size_t.of_int buflen)
+    Stubs.strerror_r (to_int err) buf_ptr buflen
   in
   if result = 0 then (
     (* Success - get actual string length and convert to OCaml string *)
@@ -149,14 +146,3 @@ let strerror_r ?(buflen = 1024) errnum =
     (* Error - strerror_r returned an error code, raise Unix error *)
     let err = int_to_unix_error result in
     raise (Unix.Unix_error (err, "strerror_r", "")))
-
-(** Get error string from errno variant *)
-let strerror_of_t err = strerror (to_int err)
-
-(** Check if an errno variant is natively defined on this platform *)
-let is_native_t = Posix_errno_is_native_impl.is_native_t
-
-(** Check if an errno value is natively defined on this platform. Returns true
-    if the errno is natively defined by the system, false if it's using a
-    placeholder fallback value. *)
-let is_native errnum = is_native_t (of_int errnum)

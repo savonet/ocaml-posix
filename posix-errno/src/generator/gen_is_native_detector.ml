@@ -22,7 +22,7 @@ let generate_is_native_detector_c () =
 
 int main() {
   printf("(* Auto-generated file - do not edit manually *)\n\n");
-  printf("let is_native_t = function\n");
+  printf("let is_native = function\n");
 %s
   printf("  | `EUNKNOWN _ -> false\n");
   return 0;

@@ -30,7 +30,8 @@ let () =
         | `EPIPE -> "EPIPE"
         | `ERANGE -> "ERANGE"
         | _ -> "OTHER")
-      errnum (strerror errnum)
+      errnum
+      (strerror (of_int errnum))
   in
 
   (* Test common POSIX errors *)
@@ -58,9 +59,7 @@ let () =
   Printf.printf "\nTesting strerror_of_t with errno variants:\n";
 
   (* Test with errno variants *)
-  let test_errno_t err name =
-    Printf.printf "  %s: %s\n" name (strerror_of_t err)
-  in
+  let test_errno_t err name = Printf.printf "  %s: %s\n" name (strerror err) in
 
   test_errno_t `ECONNREFUSED "ECONNREFUSED";
   test_errno_t `EADDRINUSE "EADDRINUSE";
@@ -69,8 +68,8 @@ let () =
   test_errno_t `EHOSTUNREACH "EHOSTUNREACH";
 
   Printf.printf "\nTesting strerror (cross-platform, not thread-safe):\n";
-  Printf.printf "  EPERM: %s\n" (strerror (to_int `EPERM));
-  Printf.printf "  ENOENT: %s\n" (strerror (to_int `ENOENT));
+  Printf.printf "  EPERM: %s\n" (strerror `EPERM);
+  Printf.printf "  ENOENT: %s\n" (strerror `ENOENT);
 
   Printf.printf "\nTesting strerror_r with custom buffer length:\n";
 
@@ -79,9 +78,7 @@ let () =
     Printf.printf "  (Skipped on Windows - strerror_r not available)\n"
   else (
     (* Test with small buffer *)
-    Printf.printf "  EPERM (buflen=50): %s\n"
-      (strerror_r ~buflen:50 (to_int `EPERM));
-    Printf.printf "  EACCES (buflen=50): %s\n"
-      (strerror_r ~buflen:50 (to_int `EACCES)));
+    Printf.printf "  EPERM (buflen=50): %s\n" (strerror_r ~buflen:50 `EPERM);
+    Printf.printf "  EACCES (buflen=50): %s\n" (strerror_r ~buflen:50 `EACCES));
 
   Printf.printf "\n✓ All strerror tests completed successfully!\n"

@@ -1,7 +1,7 @@
 (rule
- (targets test_get_system_value.ml)
+ (targets test_get_value.ml)
  (deps
-  (:gen ../src/generator/gen_get_system_value.exe))
+  (:gen ../src/generator/gen_get_value.exe))
  (action
   (with-stdout-to
    %{targets}
@@ -15,5 +15,5 @@
 (test
  (name test_errno_defaults)
  (package posix-errno)
- (modules test_errno_defaults test_get_system_value)
+ (modules test_errno_defaults test_get_value)
  (libraries posix-errno errno_defaults unix))

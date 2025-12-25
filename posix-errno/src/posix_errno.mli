@@ -226,23 +226,17 @@ val int_to_unix_error : int -> Unix.error
 
     @param errnum The errno value to get the message for
     @return Error message string *)
-val strerror : int -> string
+val strerror : t -> string
 
 (** Get error message string for an errno value using strerror_r. This function
     is thread-safe but only available on POSIX systems.
 
     @param buflen Optional buffer length for error message (default: 1024)
-    @param errnum The errno value to get the message for
+    @param errn The errno value to get the message for
     @return Error message string
     @raise Invalid_argument on Windows where strerror_r is not available
     @raise Unix_error if strerror_r fails *)
-val strerror_r : ?buflen:int -> int -> string
-
-(** Get error message string for an errno variant.
-
-    @param err The errno variant to get the message for
-    @return Error message string *)
-val strerror_of_t : t -> string
+val strerror_r : ?buflen:int -> t -> string
 
 (** {1 Native Definition Detection} *)
 
@@ -257,10 +251,4 @@ val strerror_of_t : t -> string
 
     @param errnum The errno value to check
     @return [true] if natively defined, [false] if using placeholder *)
-val is_native : int -> bool
-
-(** Check if an errno variant is natively defined on this platform.
-
-    @param err The errno variant to check
-    @return [true] if natively defined, [false] if using placeholder *)
-val is_native_t : t -> bool
+val is_native : t -> bool
