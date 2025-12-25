@@ -9,29 +9,28 @@ let () =
   let test_errno errnum err_variant =
     Printf.printf "  %s (errno %d): %s\n"
       (match err_variant with
-       | EPERM -> "EPERM"
-       | ENOENT -> "ENOENT"
-       | ESRCH -> "ESRCH"
-       | EINTR -> "EINTR"
-       | EIO -> "EIO"
-       | ENXIO -> "ENXIO"
-       | EBADF -> "EBADF"
-       | EAGAIN -> "EAGAIN"
-       | ENOMEM -> "ENOMEM"
-       | EACCES -> "EACCES"
-       | EFAULT -> "EFAULT"
-       | EBUSY -> "EBUSY"
-       | EEXIST -> "EEXIST"
-       | ENOTDIR -> "ENOTDIR"
-       | EISDIR -> "EISDIR"
-       | EINVAL -> "EINVAL"
-       | EMFILE -> "EMFILE"
-       | ENOSPC -> "ENOSPC"
-       | EPIPE -> "EPIPE"
-       | ERANGE -> "ERANGE"
-       | _ -> "OTHER")
-      errnum
-      (strerror errnum)
+        | EPERM -> "EPERM"
+        | ENOENT -> "ENOENT"
+        | ESRCH -> "ESRCH"
+        | EINTR -> "EINTR"
+        | EIO -> "EIO"
+        | ENXIO -> "ENXIO"
+        | EBADF -> "EBADF"
+        | EAGAIN -> "EAGAIN"
+        | ENOMEM -> "ENOMEM"
+        | EACCES -> "EACCES"
+        | EFAULT -> "EFAULT"
+        | EBUSY -> "EBUSY"
+        | EEXIST -> "EEXIST"
+        | ENOTDIR -> "ENOTDIR"
+        | EISDIR -> "EISDIR"
+        | EINVAL -> "EINVAL"
+        | EMFILE -> "EMFILE"
+        | ENOSPC -> "ENOSPC"
+        | EPIPE -> "EPIPE"
+        | ERANGE -> "ERANGE"
+        | _ -> "OTHER")
+      errnum (strerror errnum)
   in
 
   (* Test common POSIX errors *)
@@ -76,7 +75,9 @@ let () =
   Printf.printf "\nTesting strerror_r with custom buffer length:\n";
 
   (* Test with small buffer *)
-  Printf.printf "  EPERM (buflen=50): %s\n" (strerror_r ~buflen:50 (to_int EPERM));
-  Printf.printf "  EACCES (buflen=50): %s\n" (strerror_r ~buflen:50 (to_int EACCES));
+  Printf.printf "  EPERM (buflen=50): %s\n"
+    (strerror_r ~buflen:50 (to_int EPERM));
+  Printf.printf "  EACCES (buflen=50): %s\n"
+    (strerror_r ~buflen:50 (to_int EACCES));
 
   Printf.printf "\n✓ All strerror tests completed successfully!\n"

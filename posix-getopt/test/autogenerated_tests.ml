@@ -7,7 +7,7 @@ let test_getopt_empty_argv () =
   reset ();
   let argv = [| "progname" |] in
   let opt = { name = 'a'; arg = `None (fun () -> ()) } in
-  let ret = getopt argv [ opt ] in
+  let ret = getopt argv [opt] in
   assert (Array.length ret = 0);
   Printf.printf "  ✓ getopt handled empty argv correctly\n%!"
 
@@ -19,7 +19,7 @@ let test_missing_argument_error () =
   let opt = { name = 'a'; arg = `Required (fun _ -> ()) } in
   let got_error = ref false in
   (try
-     ignore (getopt argv [ opt ]);
+     ignore (getopt argv [opt]);
      Printf.printf "  ✗ Should have raised Missing_argument\n%!";
      assert false
    with Missing_argument 'a' ->
@@ -35,7 +35,7 @@ let test_unknown_option_error () =
   let opt = { name = 'a'; arg = `None (fun () -> ()) } in
   let got_error = ref false in
   (try
-     ignore (getopt argv [ opt ]);
+     ignore (getopt argv [opt]);
      Printf.printf "  ✗ Should have raised Unknown_option\n%!";
      assert false
    with Unknown_option "-z" ->
@@ -57,7 +57,7 @@ let test_getopt_long_errors () =
     let opt = { name = ("known", 'k'); arg = `None (fun () -> ()) } in
     let got_error = ref false in
     (try
-       ignore (getopt_long argv [ opt ]);
+       ignore (getopt_long argv [opt]);
        Printf.printf "  ✗ Should have raised Unknown_option\n%!";
        assert false
      with Unknown_option "--unknown" ->
@@ -77,22 +77,22 @@ let test_getopt_long_errors () =
       let opt = { name = ("require", 'r'); arg = `Required (fun _ -> ()) } in
       let got_error = ref false in
       (try
-         ignore (getopt_long argv [ opt ]);
+         ignore (getopt_long argv [opt]);
          Printf.printf "  ✗ Should have raised Missing_argument\n%!"
          (* Note: behavior may vary by platform *)
        with
-      | Missing_argument 'r' ->
-          got_error := true;
-          Printf.printf "  ✓ getopt_long raised Missing_argument\n%!"
-      | Unknown_option _ ->
-          (* Some implementations might return unknown option *)
-          got_error := true;
-          Printf.printf
-            "  ✓ getopt_long raised error (platform-specific behavior)\n%!"
-      | e ->
-          Printf.printf "  ⚠ Unexpected exception: %s\n%!"
-            (Printexc.to_string e);
-          got_error := true);
+        | Missing_argument 'r' ->
+            got_error := true;
+            Printf.printf "  ✓ getopt_long raised Missing_argument\n%!"
+        | Unknown_option _ ->
+            (* Some implementations might return unknown option *)
+            got_error := true;
+            Printf.printf
+              "  ✓ getopt_long raised error (platform-specific behavior)\n%!"
+        | e ->
+            Printf.printf "  ⚠ Unexpected exception: %s\n%!"
+              (Printexc.to_string e);
+            got_error := true);
       if !got_error then
         Printf.printf "  ✓ getopt_long error handling tested\n%!"
       else Printf.printf "  ⚠ getopt_long did not raise expected error\n%!"))
@@ -103,17 +103,15 @@ let test_optional_argument_handling () =
   reset ();
   let argv = [| "progname"; "-o"; "value" |] in
   let received = ref None in
-  let opt =
-    { name = 'o'; arg = `Optional (fun arg -> received := Some arg) }
-  in
-  let ret = getopt argv [ opt ] in
+  let opt = { name = 'o'; arg = `Optional (fun arg -> received := Some arg) } in
+  let ret = getopt argv [opt] in
   match !received with
-  | Some (Some "value") ->
-      assert (Array.length ret = 0);
-      Printf.printf "  ✓ Optional argument handled correctly\n%!"
-  | _ ->
-      Printf.printf "  ✗ Optional argument not received correctly\n%!";
-      assert false
+    | Some (Some "value") ->
+        assert (Array.length ret = 0);
+        Printf.printf "  ✓ Optional argument handled correctly\n%!"
+    | _ ->
+        Printf.printf "  ✗ Optional argument not received correctly\n%!";
+        assert false
 
 (* Test that reset() properly resets state *)
 let test_reset_state () =
@@ -123,7 +121,7 @@ let test_reset_state () =
   let argv1 = [| "progname"; "-a" |] in
   let called1 = ref false in
   let opt1 = { name = 'a'; arg = `None (fun () -> called1 := true) } in
-  let _ = getopt argv1 [ opt1 ] in
+  let _ = getopt argv1 [opt1] in
   assert !called1;
 
   (* Second parse with reset *)
@@ -131,7 +129,7 @@ let test_reset_state () =
   let argv2 = [| "progname"; "-b" |] in
   let called2 = ref false in
   let opt2 = { name = 'b'; arg = `None (fun () -> called2 := true) } in
-  let _ = getopt argv2 [ opt2 ] in
+  let _ = getopt argv2 [opt2] in
   assert !called2;
   Printf.printf "  ✓ reset() properly resets parsing state\n%!"
 

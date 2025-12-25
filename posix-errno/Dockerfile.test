@@ -1,0 +1,12 @@
+FROM ocaml/opam:debian-12-ocaml-5.2
+
+# Install system dependencies
+RUN sudo apt-get update -qq && \
+    sudo apt-get install -y -qq libffi-dev pkg-config && \
+    sudo rm -rf /var/lib/apt/lists/*
+
+# Install OCaml dependencies
+RUN opam install -y dune ctypes-foreign && \
+    eval $(opam env)
+
+WORKDIR /workspace

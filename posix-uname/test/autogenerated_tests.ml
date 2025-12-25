@@ -32,13 +32,11 @@ let test_uname_expected_values () =
   let { sysname; machine; _ } = uname () in
   (* Check for common Unix-like system names *)
   let known_systems =
-    [ "Linux"; "Darwin"; "FreeBSD"; "OpenBSD"; "NetBSD"; "SunOS" ]
+    ["Linux"; "Darwin"; "FreeBSD"; "OpenBSD"; "NetBSD"; "SunOS"]
   in
   let is_known_system = List.mem sysname known_systems in
-  if is_known_system then
-    Printf.printf "  ✓ Recognized system: %s\n%!" sysname
-  else
-    Printf.printf "  ⚠ Unknown system name (not an error): %s\n%!" sysname;
+  if is_known_system then Printf.printf "  ✓ Recognized system: %s\n%!" sysname
+  else Printf.printf "  ⚠ Unknown system name (not an error): %s\n%!" sysname;
 
   (* Check that machine architecture looks reasonable *)
   let known_arches =
@@ -56,7 +54,8 @@ let test_uname_expected_values () =
     ]
   in
   let is_known_arch = List.mem machine known_arches in
-  if is_known_arch then Printf.printf "  ✓ Recognized architecture: %s\n%!" machine
+  if is_known_arch then
+    Printf.printf "  ✓ Recognized architecture: %s\n%!" machine
   else Printf.printf "  ⚠ Unknown architecture (not an error): %s\n%!" machine
 
 (* Note: uname() rarely fails in practice. According to POSIX, it can only fail with:

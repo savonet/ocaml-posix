@@ -590,15 +590,17 @@ let strerror_r ?(buflen = 1024) errnum =
   let open Ctypes in
   let buf = CArray.make char buflen in
   let buf_ptr = CArray.start buf in
-  let result = Stubs.strerror_r errnum buf_ptr (Unsigned.Size_t.of_int buflen) in
-  if result = 0 then
+  let result =
+    Stubs.strerror_r errnum buf_ptr (Unsigned.Size_t.of_int buflen)
+  in
+  if result = 0 then (
     (* Success - get actual string length and convert to OCaml string *)
     let len = Stubs.strlen buf_ptr in
-    string_from_ptr buf_ptr ~length:len
-  else
+    string_from_ptr buf_ptr ~length:len)
+  else (
     (* Error - strerror_r returned an error code, raise Unix error *)
     let err = int_to_unix_error result in
-    raise (Unix.Unix_error (err, "strerror_r", ""))
+    raise (Unix.Unix_error (err, "strerror_r", "")))
 
 (** Get error string from errno variant *)
 let strerror_of_t err = strerror (to_int err)

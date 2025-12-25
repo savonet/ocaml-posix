@@ -54,10 +54,10 @@ let test_multiple_signals () =
   let sigset = sigemptyset () in
   List.iter
     (fun sig_ -> sigaddset sigset sig_)
-    [ `Sigint; `Sigterm; `Sigusr1; `Sigusr2; `Sigchld ];
+    [`Sigint; `Sigterm; `Sigusr1; `Sigusr2; `Sigchld];
   List.iter
     (fun sig_ -> assert (sigismember sigset sig_))
-    [ `Sigint; `Sigterm; `Sigusr1; `Sigusr2; `Sigchld ];
+    [`Sigint; `Sigterm; `Sigusr1; `Sigusr2; `Sigchld];
   assert (not (sigismember sigset `Sigpipe));
   Printf.printf "  ✓ Multiple signal operations succeeded\n%!"
 
