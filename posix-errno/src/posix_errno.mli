@@ -243,3 +243,24 @@ val strerror_r : ?buflen:int -> int -> string
     @param err The errno variant to get the message for
     @return Error message string *)
 val strerror_of_t : t -> string
+
+(** {1 Native Definition Detection} *)
+
+(** Check if an errno value is natively defined on this platform. Returns [true]
+    if the errno is natively defined by the system, [false] if it's using a
+    placeholder fallback value.
+
+    This is useful to determine if an errno constant represents a real system
+    error on the current platform, or if it's just a placeholder value
+    (typically in the 10000+ range) that was assigned because the error doesn't
+    exist on this system.
+
+    @param errnum The errno value to check
+    @return [true] if natively defined, [false] if using placeholder *)
+val is_native : int -> bool
+
+(** Check if an errno variant is natively defined on this platform.
+
+    @param err The errno variant to check
+    @return [true] if natively defined, [false] if using placeholder *)
+val is_native_t : t -> bool

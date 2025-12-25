@@ -138,3 +138,11 @@ let strerror_r ?(buflen = 1024) errnum =
 
 (** Get error string from errno variant *)
 let strerror_of_t err = strerror (to_int err)
+
+(** Check if an errno variant is natively defined on this platform *)
+let is_native_t = Posix_errno_is_native_impl.is_native_t
+
+(** Check if an errno value is natively defined on this platform. Returns true
+    if the errno is natively defined by the system, false if it's using a
+    placeholder fallback value. *)
+let is_native errnum = is_native_t (of_int errnum)

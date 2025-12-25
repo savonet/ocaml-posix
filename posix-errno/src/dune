@@ -11,6 +11,13 @@
  (foreign_stubs
   (language c)
   (names posix_errno_generated_stubs))
+ (modules
+  posix_errno
+  posix_errno_type
+  posix_errno_conversions
+  posix_errno_is_native_impl
+  posix_errno_generated_constants
+  posix_errno_generated_stubs)
  (libraries unix ctypes posix-errno.constants posix-errno.stubs))
 
 (rule
@@ -61,3 +68,9 @@
   (with-stdout-to
    %{targets}
    (run ./generator/gen_errno_conversions.exe))))
+
+(rule
+ (targets posix_errno_is_native_impl.ml)
+ (deps ./generator/posix_errno_is_native_impl.ml)
+ (action
+  (copy %{deps} %{targets})))

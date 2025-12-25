@@ -74,10 +74,14 @@ let () =
 
   Printf.printf "\nTesting strerror_r with custom buffer length:\n";
 
-  (* Test with small buffer *)
-  Printf.printf "  EPERM (buflen=50): %s\n"
-    (strerror_r ~buflen:50 (to_int `EPERM));
-  Printf.printf "  EACCES (buflen=50): %s\n"
-    (strerror_r ~buflen:50 (to_int `EACCES));
+  (* Skip strerror_r tests on Windows where it's not available *)
+  if Sys.os_type = "Win32" then
+    Printf.printf "  (Skipped on Windows - strerror_r not available)\n"
+  else (
+    (* Test with small buffer *)
+    Printf.printf "  EPERM (buflen=50): %s\n"
+      (strerror_r ~buflen:50 (to_int `EPERM));
+    Printf.printf "  EACCES (buflen=50): %s\n"
+      (strerror_r ~buflen:50 (to_int `EACCES)));
 
   Printf.printf "\n✓ All strerror tests completed successfully!\n"

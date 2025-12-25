@@ -170,9 +170,9 @@ let () =
 
   (* Compare regular errno values *)
   Printf.printf "Regular errno constants:\n";
-  Printf.printf "%-20s | %-10s | %-10s | %s\n" "Name" "Default" "System"
-    "Status";
-  Printf.printf "%s\n" (String.make 65 '-');
+  Printf.printf "%-20s | %-10s | %-10s | %-10s | %s\n" "Name" "Default" "System"
+    "Native" "Status";
+  Printf.printf "%s\n" (String.make 77 '-');
 
   let matching = ref 0 in
   let different = ref 0 in
@@ -181,6 +181,8 @@ let () =
   List.iter
     (fun (name, default_value) ->
       let system_value = get_system_value name in
+      let is_native_val = is_native system_value in
+      let native_str = if is_native_val then "YES" else "NO" in
       let status, mark =
         if system_value = default_value then (
           incr matching;
@@ -191,8 +193,8 @@ let () =
             (name, default_value, system_value) :: !different_list;
           ("DIFFERENT", "**"))
       in
-      Printf.printf "%s%-20s | %-10d | %-10d | %s\n" mark name default_value
-        system_value status)
+      Printf.printf "%s%-20s | %-10d | %-10d | %-10s | %s\n" mark name
+        default_value system_value native_str status)
     Errno_defaults.errno_defaults;
 
   (* Handle aliases *)
@@ -222,12 +224,18 @@ let () =
           default_val system_val (system_val - default_val))
       (List.rev !different_list));
 
-  Printf.printf "\nNote: Values that match the defaults may either:\n";
+  Printf.printf
+    "\nNote: The 'Native' column shows whether the errno is natively\n";
+  Printf.printf
+    "defined by the system (YES) or using a placeholder fallback (NO).\n";
+  Printf.printf "\nValues that match the defaults may either:\n";
   Printf.printf "  1. Be natively defined by the system with that value, OR\n";
   Printf.printf
     "  2. Not be defined by the system and use the fallback default value\n";
   Printf.printf
     "\nValues that differ from defaults are definitely defined by the system.\n";
+  Printf.printf
+    "Use the is_native() function to distinguish between cases 1 and 2.\n";
 
   Printf.printf
     "\nTest completed successfully (informational only, no failures)\n"

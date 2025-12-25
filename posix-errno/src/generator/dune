@@ -76,3 +76,44 @@
  (name gen_errno_conversions)
  (modules gen_errno_conversions)
  (libraries errno_defaults))
+
+(executable
+ (name gen_is_native_detector)
+ (modules gen_is_native_detector)
+ (libraries errno_defaults))
+
+(rule
+ (targets target_is_native_detector.c)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_is_native_detector.exe))))
+
+(rule
+ (targets target_is_native_detector.exe)
+ (deps target_is_native_detector.c)
+ (action
+  (run %{ocaml-config:c_compiler} -o %{targets} target_is_native_detector.c)))
+
+(rule
+ (targets posix_errno_is_native_impl.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../../posix-base/src/exec.sh)
+  (:gen target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_errno_is_native_impl.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
