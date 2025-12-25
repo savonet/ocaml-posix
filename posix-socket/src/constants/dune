@@ -2,3 +2,11 @@
  (name posix_socket_constants)
  (public_name posix-socket.constants)
  (libraries ctypes.stubs))
+
+(rule
+ (targets posix_eai_errno_constants.ml)
+ (deps ../generator/gen_eai_errno_constants.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_eai_errno_constants.exe))))

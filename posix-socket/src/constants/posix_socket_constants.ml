@@ -1,4 +1,6 @@
 module Def (S : Cstubs.Types.TYPE) = struct
+  include Posix_eai_errno_constants.Def (S)
+
   let af_inet = S.constant "AF_INET" S.int
   let af_inet6 = S.constant "AF_INET6" S.int
   let af_unix = S.constant "AF_UNIX" S.int

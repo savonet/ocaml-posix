@@ -24,6 +24,7 @@ module Def (F : Cstubs.FOREIGN) = struct
   let getservbyname =
     foreign "getservbyname" (ptr char @-> ptr void @-> returning (ptr Servent.t))
 
+  let strerror = foreign "gai_strerror" (int @-> returning string)
   let strnlen = foreign "strnlen" (ptr char @-> size_t @-> returning size_t)
   let htonl = foreign "htonl" (uint32_t @-> returning uint32_t)
   let htons = foreign "htons" (uint16_t @-> returning uint16_t)

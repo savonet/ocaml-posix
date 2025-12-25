@@ -1,12 +1,6 @@
-open Posix_errno
+open Posix_socket
 
-(* get_value is now generated from errno_defaults.mli in Test_get_value module *)
-
-let get_alias_value _name target_name =
-  try Test_get_value.get_value target_name
-  with _ ->
-    Printf.printf "    (alias target %s not found)\n" target_name;
-    assert false
+(* get_value is now generated from eai_errno_defaults.mli in Test_get_value module *)
 
 let () =
   Printf.printf "=== POSIX Errno Default Values Test ===\n\n";
@@ -14,10 +8,10 @@ let () =
   (* Print system information *)
   Printf.printf "Platform: system=%s\n\n" Posix_base.System_detect.system;
 
-  Printf.printf "Comparing default errno values with system values...\n\n";
+  Printf.printf "Comparing default eai errno values with system values...\n\n";
 
-  (* Compare regular errno values *)
-  Printf.printf "Regular errno constants:\n";
+  (* Compare regular eai errno values *)
+  Printf.printf "eai_errno constants:\n";
   Printf.printf "%-20s | %-10s | %-10s | %-10s | %s\n" "Name" "Default" "System"
     "Native" "Status";
   Printf.printf "%s\n" (String.make 77 '-');
@@ -29,7 +23,7 @@ let () =
   List.iter
     (fun (name, default_value) ->
       let value = Test_get_value.get_value name in
-      let int_value = Posix_errno.to_int value in
+      let int_value = Posix_socket.int_of_error value in
       let is_native_val = is_native value in
       let native_str = if is_native_val then "YES" else "NO" in
       let status, mark =
@@ -43,33 +37,12 @@ let () =
       in
       Printf.printf "%s%-20s | %-10d | %-10d | %-10s | %s\n" mark name
         default_value int_value native_str status)
-    Errno_defaults.errno_defaults;
-
-  (* Handle aliases *)
-  Printf.printf "\nErrno aliases:\n";
-  Printf.printf "%-20s | %-10s | %-10s | %-15s | %-10s | %-10s\n" "Alias"
-    "Value" "Native" "Target" "Value" "Native";
-  Printf.printf "%s\n" (String.make 82 '-');
-
-  List.iter
-    (fun (alias_name, target_name) ->
-      let target_value = get_alias_value alias_name target_name in
-      let alias_value = Test_get_value.get_value alias_name in
-      let alias_native = if is_native alias_value then "YES" else "NO" in
-      let target_native = if is_native target_value then "YES" else "NO" in
-
-      Printf.printf "  %-20s | %-10d | %-10s | %-15s | %-10d | %-10s\n"
-        alias_name
-        (Posix_errno.to_int alias_value)
-        alias_native target_name
-        (Posix_errno.to_int target_value)
-        target_native)
-    Errno_defaults.errno_aliases;
+    Eai_errno_defaults.eai_errno_defaults;
 
   (* Summary *)
   Printf.printf "\n=== Summary ===\n";
-  Printf.printf "Total errno constants tested: %d\n"
-    (List.length Errno_defaults.errno_defaults);
+  Printf.printf "Total eai_errno constants tested: %d\n"
+    (List.length Eai_errno_defaults.eai_errno_defaults);
   Printf.printf "Values matching defaults: %d\n" !matching;
   Printf.printf "Values different from defaults: %d\n" !different;
 
@@ -82,7 +55,7 @@ let () =
       (List.rev !different_list));
 
   Printf.printf
-    "\nNote: The 'Native' column shows whether the errno is natively\n";
+    "\nNote: The 'Native' column shows whether the eai errno is natively\n";
   Printf.printf
     "defined by the system (YES) or using a placeholder fallback (NO).\n";
   Printf.printf "\nValues that match the defaults may either:\n";

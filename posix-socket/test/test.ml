@@ -29,5 +29,19 @@ let () =
     | _ -> assert false
 
 let () =
+  match getaddrinfo "/invalid" with
+    | exception Posix_socket.Error v ->
+        Printf.printf "Got exception %s for invalid getaddrinfo call!\n%!"
+          (Posix_socket.strerror v)
+    | _ -> assert false
+
+let () =
+  match getnameinfo Ctypes.(coerce (ptr void) (ptr Sockaddr.t) null) with
+    | exception Posix_socket.Error v ->
+        Printf.printf "Got exception %s for invalid getaddrinfo call!\n%!"
+          (Posix_socket.strerror v)
+    | _ -> assert false
+
+let () =
   Gc.full_major ();
   Gc.full_major ()

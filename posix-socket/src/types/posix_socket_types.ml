@@ -1,5 +1,7 @@
 open Ctypes
 module Constants = Posix_socket_constants.Def (Posix_socket_generated_constants)
+include Posix_eai_errno_type
+include Posix_eai_errno_conversions
 
 let socklen : (module Posix_base.Types.Unsigned) =
   Posix_base.Types.mkUnsigned ~name:"socklen_t" ~size:Constants.socklen_t_len

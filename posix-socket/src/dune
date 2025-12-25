@@ -28,3 +28,26 @@
  (targets posix_socket_generated_stubs.c)
  (action
   (run ./generator/gen_stubs.exe c %{targets})))
+
+(rule
+ (targets posix_eai_errno_is_native_impl.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ../../posix-base/src/exec.sh)
+  (:gen ./generator/target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_eai_errno_is_native_impl.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen ./generator/target_is_native_detector.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))

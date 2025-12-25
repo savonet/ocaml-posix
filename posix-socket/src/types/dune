@@ -30,3 +30,19 @@
   (with-stdout-to
    %{targets}
    (run %{gen}))))
+
+(rule
+ (targets posix_eai_errno_type.ml)
+ (deps ../generator/gen_eai_errno_type.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_eai_errno_type.exe))))
+
+(rule
+ (targets posix_eai_errno_conversions.ml)
+ (deps ../generator/gen_eai_errno_conversions.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ../generator/gen_eai_errno_conversions.exe))))

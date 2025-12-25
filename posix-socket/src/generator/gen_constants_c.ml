@@ -1,8 +1,19 @@
+let generate_eai_errno_defaults_c () =
+  let defs =
+    List.map
+      (fun (name, value) ->
+        Printf.sprintf "#ifndef EAI_%s\n#define EAI_%s %d\n#endif\n" name name
+          value)
+      Eai_errno_defaults.eai_errno_defaults
+  in
+  String.concat "\n" defs
+
 module Types = Posix_base.Generators.Types (struct
   module Types = Posix_socket_constants.Def
 
   let c_headers =
-    {|
+    Printf.sprintf
+      {|
 #ifdef _WIN32
   #include <winsock2.h>
   #include <ws2tcpip.h>
@@ -13,6 +24,8 @@ module Types = Posix_base.Generators.Types (struct
   #include <netinet/in.h>
   #include <netdb.h>
 #endif
+
+%s
 
 #define SA_FAMILY_T_LEN (sizeof(((struct sockaddr*)0)->sa_family))
 #define SOCKLEN_T_LEN (sizeof(socklen_t))
@@ -26,6 +39,7 @@ module Types = Posix_base.Generators.Types (struct
   #define NI_MAXSERV 32
 #endif
 |}
+      (generate_eai_errno_defaults_c ())
 end)
 
 let () = Types.gen ()

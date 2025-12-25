@@ -1,7 +1,7 @@
 (library
  (name posix_base)
  (public_name posix-base)
- (modules posix_base)
+ (modules posix_base system_detect)
  (synopsis
   "posix-base provides the base tools to generate the various posix bindings")
  (libraries ctypes.stubs integers))
@@ -18,3 +18,37 @@
    (run
     %{exe:posix_base_dirname_internal.exe}
     %{lib:ctypes:ctypes_cstubs_internals.h}))))
+
+(rule
+ (targets target_system_detect.exe)
+ (deps target_system_detect.c)
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system}
+   -o
+   %{targets}
+   target_system_detect.c)))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:exec ./exec.sh)
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "./%{exec} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))

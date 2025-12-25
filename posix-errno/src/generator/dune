@@ -3,44 +3,10 @@
  (modules gen_stubs)
  (libraries posix-errno.stubs posix-base))
 
-(rule
- (targets target_system_detect.exe)
- (deps target_system_detect.c)
- (action
-  (run
-   %{ocaml-config:c_compiler}
-   -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system}
-   -o
-   %{targets}
-   target_system_detect.c)))
-
-(rule
- (targets system_detect.ml)
- (enabled_if
-  (<> %{ocaml-config:host} %{ocaml-config:target}))
- (deps
-  (:exec ../../../posix-base/src/exec.sh)
-  (:gen target_system_detect.exe))
- (action
-  (with-stdout-to
-   %{targets}
-   (system "%{exec} %{ocaml-config:system} %{gen}"))))
-
-(rule
- (targets system_detect.ml)
- (enabled_if
-  (= %{ocaml-config:host} %{ocaml-config:target}))
- (deps
-  (:gen target_system_detect.exe))
- (action
-  (with-stdout-to
-   %{targets}
-   (run %{gen}))))
-
 (library
  (name errno_defaults)
- (libraries str)
- (modules errno_defaults system_detect))
+ (libraries str posix-base)
+ (modules errno_defaults))
 
 (executable
  (name gen_constants_c)
