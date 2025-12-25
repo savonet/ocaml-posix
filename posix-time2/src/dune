@@ -15,9 +15,11 @@
  (foreign_stubs
   (language c)
   (names posix_time2_generated_stubs)
-  (flags :standard
+  (flags
+   :standard
    (:include c_flags.sexp)))
- (c_library_flags :standard
+ (c_library_flags
+  :standard
   (:include c_library_flags.sexp))
  (libraries unix posix-errno ctypes posix-time2.types posix-time2.stubs))
 

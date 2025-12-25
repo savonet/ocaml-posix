@@ -61,7 +61,8 @@ let test_nanosleep_invalid () =
      prevents invalid values. *)
   Printf.printf
     "  ℹ Timespec.create normalizes values, preventing nsec >= 1e9 at \
-     construction\n%!"
+     construction\n\
+     %!"
 
 (* Test nanosleep with valid value *)
 let test_nanosleep_valid () =
@@ -110,17 +111,17 @@ let test_localtime () =
 let test_mktime () =
   Printf.printf "Testing mktime...\n%!";
   (* Create a valid time structure *)
-  match
-    Tm.create 0 0 12 1 0 124 1 0 0
-    (* 2024-01-01 12:00:00, Monday, day 0 of year *)
-  with
-  | Some tm ->
-      let time = mktime tm in
-      Printf.printf "  ✓ mktime succeeded: %Ld\n%!" time;
-      assert (time > 0L)
-  | None ->
-      Printf.printf "  ✗ Failed to create valid tm structure\n%!";
-      assert false
+    match
+      Tm.create 0 0 12 1 0 124 1 0 0
+      (* 2024-01-01 12:00:00, Monday, day 0 of year *)
+    with
+    | Some tm ->
+        let time = mktime tm in
+        Printf.printf "  ✓ mktime succeeded: %Ld\n%!" time;
+        assert (time > 0L)
+    | None ->
+        Printf.printf "  ✗ Failed to create valid tm structure\n%!";
+        assert false
 
 (* Test setitimer and getitimer *)
 let test_itimer () =
@@ -163,16 +164,16 @@ let test_select_timeout () =
 let test_select_invalid_fd () =
   Printf.printf "Testing select with invalid fd (error case)...\n%!";
   (* Create an invalid file descriptor *)
-  let invalid_fd = Unix.openfile "/dev/null" [ Unix.O_RDONLY ] 0o644 in
+  let invalid_fd = Unix.openfile "/dev/null" [Unix.O_RDONLY] 0o644 in
   Unix.close invalid_fd;
   (* Now it's invalid *)
-  (try
-     ignore (select [ invalid_fd ] [] [] None);
-     Printf.printf "  ✗ select with invalid fd should have failed\n%!";
-     (* Some systems may not error on this *)
-     Printf.printf "  ⚠ (or system doesn't error on closed fd)\n%!"
-   with Unix.Unix_error (Unix.EBADF, "select", _) ->
-     Printf.printf "  ✓ select correctly rejected invalid fd (EBADF)\n%!")
+  try
+    ignore (select [invalid_fd] [] [] None);
+    Printf.printf "  ✗ select with invalid fd should have failed\n%!";
+    (* Some systems may not error on this *)
+    Printf.printf "  ⚠ (or system doesn't error on closed fd)\n%!"
+  with Unix.Unix_error (Unix.EBADF, "select", _) ->
+    Printf.printf "  ✓ select correctly rejected invalid fd (EBADF)\n%!"
 
 (* Test utimes on a valid file *)
 let test_utimes_valid () =
@@ -189,12 +190,12 @@ let test_utimes_invalid () =
   Printf.printf "Testing utimes (error case)...\n%!";
   let nonexistent = "/tmp/this_file_should_not_exist_posix_time2_test_12345" in
   let new_time = Timeval.create 1000000000L 0L in
-  (try
-     utimes nonexistent new_time;
-     Printf.printf "  ✗ utimes on non-existent file should have failed\n%!";
-     assert false
-   with Unix.Unix_error (Unix.ENOENT, "utimes", _) ->
-     Printf.printf "  ✓ utimes correctly rejected non-existent file (ENOENT)\n%!")
+  try
+    utimes nonexistent new_time;
+    Printf.printf "  ✗ utimes on non-existent file should have failed\n%!";
+    assert false
+  with Unix.Unix_error (Unix.ENOENT, "utimes", _) ->
+    Printf.printf "  ✓ utimes correctly rejected non-existent file (ENOENT)\n%!"
 
 let () =
   Printf.printf "\n=== POSIX Time2 Error Handling Tests ===\n\n%!";
