@@ -117,6 +117,18 @@
 )
 
 (package
+ (name posix-stat)
+ (synopsis "Bindings for posix stat")
+ (description "posix-stat provides types and bindings for POSIX sys/stat.h APIs.")
+ (depends
+  ctypes
+  (posix-base (= :version))
+  (posix-types (= :version))
+  (posix-time2 (= :version))
+  (posix-errno (= :version)))
+)
+
+(package
  (name posix-bindings)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
@@ -128,5 +140,6 @@
   posix-time2
   posix-uname
   posix-math2
-  posix-getopt)
+  posix-getopt
+  posix-stat)
 )

@@ -1,0 +1,125 @@
+open Ctypes
+include Posix_stat_stubs.Def (Posix_stat_generated_stubs)
+include Posix_stat_types
+
+(* File type test functions - implement as OCaml functions *)
+let s_isreg mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifreg)
+let s_isdir mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifdir)
+let s_islnk mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_iflnk)
+let s_ischr mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifchr)
+let s_isblk mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifblk)
+let s_isfifo mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ififo)
+let s_issock mode = Posix_types.Mode.(equal (logand mode s_ifmt) s_ifsock)
+
+(* High-level stat type *)
+type stat = {
+  st_dev : Posix_types.dev_t;
+  st_ino : Posix_types.ino_t;
+  st_mode : Posix_types.mode_t;
+  st_nlink : Posix_types.nlink_t;
+  st_uid : Posix_types.uid_t;
+  st_gid : Posix_types.gid_t;
+  st_rdev : Posix_types.dev_t;
+  st_size : Posix_types.off_t;
+  st_atim : Posix_time2.Timespec.t;
+  st_mtim : Posix_time2.Timespec.t;
+  st_ctim : Posix_time2.Timespec.t;
+  st_blksize : Posix_types.blksize_t;
+  st_blocks : Posix_types.blkcnt_t;
+}
+
+(* Helper to convert C struct stat to OCaml record *)
+let from_stat stat_ptr =
+  let get f = getf stat_ptr f in
+  let get_timespec f =
+    let ts = get f in
+    let tv_sec =
+      Posix_types.Time.to_int64 (getf ts Types.Time2_types.Timespec.tv_sec)
+    in
+    let tv_nsec =
+      Signed.Long.to_int64 (getf ts Types.Time2_types.Timespec.tv_nsec)
+    in
+    Posix_time2.Timespec.create tv_sec tv_nsec
+  in
+  {
+    st_dev = get Types.Stat.st_dev;
+    st_ino = get Types.Stat.st_ino;
+    st_mode = get Types.Stat.st_mode;
+    st_nlink = get Types.Stat.st_nlink;
+    st_uid = get Types.Stat.st_uid;
+    st_gid = get Types.Stat.st_gid;
+    st_rdev = get Types.Stat.st_rdev;
+    st_size = get Types.Stat.st_size;
+    st_atim = get_timespec Types.Stat.st_atim;
+    st_mtim = get_timespec Types.Stat.st_mtim;
+    st_ctim = get_timespec Types.Stat.st_ctim;
+    st_blksize = get Types.Stat.st_blksize;
+    st_blocks = get Types.Stat.st_blocks;
+  }
+
+(* Helper to convert Unix.file_descr to int *)
+external fd_to_int : Unix.file_descr -> int = "%identity"
+
+(* stat functions *)
+let stat path =
+  let st = make Types.Stat.t in
+  ignore (Posix_errno.raise_on_neg ~call:"stat" (fun () -> stat path (addr st)));
+  from_stat st
+
+let fstat fd =
+  let st = make Types.Stat.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fstat" (fun () ->
+         fstat (fd_to_int fd) (addr st)));
+  from_stat st
+
+let lstat path =
+  let st = make Types.Stat.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"lstat" (fun () -> lstat path (addr st)));
+  from_stat st
+
+(* chmod functions *)
+let chmod path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"chmod" (fun () -> chmod path mode))
+
+let fchmod fd mode =
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fchmod" (fun () ->
+         fchmod (fd_to_int fd) mode))
+
+(* Directory and special file creation *)
+let mkdir path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"mkdir" (fun () -> mkdir path mode))
+
+let mkfifo path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"mkfifo" (fun () -> mkfifo path mode))
+
+(* *at functions with optional arguments *)
+let fstatat ?(dirfd = Unix.stdin) ?(flags = []) path =
+  let st = make Types.Stat.t in
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  let flags_int = List.fold_left ( lor ) 0 flags in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fstatat" (fun () ->
+         fstatat fd_int path (addr st) flags_int));
+  from_stat st
+
+let fchmodat ?(dirfd = Unix.stdin) ?(flags = []) path mode =
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  let flags_int = List.fold_left ( lor ) 0 flags in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fchmodat" (fun () ->
+         fchmodat fd_int path mode flags_int))
+
+let mkdirat ?(dirfd = Unix.stdin) path mode =
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"mkdirat" (fun () ->
+         mkdirat fd_int path mode))
+
+let mkfifoat ?(dirfd = Unix.stdin) path mode =
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"mkfifoat" (fun () ->
+         mkfifoat fd_int path mode))

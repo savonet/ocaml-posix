@@ -1,0 +1,9 @@
+(executable
+ (name test)
+ (libraries posix-stat unix))
+
+(rule
+ (alias runtest)
+ (package posix-stat)
+ (action
+  (run %{exe:test.exe})))
