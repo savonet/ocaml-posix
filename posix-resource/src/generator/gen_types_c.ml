@@ -4,6 +4,7 @@ module Types = Posix_base.Generators.Types (struct
   let c_headers = {|
 #include <sys/resource.h>
 #include <sys/time.h>
+#include <time.h>
 |}
 end)
 
