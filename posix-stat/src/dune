@@ -12,10 +12,9 @@
   (language c)
   (names posix_stat_generated_stubs))
  (libraries
-  unix
-  unix-errno.unix
   ctypes
   posix-types
+  posix-errno
   posix-time2
   posix-stat.types
   posix-stat.stubs))

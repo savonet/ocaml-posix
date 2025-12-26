@@ -1,6 +1,5 @@
 open Ctypes
 include Posix_stat_stubs.Def (Posix_stat_generated_stubs)
-
 include Posix_stat_types
 
 (* File type test functions - implement as OCaml functions *)
@@ -61,66 +60,66 @@ let from_stat stat_ptr =
 (* Helper to convert Unix.file_descr to int *)
 external fd_to_int : Unix.file_descr -> int = "%identity"
 
-(* Error handling helpers *)
-let wrap_int_result f =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match f () with x when x < 0 -> None | _ -> Some ()))
-
-let wrap_stat_result f =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let ret, result = f () in
-          match ret with x when x < 0 -> None | _ -> Some result))
-
 (* stat functions *)
 let stat path =
-  wrap_stat_result (fun () ->
-      let st = make Types.Stat.t in
-      let ret = stat path (addr st) in
-      (ret, from_stat st))
+  let st = make Types.Stat.t in
+  ignore (Posix_errno.raise_on_neg ~call:"stat" (fun () -> stat path (addr st)));
+  from_stat st
 
 let fstat fd =
-  wrap_stat_result (fun () ->
-      let st = make Types.Stat.t in
-      let ret = fstat (fd_to_int fd) (addr st) in
-      (ret, from_stat st))
+  let st = make Types.Stat.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fstat" (fun () ->
+         fstat (fd_to_int fd) (addr st)));
+  from_stat st
 
 let lstat path =
-  wrap_stat_result (fun () ->
-      let st = make Types.Stat.t in
-      let ret = lstat path (addr st) in
-      (ret, from_stat st))
+  let st = make Types.Stat.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"lstat" (fun () -> lstat path (addr st)));
+  from_stat st
 
 (* chmod functions *)
-let chmod path mode = wrap_int_result (fun () -> chmod path mode)
-let fchmod fd mode = wrap_int_result (fun () -> fchmod (fd_to_int fd) mode)
+let chmod path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"chmod" (fun () -> chmod path mode))
+
+let fchmod fd mode =
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fchmod" (fun () ->
+         fchmod (fd_to_int fd) mode))
 
 (* Directory and special file creation *)
-let mkdir path mode = wrap_int_result (fun () -> mkdir path mode)
-let mkfifo path mode = wrap_int_result (fun () -> mkfifo path mode)
+let mkdir path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"mkdir" (fun () -> mkdir path mode))
+
+let mkfifo path mode =
+  ignore (Posix_errno.raise_on_neg ~call:"mkfifo" (fun () -> mkfifo path mode))
 
 (* *at functions with optional arguments *)
 let fstatat ?(dirfd = Unix.stdin) ?(flags = []) path =
-  wrap_stat_result (fun () ->
-      let st = make Types.Stat.t in
-      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
-      let flags_int = List.fold_left ( lor ) 0 flags in
-      let ret = fstatat fd_int path (addr st) flags_int in
-      (ret, from_stat st))
+  let st = make Types.Stat.t in
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  let flags_int = List.fold_left ( lor ) 0 flags in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fstatat" (fun () ->
+         fstatat fd_int path (addr st) flags_int));
+  from_stat st
 
 let fchmodat ?(dirfd = Unix.stdin) ?(flags = []) path mode =
-  wrap_int_result (fun () ->
-      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
-      let flags_int = List.fold_left ( lor ) 0 flags in
-      fchmodat fd_int path mode flags_int)
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  let flags_int = List.fold_left ( lor ) 0 flags in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"fchmodat" (fun () ->
+         fchmodat fd_int path mode flags_int))
 
 let mkdirat ?(dirfd = Unix.stdin) path mode =
-  wrap_int_result (fun () ->
-      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
-      mkdirat fd_int path mode)
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"mkdirat" (fun () ->
+         mkdirat fd_int path mode))
 
 let mkfifoat ?(dirfd = Unix.stdin) path mode =
-  wrap_int_result (fun () ->
-      let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
-      mkfifoat fd_int path mode)
+  let fd_int = if dirfd = Unix.stdin then at_fdcwd else fd_to_int dirfd in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"mkfifoat" (fun () ->
+         mkfifoat fd_int path mode))

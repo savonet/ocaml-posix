@@ -125,7 +125,7 @@
   (posix-base (= :version))
   (posix-types (= :version))
   (posix-time2 (= :version))
-  unix-errno)
+  (posix-errno (= :version)))
 )
 
 (package
