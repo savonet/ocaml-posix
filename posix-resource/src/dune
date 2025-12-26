@@ -12,9 +12,8 @@
   (language c)
   (names posix_resource_generated_stubs))
  (libraries
-  unix
-  unix-errno.unix
   ctypes
+  posix-errno
   posix-types
   posix-time2
   posix-resource.types

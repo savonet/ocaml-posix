@@ -24,18 +24,6 @@ type rusage = {
   ru_nivcsw : int64;
 }
 
-(* Error handling helpers *)
-let wrap_int_result f =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          match f () with x when x < 0 -> None | _ -> Some ()))
-
-let wrap_result f =
-  Errno_unix.with_unix_exn (fun () ->
-      Errno_unix.raise_on_errno (fun () ->
-          let ret, result = f () in
-          match ret with x when x < 0 -> None | _ -> Some result))
-
 (* Conversion helpers *)
 let from_rlimit rlim =
   let get f = getf rlim f in
@@ -80,28 +68,31 @@ let from_rusage ru =
 
 (* Resource limit functions *)
 let getrlimit resource =
-  wrap_result (fun () ->
-      let rlim = make Types.Rlimit.t in
-      let ret = getrlimit resource (addr rlim) in
-      (ret, from_rlimit rlim))
+  let rlim = make Types.Rlimit.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"getrlimit" (fun () ->
+         getrlimit resource (addr rlim)));
+  from_rlimit rlim
 
 let setrlimit resource limits =
-  wrap_int_result (fun () ->
-      let rlim = to_rlimit limits in
-      setrlimit resource (addr rlim))
+  let rlim = to_rlimit limits in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"setrlimit" (fun () ->
+         setrlimit resource (addr rlim)))
 
 (* Resource usage functions *)
 let getrusage who =
-  wrap_result (fun () ->
-      let ru = make Types.Rusage.t in
-      let ret = getrusage who (addr ru) in
-      (ret, from_rusage ru))
+  let ru = make Types.Rusage.t in
+  ignore
+    (Posix_errno.raise_on_neg ~call:"getrusage" (fun () ->
+         getrusage who (addr ru)));
+  from_rusage ru
 
 (* Priority functions *)
 let getpriority which who =
-  wrap_result (fun () ->
-      let ret = getpriority which who in
-      (ret, ret))
+  Posix_errno.raise_on_neg ~call:"getpriority" (fun () -> getpriority which who)
 
 let setpriority which who prio =
-  wrap_int_result (fun () -> setpriority which who prio)
+  ignore
+    (Posix_errno.raise_on_neg ~call:"setpriority" (fun () ->
+         setpriority which who prio))
