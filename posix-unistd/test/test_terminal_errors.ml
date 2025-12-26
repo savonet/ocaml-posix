@@ -28,11 +28,10 @@ let test_ttyname_r_not_tty _ =
   (* ttyname_r on non-tty fd should raise ENOTTY *)
   with_temp_file (fun tmp ->
       let fd = Unix.openfile tmp [Unix.O_RDWR] 0o644 in
-      let buf = Bytes.create 256 in
       assert_raises_verbose
         (Unix.Unix_error (Unix.ENOTTY, "ttyname_r", ""))
         "ttyname_r on non-tty"
-        (fun () -> ignore (ttyname_r fd buf));
+        (fun () -> ignore (ttyname_r fd));
       Unix.close fd)
 
 let test_tcgetpgrp_not_tty _ =

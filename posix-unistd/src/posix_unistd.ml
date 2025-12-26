@@ -111,10 +111,7 @@ let getcwd () =
   ignore
     (Posix_errno.raise_on_null ~call:"getcwd" (fun () ->
          getcwd (CArray.start buf) default_buf_len));
-  let len = strlen (CArray.start buf) in
-  let bytes = Bytes.create len in
-  memcpy_to_bytes (ocaml_bytes_start bytes) (CArray.start buf) len;
-  Bytes.unsafe_to_string bytes
+  string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
 
 (* File positioning *)
 type seek_command = Seek_set | Seek_cur | Seek_end
@@ -291,21 +288,23 @@ let ttyname fd =
   let fd = fd_to_int fd in
   Posix_errno.raise_on_none ~call:"ttyname" (fun () -> ttyname fd)
 
-let ttyname_r fd buf =
+let ttyname_r ?(len = host_name_max) fd =
   let fd = fd_to_int fd in
-  match ttyname_r fd (ocaml_bytes_start buf) (Bytes.length buf) with
-    | 0 -> Bytes.sub buf 0 (strlen_bytes (ocaml_bytes_start buf))
+  let buf = CArray.make char len in
+  match ttyname_r fd (CArray.start buf) len with
+    | 0 ->
+        string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
     | n ->
         raise
           (Unix.Unix_error (Posix_errno.int_to_unix_error n, "ttyname_r", ""))
 
 let ctermid () =
-  let buf = CArray.make char max_hostname in
+  let buf = CArray.make char host_name_max in
   let result =
     Posix_errno.raise_on_null ~call:"ctermid" (fun () ->
         ctermid (CArray.start buf))
   in
-  string_from_ptr result ~length:max_hostname
+  string_from_ptr result ~length:(strlen (CArray.start buf))
 
 let tcgetpgrp fd =
   let fd = fd_to_int fd in
@@ -320,11 +319,11 @@ let tcsetpgrp fd pgrp =
 let gethostid () = Signed.Long.to_int64 (gethostid ())
 
 let gethostname () =
-  let buf = CArray.make char max_hostname in
+  let buf = CArray.make char host_name_max in
   ignore
     (Posix_errno.raise_on_neg ~call:"gethostname" (fun () ->
-         gethostname (CArray.start buf) max_hostname));
-  string_from_ptr (CArray.start buf) ~length:max_hostname
+         gethostname (CArray.start buf) host_name_max));
+  string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
 
 let sethostname name =
   ignore
@@ -335,9 +334,11 @@ let sethostname name =
 let getlogin () =
   Posix_errno.raise_on_none ~call:"getlogin" (fun () -> getlogin ())
 
-let getlogin_r buf =
-  match getlogin_r (ocaml_bytes_start buf) (Bytes.length buf) with
-    | 0 -> Bytes.sub buf 0 (strlen_bytes (ocaml_bytes_start buf))
+let getlogin_r ?(len = login_name_max) () =
+  let buf = CArray.make char len in
+  match getlogin_r (CArray.start buf) len with
+    | 0 ->
+        string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
     | n ->
         raise
           (Unix.Unix_error (Posix_errno.int_to_unix_error n, "getlogin_r", ""))

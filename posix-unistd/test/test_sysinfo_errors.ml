@@ -17,12 +17,11 @@ let test_sethostname_eperm _ =
 
 let test_getlogin_r_small_buffer _ =
   (* getlogin_r with too small buffer should raise ERANGE *)
-  let buf = Bytes.create 1 in
-  try
-    let _ = getlogin_r buf in
-    (* May succeed with very short login names *)
-    ()
-  with
+    try
+      let _ = getlogin_r ~len:1 () in
+      (* May succeed with very short login names *)
+      ()
+    with
     | Unix.Unix_error (Unix.ERANGE, "getlogin_r", "") ->
         (* Expected for most cases *)
         ()

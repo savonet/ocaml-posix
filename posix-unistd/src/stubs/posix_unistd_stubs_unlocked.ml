@@ -5,7 +5,6 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   (* Type alias to fix const char ** vs char *const * mismatch *)
   let argv_t = typedef (ptr string) "char*const*"
-  let strlen = foreign "strlen" (ptr char @-> returning int)
 
   (* Basic I/O operations *)
   let read = foreign "read" (int @-> ptr char @-> int @-> returning int)

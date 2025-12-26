@@ -5,8 +5,13 @@ module Types = Posix_base.Generators.Types (struct
     {|
 #include <unistd.h>
 #include <fcntl.h>
+
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 256
+#endif
+
+#ifndef LOGIN_NAME_MAX
+#define LOGIN_NAME_MAX 256
 #endif
 |}
 end)

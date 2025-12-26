@@ -36,9 +36,8 @@ let test_ttyname_r _ =
     try
       test_success "ttyname_r" "ttyname_r" "Get terminal name (reentrant)"
         (fun () ->
-          let buf = Bytes.create 256 in
-          let name = ttyname_r Unix.stdin buf in
-          assert_bool "tty name should not be empty" (Bytes.length name > 0))
+          let name = ttyname_r Unix.stdin in
+          assert_bool "tty name should not be empty" (String.length name > 0))
     with _ ->
       skip_test "ttyname_r" "ttyname_r" "Get terminal name (reentrant)"
         "ttyname_r not available")

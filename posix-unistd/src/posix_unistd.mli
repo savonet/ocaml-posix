@@ -9,9 +9,10 @@
 
 (** {1 Constants} *)
 
-(** {2 Hostname limits} *)
+(** {2 Name limits} *)
 
-val max_hostname : int
+val host_name_max : int
+val login_name_max : int
 
 (** {2 System configuration (sysconf) constants} *)
 
@@ -381,8 +382,8 @@ val isatty : Unix.file_descr -> bool
 (** [ttyname fd] returns the name of the terminal device. *)
 val ttyname : Unix.file_descr -> string
 
-(** [ttyname_r fd] thread-safe version of [ttyname]. *)
-val ttyname_r : Unix.file_descr -> bytes -> bytes
+(** [ttyname_r ?len fd] thread-safe version of [ttyname]. *)
+val ttyname_r : ?len:int -> Unix.file_descr -> string
 
 (** [ctermid ()] returns the path to the controlling terminal. *)
 val ctermid : unit -> string
@@ -415,7 +416,7 @@ val sethostname : string -> unit
 val getlogin : unit -> string
 
 (** [getlogin_r ()] thread-safe version of [getlogin]. *)
-val getlogin_r : bytes -> bytes
+val getlogin_r : ?len:int -> unit -> string
 
 (** {1 Program Execution} *)
 

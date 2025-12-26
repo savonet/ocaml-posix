@@ -3,7 +3,7 @@ open Ctypes
 module Def (F : Cstubs.FOREIGN) = struct
   open F
 
-  let strlen_bytes = foreign "strlen_bytes" (ocaml_bytes @-> returning int)
+  let strlen = foreign "strlen" (ptr char @-> returning int)
 
   let memcpy_to_bytes =
     foreign "memcpy" (ocaml_bytes @-> ptr char @-> int @-> returning void)
@@ -12,10 +12,9 @@ module Def (F : Cstubs.FOREIGN) = struct
     foreign "memcpy" (ptr char @-> ocaml_bytes @-> int @-> returning void)
 
   let ttyname_r =
-    foreign "ttyname_r_bytes" (int @-> ocaml_bytes @-> int @-> returning int)
+    foreign "ttyname_r" (int @-> ptr char @-> int @-> returning int)
 
-  let getlogin_r =
-    foreign "getlogin_r_bytes" (ocaml_bytes @-> int @-> returning int)
+  let getlogin_r = foreign "getlogin_r" (ptr char @-> int @-> returning int)
 
   (* File descriptor operations *)
   let close = foreign "close" (int @-> returning int)
@@ -97,6 +96,7 @@ module Def (F : Cstubs.FOREIGN) = struct
   let sysconf = foreign "sysconf" (int @-> returning long)
   let pathconf = foreign "pathconf" (string @-> int @-> returning long)
   let fpathconf = foreign "fpathconf" (int @-> int @-> returning long)
+  let confstr = foreign "confstr" (int @-> ptr char @-> int @-> returning int)
 
   (* Configuration strings - needs special handling for buffer size *)
   let confstr_ptr =

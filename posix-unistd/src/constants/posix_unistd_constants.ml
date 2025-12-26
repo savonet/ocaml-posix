@@ -1,5 +1,6 @@
 module Def (S : Cstubs.Types.TYPE) = struct
-  let max_hostname = S.constant "HOST_NAME_MAX" S.int
+  let host_name_max = S.constant "HOST_NAME_MAX" S.int
+  let login_name_max = S.constant "LOGIN_NAME_MAX" S.int
 
   (* sysconf names - commonly available ones *)
   let sc_arg_max = S.constant "_SC_ARG_MAX" S.int

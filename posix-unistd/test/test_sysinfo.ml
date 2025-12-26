@@ -64,9 +64,8 @@ let test_getlogin_r _ =
   else
     test_success "getlogin_r" "getlogin_r" "Get login name (reentrant)"
       (fun () ->
-        let buf = Bytes.create 256 in
-        let login = getlogin_r buf in
-        assert_bool "Login name should not be empty" (Bytes.length login > 0))
+        let login = getlogin_r () in
+        assert_bool "Login name should not be empty" (String.length login > 0))
 
 let suite =
   "System configuration and info tests"
