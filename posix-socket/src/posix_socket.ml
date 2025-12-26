@@ -16,6 +16,11 @@ exception Error of error
 
 let strerror err = strerror (int_of_error err)
 
+let () =
+  Printexc.register_printer (function
+    | Error err -> Some (Printf.sprintf "Posix_socket.Error(%s)" (strerror err))
+    | _ -> None)
+
 module Addrinfo = Types.Addrinfo
 
 module Sockaddr = struct
