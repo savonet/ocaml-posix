@@ -129,6 +129,18 @@
 )
 
 (package
+ (name posix-resource)
+ (synopsis "Bindings for posix resource limits and usage")
+ (description "posix-resource provides types and bindings for POSIX sys/resource.h APIs.")
+ (depends
+  ctypes
+  (posix-base (= :version))
+  (posix-types (= :version))
+  (posix-time2 (= :version))
+  (posix-errno (= :version)))
+)
+
+(package
  (name posix-bindings)
  (synopsis "POSIX bindings")
  (description "install all available posix bindings")
@@ -141,5 +153,6 @@
   posix-uname
   posix-math2
   posix-getopt
-  posix-stat)
+  posix-stat
+  posix-resource)
 )

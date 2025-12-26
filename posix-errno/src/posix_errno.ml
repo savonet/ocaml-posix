@@ -105,14 +105,11 @@ let to_unix_error = function
 let int_to_unix_error n = to_unix_error (of_int n)
 
 (** Generic error-raising function *)
-let raise_on_error ?call f check =
+let raise_on_error ?(call = "") f check =
   reset_errno ();
   let result = f () in
-  if check result then (
-    let errno = get_errno () in
-    let unix_err = to_unix_error errno in
-    let call_name = match call with Some c -> c | None -> "" in
-    raise (Unix.Unix_error (unix_err, call_name, "")))
+  if check result then
+    raise (Unix.Unix_error (to_unix_error (get_errno ()), call, ""))
   else result
 
 (** Check for negative integer return *)

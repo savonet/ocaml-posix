@@ -1,0 +1,30 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_resource)
+ (public_name posix-resource)
+ (synopsis
+  "posix-resource provides access to the features exposed in sys/resource.h")
+ (foreign_stubs
+  (language c)
+  (names posix_resource_generated_stubs))
+ (libraries
+  ctypes
+  posix-errno
+  posix-types
+  posix-time2
+  posix-resource.types
+  posix-resource.stubs))
+
+(rule
+ (targets posix_resource_generated_stubs.ml)
+ (action
+  (run ./generator/gen_stubs.exe ml %{targets})))
+
+(rule
+ (targets posix_resource_generated_stubs.c)
+ (action
+  (run ./generator/gen_stubs.exe c %{targets})))

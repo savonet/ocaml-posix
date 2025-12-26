@@ -1,0 +1,54 @@
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries posix-resource.stubs posix-base))
+
+(executable
+ (name gen_types_c)
+ (modules gen_types_c)
+ (libraries posix-resource.types posix-base))
+
+(rule
+ (targets gen_types.c)
+ (action
+  (run ./gen_types_c.exe %{targets})))
+
+(rule
+ (targets gen_types_c)
+ (deps
+  (:c_code ./gen_types.c))
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
+
+(executable
+ (name gen_constants_c)
+ (modules gen_constants_c)
+ (libraries posix-resource.constants posix-base))
+
+(rule
+ (targets gen_constants.c)
+ (action
+  (run ./gen_constants_c.exe %{targets})))
+
+(rule
+ (targets gen_constants_c)
+ (deps
+  (:c_code ./gen_constants.c))
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -I
+   %{read-lines:../../../posix-base/src/clibs_include_path}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
