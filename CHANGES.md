@@ -1,6 +1,7 @@
 # 4.0.0 (unreleased)
 * Add `posix-errno`, remove all use of `unix_errno`.
 * Add `posix-stat`.
+* Add `posix-resource`.
 * Add support for `posix-socket` `EAI_*` errors.
 
 # 3.1.0 (22-12-2025)
