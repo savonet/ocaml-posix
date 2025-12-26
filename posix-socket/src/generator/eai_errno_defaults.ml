@@ -88,7 +88,21 @@ let eai_errno_defs =
       name = "SYSTEM";
       default = -11;
       overrides =
-        [(["macosx"; "freebsd"; "openbsd"; "netbsd"; "dragonfly"], 11)];
+        [
+          ( [
+              "macosx";
+              "freebsd";
+              "openbsd";
+              "netbsd";
+              "dragonfly";
+              "win32";
+              "win64";
+              "cygwin";
+              "mingw";
+              "mingw64";
+            ],
+            11 );
+        ];
     };
     { name = "BADHINTS"; default = 12; overrides = [] };
     { name = "PROTOCOL"; default = 13; overrides = [] };
@@ -96,7 +110,21 @@ let eai_errno_defs =
       name = "OVERFLOW";
       default = -12;
       overrides =
-        [(["macosx"; "freebsd"; "openbsd"; "netbsd"; "dragonfly"], 14)];
+        [
+          ( [
+              "macosx";
+              "freebsd";
+              "openbsd";
+              "netbsd";
+              "dragonfly";
+              "win32";
+              "win64";
+              "cygwin";
+              "mingw";
+              "mingw64";
+            ],
+            14 );
+        ];
     };
   ]
 
