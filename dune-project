@@ -6,7 +6,7 @@
 (maintainers "romain.beauxis@gmail.com")
 (maintenance_intent "(latest)")
 
-(version 3.1.0)
+(version 4.0.0)
 (generate_opam_files true)
 (opam_file_location inside_opam_directory)
 
