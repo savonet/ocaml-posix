@@ -1,5 +1,3 @@
-(* Generator for the errno polymorphic variant type *)
-
 let generate_constant_definition () =
   let names =
     List.map
