@@ -1,0 +1,9 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_unistd_constants)
+ (public_name posix-unistd.constants)
+ (libraries posix-types ctypes.stubs))

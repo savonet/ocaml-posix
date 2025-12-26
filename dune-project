@@ -62,6 +62,16 @@
 )
 
 (package
+ (name posix-unistd)
+ (synopsis "Bindings for posix unistd.h functions")
+ (description "posix-unistd provides comprehensive OCaml bindings to POSIX unistd.h functions.")
+ (depends
+  ctypes
+  (posix-base (= :version))
+  (posix-types (= :version))
+  (posix-errno (= :version))))
+
+(package
  (name posix-socket)
  (synopsis "Bindings for posix sockets")
  (description "posix-socket provides the types and bindings of posix sockets APIs available on both unix and windows.")
@@ -150,6 +160,7 @@
   posix-socket
   posix-socket-unix
   posix-time2
+  posix-unistd
   posix-uname
   posix-math2
   posix-getopt
