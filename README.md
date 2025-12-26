@@ -13,11 +13,14 @@ The purpose of this repository is to aggregate all existing POSIX bindings into 
 
 Currently, it contains:
 * `posix-types`, replacing and extending [ocaml-posix-types](https://github.com/yallop/ocaml-posix-types) as well as [PosixTypes](http://ocamllabs.io/ocaml-ctypes/PosixTypes.html) from `ocaml-ctypes`
+* `posix-errno`, replacing and extending [unix-unix-errno](https://github.com/xapi-project/ocaml-unix-errno)
 * `posix-posix-socket` and `posix-socket-unix`, replacing and extending [sys-socket](https://github.com/toots/ocaml-sys-socket)
 * `posix-time2`, replacing and extending [posix-time](https://github.com/mwweissmann/ocaml-posix-time) and replacing [unix-time](https://github.com/dsheets/ocaml-unix-time) and [posix-clock](https://github.com/mwweissmann/ocaml-posix-clock)
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
+* `posix-resource`, replacing and extending [unix-sys-resource](https://github.com/dsheets/ocaml-unix-sys-resource)
 * `posix-signal`
+* `posix-stat`, replacing and extending [unix-sys-stat](https://github.com/dsheets/ocaml-unix-sys-stat)
 * `posix-math2`
 
 ## API
@@ -46,5 +49,3 @@ dune install
 
 * Convert [posix-mqueue](https://github.com/mwweissmann/ocaml-posix-mqueue)
 * Convert [posix-semaphore](https://github.com/mwweissmann/ocaml-posix-semaphore)
-* Convert [unix-sys-resource](https://github.com/dsheets/ocaml-unix-sys-resource)
-* Convert [unix-sys-stat](https://github.com/dsheets/ocaml-unix-sys-stat)
