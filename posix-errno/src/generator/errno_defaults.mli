@@ -1,7 +1,3 @@
-module System_detect : sig
-  val system : string
-end
-
 type errno_def = {
   name : string;
   default : int;

@@ -1,5 +1,29 @@
 open Ctypes
 
+type error =
+  [ `ADDRFAMILY
+  | `AGAIN
+  | `BADFLAGS
+  | `BADHINTS
+  | `FAIL
+  | `FAMILY
+  | `MEMORY
+  | `NODATA
+  | `NONAME
+  | `PROTOCOL
+  | `SOCKTYPE
+  | `OVERFLOW
+  | `SERVICE
+  | `SYSTEM
+  | `UNKNOWN of int ]
+
+val int_of_error : error -> int
+val error_of_int : int -> error
+val is_native : error -> bool
+val strerror : error -> string
+
+exception Error of error
+
 (** network/host byte order conversion functions. *)
 val ntohl : Unsigned.uint32 -> Unsigned.uint32
 

@@ -1,26 +1,20 @@
 open Ctypes
 module Sa_family : Unsigned.S
 
+type error = Posix_eai_errno_type.error
+
+val int_of_error : error -> int
+val error_of_int : int -> error
+
 type sa_family_t = Sa_family.t
 
-val sockaddr_storage_len : int
+include module type of
+    Posix_socket_constants.Def (Posix_socket_generated_constants)
+
 val sa_family_t : sa_family_t typ
 val af_inet : sa_family_t
 val af_inet6 : sa_family_t
 val af_unspec : sa_family_t
-val sock_stream : int
-val sock_dgram : int
-val sock_seqpacket : int
-val ni_maxserv : int
-val ni_maxhost : int
-val ni_numerichost : int
-val ni_numericserv : int
-val ipproto_ip : int
-val ipproto_ipv6 : int
-val ipproto_icmp : int
-val ipproto_raw : int
-val ipproto_tcp : int
-val ipproto_udp : int
 
 module Socklen : Unsigned.S
 

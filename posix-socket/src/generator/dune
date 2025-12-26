@@ -31,7 +31,7 @@
 (executable
  (name gen_constants_c)
  (modules gen_constants_c)
- (libraries posix-socket.constants posix-base))
+ (libraries posix-socket.constants posix-base eai_errno_defaults))
 
 (rule
  (targets gen_constants.c)
@@ -52,3 +52,46 @@
    -o
    %{targets}
    %{c_code})))
+
+(library
+ (name eai_errno_defaults)
+ (libraries str posix_base)
+ (modules eai_errno_defaults))
+
+(executable
+ (name gen_eai_errno_constants)
+ (modules gen_eai_errno_constants)
+ (libraries eai_errno_defaults))
+
+(executable
+ (name gen_eai_errno_type)
+ (modules gen_eai_errno_type)
+ (libraries eai_errno_defaults))
+
+(executable
+ (name gen_eai_errno_conversions)
+ (modules gen_eai_errno_conversions)
+ (libraries eai_errno_defaults))
+
+(executable
+ (name gen_is_native_detector)
+ (modules gen_is_native_detector)
+ (libraries eai_errno_defaults))
+
+(rule
+ (targets target_is_native_detector.c)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_is_native_detector.exe))))
+
+(executable
+ (name gen_get_value)
+ (modules gen_get_value)
+ (libraries eai_errno_defaults posix-socket))
+
+(rule
+ (targets target_is_native_detector.exe)
+ (deps target_is_native_detector.c)
+ (action
+  (run %{ocaml-config:c_compiler} -o %{targets} target_is_native_detector.c)))

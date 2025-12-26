@@ -1,5 +1,9 @@
 open Ctypes
 
+module System_detect : sig
+  val system : string
+end
+
 (** Utilities modules to build ctypes bindings. *)
 
 (** Module used to define stubs generators. See: {!Posix_uname_stubs} and

@@ -1,6 +1,7 @@
 open Ctypes
 include Posix_socket_types
 include Posix_socket_stubs.Def (Posix_socket_generated_stubs)
+include Posix_eai_errno_is_native_impl
 
 type sockaddr_storage = unit
 
@@ -10,6 +11,10 @@ type socket_type = int
 
 let socket_type_t = int
 let from_sockaddr_storage t ptr = from_voidp t (to_voidp ptr)
+
+exception Error of error
+
+let strerror err = strerror (int_of_error err)
 
 module Addrinfo = Types.Addrinfo
 
@@ -90,7 +95,7 @@ let getnameinfo sockaddr_ptr =
                     (ntohs !@(ptr |-> Types.Servent.s_port)))
         in
         (host, port)
-    | _ -> failwith "getnameinfo"
+    | n -> raise (Error (error_of_int n))
 
 let getaddrinfo =
   let get_sockaddr p =
@@ -129,7 +134,7 @@ let getaddrinfo =
     in
     match getaddrinfo host port hints p with
       | 0 -> get_sockaddr p
-      | _ -> failwith "getaddrinfo"
+      | n -> raise (Error (error_of_int n))
 
 external alloc_sockaddr : _ Cstubs_internals.fatptr -> int -> Unix.sockaddr
   = "posix_socket_alloc_sockaddr"

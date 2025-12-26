@@ -1,5 +1,3 @@
-module System_detect = System_detect
-
 (* Type for errno definition with platform-specific overrides *)
 type errno_def = {
   name : string;
@@ -1798,4 +1796,4 @@ let get_errno_defaults system =
   List.map (fun def -> (def.name, get_value_for_system system def)) errno_defs
 
 (* Main errno defaults to use for this build *)
-let errno_defaults = get_errno_defaults System_detect.system
+let errno_defaults = get_errno_defaults Posix_base.System_detect.system

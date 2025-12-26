@@ -2,3 +2,18 @@
  (name test)
  (package posix-socket)
  (libraries posix-socket))
+
+(rule
+ (targets test_get_value.ml)
+ (deps
+  (:gen ../src/generator/gen_get_value.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
+
+(test
+ (name test_eai_errno_defaults)
+ (package posix-socket)
+ (modules test_eai_errno_defaults test_get_value)
+ (libraries posix-socket eai_errno_defaults unix))

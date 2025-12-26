@@ -1,4 +1,5 @@
 open Ctypes
+module System_detect = System_detect
 
 module Generators = struct
   module type TypesDef = sig
