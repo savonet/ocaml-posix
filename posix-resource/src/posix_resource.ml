@@ -90,7 +90,9 @@ let getrusage who =
 
 (* Priority functions *)
 let getpriority which who =
-  Posix_errno.raise_on_neg ~call:"getpriority" (fun () -> getpriority which who)
+  Posix_errno.raise_on_error ~call:"getpriority"
+    (fun () -> getpriority which who)
+    (fun n -> n = -1)
 
 let setpriority which who prio =
   ignore
