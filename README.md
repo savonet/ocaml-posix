@@ -18,6 +18,7 @@ Currently, it contains:
 * `posix-time2`, replacing and extending [posix-time](https://github.com/mwweissmann/ocaml-posix-time) and replacing [unix-time](https://github.com/dsheets/ocaml-unix-time) and [posix-clock](https://github.com/mwweissmann/ocaml-posix-clock)
 * `posix-getopt`, replacing [posix-getopt](	https://github.com/toots/posix-getopt)
 * `posix-uname`
+* `posix-unistd`: Bindings for posix `unistd.h` functions
 * `posix-resource`, replacing and extending [unix-sys-resource](https://github.com/dsheets/ocaml-unix-sys-resource)
 * `posix-signal`
 * `posix-stat`, replacing and extending [unix-sys-stat](https://github.com/dsheets/ocaml-unix-sys-stat)
