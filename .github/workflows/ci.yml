@@ -20,3 +20,5 @@ jobs:
     steps:
     - name: Build and test module
       uses: savonet/build-and-test-ocaml-module@main
+      with:
+        test-target: citest
