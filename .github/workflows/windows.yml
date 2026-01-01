@@ -87,4 +87,4 @@ jobs:
 
       - name: Run tests
         run: |
-          opam exe dune runtest ${{ matrix.package }}
+          opam exe dune build @citest ${{ matrix.package }}

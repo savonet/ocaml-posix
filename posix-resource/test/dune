@@ -3,7 +3,7 @@
  (libraries posix-resource unix))
 
 (rule
- (alias runtest)
+ (alias citest)
  (package posix-resource)
  (action
   (run %{exe:test.exe})))

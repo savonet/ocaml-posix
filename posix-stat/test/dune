@@ -3,7 +3,7 @@
  (libraries posix-stat unix))
 
 (rule
- (alias runtest)
+ (alias citest)
  (package posix-stat)
  (action
   (run %{exe:test.exe})))

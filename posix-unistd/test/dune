@@ -1,6 +1,5 @@
-(test
+(executable
  (name test)
- (package posix-unistd)
  (modules
   test_helpers
   test_constants
@@ -21,3 +20,9 @@
   test_sysinfo_errors
   test)
  (libraries unix posix-unistd ounit2))
+
+(rule
+ (alias citest)
+ (package posix-unistd)
+ (action
+  (run %{exe:test.exe})))

@@ -1,7 +1,12 @@
-(test
+(executable
  (name test)
- (package posix-socket)
  (libraries posix-socket))
+
+(rule
+ (alias citest)
+ (package posix-socket)
+ (action
+  (run %{exe:test.exe})))
 
 (rule
  (targets test_get_value.ml)
@@ -12,8 +17,13 @@
    %{targets}
    (run %{gen}))))
 
-(test
+(executable
  (name test_eai_errno_defaults)
- (package posix-socket)
  (modules test_eai_errno_defaults test_get_value)
  (libraries posix-socket eai_errno_defaults unix))
+
+(rule
+ (alias citest)
+ (package posix-socket)
+ (action
+  (run %{exe:test_eai_errno_defaults.exe})))

@@ -1,4 +1,9 @@
-(test
+(executable
  (name test)
- (package posix-socket-unix)
  (libraries posix-socket-unix))
+
+(rule
+ (alias citest)
+ (package posix-socket-unix)
+ (action
+  (run %{exe:test.exe})))

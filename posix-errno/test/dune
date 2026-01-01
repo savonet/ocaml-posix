@@ -7,13 +7,23 @@
    %{targets}
    (run %{gen}))))
 
-(test
+(executable
  (name test)
- (package posix-errno)
  (libraries posix-errno))
 
-(test
- (name test_errno_defaults)
+(rule
+ (alias citest)
  (package posix-errno)
+ (action
+  (run %{exe:test.exe})))
+
+(executable
+ (name test_errno_defaults)
  (modules test_errno_defaults test_get_value)
  (libraries posix-errno errno_defaults unix))
+
+(rule
+ (alias citest)
+ (package posix-errno)
+ (action
+  (run %{exe:test_errno_defaults.exe})))
