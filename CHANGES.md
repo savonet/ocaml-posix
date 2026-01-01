@@ -1,4 +1,4 @@
-# 4.0.0 (unreleased)
+# 4.0.0 (01-01-2026)
 * Add `posix-errno`, remove all use of `unix_errno`.
 * Add `posix-stat`.
 * Add `posix-resource`.
