@@ -5,6 +5,7 @@ module Stubs = Posix_base.Generators.Stubs (struct
     {|
 #include <string.h>
 #include <unistd.h>
+#include <grp.h>
 
 static inline size_t confstr_bytes(int name, unsigned char* buf, size_t len) {
     return confstr(name, (char*)buf, len);
