@@ -31,14 +31,14 @@ let () =
 let () =
   match getaddrinfo "/invalid" with
     | exception Posix_socket.Error v ->
-        Printf.printf "Got exception %s for invalid getaddrinfo call!\n%!"
+        Printf.printf "As expected, got exception %s for invalid getaddrinfo call!\n%!"
           (Posix_socket.strerror v)
     | _ -> assert false
 
 let () =
   match getnameinfo Ctypes.(coerce (ptr void) (ptr Sockaddr.t) null) with
     | exception Posix_socket.Error v ->
-        Printf.printf "Got exception %s for invalid getaddrinfo call!\n%!"
+        Printf.printf "As expected exception %s for invalid getaddrinfo call!\n%!"
           (Posix_socket.strerror v)
     | _ -> assert false
 
