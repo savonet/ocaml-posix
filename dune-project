@@ -78,7 +78,7 @@
  (depends
   (ocaml (>= 4.12))
   dune-configurator
-  (posix-base (>= :version))
+  (posix-base (= :version))
   ctypes)
 )
 
@@ -88,7 +88,7 @@
  (description "posix-socket-unix provides unix-specific types and bindings for posix sockets.")
  (depends
   ctypes
-  (posix-base (>= :version))
+  (posix-base (= :version))
   (posix-socket (= :version))
   (posix-errno (= :version)))
 )
