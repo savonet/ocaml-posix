@@ -11,7 +11,7 @@ bug-reports: "https://github.com/savonet/ocaml-posix/issues"
 depends: [
   "dune" {>= "3.20"}
   "ocaml" {>= "4.08"}
-  "integers"
+  "integers" {>= "0.3.0"}
   "ctypes" {>= "0.24.0"}
   "odoc" {with-doc}
 ]

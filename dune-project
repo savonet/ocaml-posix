@@ -16,7 +16,7 @@
  (description "posix-base provides base tools for the posix binding modules.")
  (depends
   (ocaml (>= 4.08))
-  integers
+  (integers (>= 0.3.0))
   (ctypes (>= 0.24.0)))
 )
 
