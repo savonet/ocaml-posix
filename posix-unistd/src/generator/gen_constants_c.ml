@@ -13,6 +13,11 @@ module Types = Posix_base.Generators.Types (struct
 #ifndef LOGIN_NAME_MAX
 #define LOGIN_NAME_MAX 256
 #endif
+
+// FreeBSD does not have this one
+#ifndef _PC_2_SYMLINKS
+#define _PC_2_SYMLINKS 13
+#endif
 |}
 end)
 
