@@ -11,6 +11,15 @@ module Stubs = Posix_base.Generators.Stubs (struct
 static inline size_t confstr_bytes(int name, unsigned char* buf, size_t len) {
     return confstr(name, (char*)buf, len);
 }
+
+#ifdef __FreeBSD__
+static inline pid_t _setpgrp() {
+    setpgrp(0, 0);
+    return getpgid(0);
+}
+
+#define setpgrp _setpgrp
+#endif
 |}
 
   let concurrency = Cstubs.sequential
