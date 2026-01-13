@@ -15,7 +15,7 @@
  (action
   (with-stdout-to
    %{targets}
-   (run %{gen}))))
+   (runexec %{gen}))))
 
 (executable
  (name test_eai_errno_defaults)

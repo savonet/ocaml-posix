@@ -32,20 +32,6 @@
 
 (rule
  (targets system_detect.ml)
- (enabled_if
-  (<> %{ocaml-config:host} %{ocaml-config:target}))
- (deps
-  (:exec ./exec.sh)
-  (:gen target_system_detect.exe))
- (action
-  (with-stdout-to
-   %{targets}
-   (system "./%{exec} %{ocaml-config:system} %{gen}"))))
-
-(rule
- (targets system_detect.ml)
- (enabled_if
-  (= %{ocaml-config:host} %{ocaml-config:target}))
  (deps
   (:gen target_system_detect.exe))
  (action

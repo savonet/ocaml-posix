@@ -5,7 +5,7 @@
  (action
   (with-stdout-to
    %{targets}
-   (run %{gen}))))
+   (runexec %{gen}))))
 
 (executable
  (name test)
