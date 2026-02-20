@@ -110,7 +110,7 @@
  (depends
   dune-configurator
   (ounit2 :with-test)
-  (process :with-test)
+  (lwt :with-test)
   (posix-uname (and :with-test (= :version)))
   ctypes
   (posix-base (= :version))

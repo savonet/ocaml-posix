@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries process posix-uname posix-getopt ounit2))
+ (libraries lwt.unix posix-uname posix-getopt ounit2))
 
 (rule
  (alias citest)
