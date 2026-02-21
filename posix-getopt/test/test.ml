@@ -3,6 +3,12 @@ open Posix_getopt
 
 let sysname = Posix_uname.((uname ()).sysname)
 
+module Process = struct
+  let read_stdout cmd args =
+    let cmd = (cmd, Array.append [| cmd |] args) in
+    Lwt_process.pread_lines cmd |> Lwt_stream.to_list |> Lwt_main.run
+end
+
 let is_alpine =
   try
     Process.read_stdout "/bin/sh"
