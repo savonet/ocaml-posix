@@ -55,7 +55,7 @@
  (action
   (with-stdout-to
    %{targets}
-   (run %{exec} %{ocaml-config:system} ./off_t_size_native.exe))))
+   (system "./%{exec} %{ocaml-config:system} ./off_t_size_native.exe"))))
 
 (rule
  (targets off_t_size_lfs)
@@ -65,7 +65,7 @@
  (action
   (with-stdout-to
    %{targets}
-   (run %{exec} %{ocaml-config:system} ./off_t_size_lfs.exe))))
+   (system "./%{exec} %{ocaml-config:system} ./off_t_size_lfs.exe"))))
 
 (executable
  (name gen_lfs_detect)
@@ -110,7 +110,7 @@
  (action
   (with-stdout-to
    %{targets}
-   (system "./%{exec} %{ocaml-config:system} %{gen}"))))
+   (system "%{exec} %{ocaml-config:system} %{gen}"))))
 
 (rule
  (targets system_detect.ml)
