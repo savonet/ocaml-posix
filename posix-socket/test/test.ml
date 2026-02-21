@@ -23,6 +23,7 @@ let () =
 
 let () =
   match getaddrinfo "google.com" with
+    | exception Posix_socket.Error `AGAIN -> ()
     | sockaddr :: _ ->
         let name, port = getnameinfo sockaddr in
         Printf.printf "Socket name: %s, port: %d\n%!" name port
