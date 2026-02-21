@@ -34,7 +34,7 @@
  (enabled_if
   (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps
-  (:exec ../../../base/src/exec.sh)
+  (:exec ../../../base/exec.sh)
   (:gen ./generator/target_is_native_detector.exe))
  (action
   (with-stdout-to

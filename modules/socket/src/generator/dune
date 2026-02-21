@@ -15,7 +15,7 @@
  (action
   (run
    %{ocaml-config:c_compiler}
-   %{read-lines:../../../../base/src/c_flags}
+   %{read-lines:../../../../base/c_flags}
    -I
    %{ocaml-config:standard_library}
    -o
@@ -39,7 +39,7 @@
  (action
   (run
    %{ocaml-config:c_compiler}
-   %{read-lines:../../../../base/src/c_flags}
+   %{read-lines:../../../../base/c_flags}
    -I
    %{ocaml-config:standard_library}
    -o

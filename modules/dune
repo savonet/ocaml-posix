@@ -1,1 +1,1 @@
-(dynamic_include ../base/src/c_flags.inc)
+(dynamic_include ../base/c_flags.inc)
