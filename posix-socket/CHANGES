@@ -1,3 +1,7 @@
+3.0.1 (unreleased)
+=====
+* Fix socket len in `getaddrinfo`.
+
 3.0.0 (2025-04-20)
 =====
 * Remove full struct support for `SockaddrStorage`,

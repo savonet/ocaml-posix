@@ -58,19 +58,22 @@ type sockaddr_in6 = SockaddrInet6.t structure
 let sockaddr_in6_t = SockaddrInet6.t
 
 let sockaddr_len s =
-  match !@(s |-> Sockaddr.sa_family) with
-    | id when id = af_inet -> sizeof sockaddr_in_t
-    | id when id = af_inet6 -> sizeof sockaddr_in6_t
-    | id ->
-        failwith
-          (Printf.sprintf "Unsupported socket family: %x" (Sa_family.to_int id))
+  if is_null s then 0
+  else (
+    match !@(s |-> Sockaddr.sa_family) with
+      | id when id = af_inet -> sizeof sockaddr_in_t
+      | id when id = af_inet6 -> sizeof sockaddr_in6_t
+      | id ->
+          failwith
+            (Printf.sprintf "Unsupported socket family: %x"
+               (Sa_family.to_int id)))
 
 let getnameinfo sockaddr_ptr =
   let s = allocate_n char ~count:ni_maxhost in
   let p = allocate_n char ~count:ni_maxserv in
   match
     getnameinfo sockaddr_ptr
-      (Socklen.of_int (sizeof sockaddr_t))
+      (Socklen.of_int (sockaddr_len sockaddr_ptr))
       s
       (Socklen.of_int ni_maxhost)
       p
