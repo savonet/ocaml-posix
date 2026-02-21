@@ -68,10 +68,16 @@ let sockaddr_len s =
 let getnameinfo sockaddr_ptr =
   let s = allocate_n char ~count:ni_maxhost in
   let p = allocate_n char ~count:ni_maxserv in
+  let size =
+    if is_null sockaddr_ptr then sizeof sockaddr_t
+    else (
+      let family = !@(sockaddr_ptr |-> Sockaddr.sa_family) in
+      if family = af_inet then sizeof sockaddr_in_t
+      else if family = af_inet6 then sizeof sockaddr_in6_t
+      else sizeof sockaddr_t)
+  in
   match
-    getnameinfo sockaddr_ptr
-      (Socklen.of_int (sizeof sockaddr_t))
-      s
+    getnameinfo sockaddr_ptr (Socklen.of_int size) s
       (Socklen.of_int ni_maxhost)
       p
       (Socklen.of_int ni_maxserv)
