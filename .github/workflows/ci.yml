@@ -1,7 +1,6 @@
 name: CI
 
 on:
-on:
   merge_group:
   pull_request:
   push:
