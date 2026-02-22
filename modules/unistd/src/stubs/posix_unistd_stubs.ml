@@ -96,7 +96,6 @@ module Def (F : Cstubs.FOREIGN) = struct
   let sysconf = foreign "sysconf" (int @-> returning long)
   let pathconf = foreign "pathconf" (string @-> int @-> returning long)
   let fpathconf = foreign "fpathconf" (int @-> int @-> returning long)
-  let confstr = foreign "confstr" (int @-> ptr char @-> int @-> returning int)
 
   (* Configuration strings - needs special handling for buffer size *)
   let confstr_ptr =
