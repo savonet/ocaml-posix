@@ -1,3 +1,8 @@
+# 4.0.2 (unreleased)
+* Fixed segfault on 32bit architecture with enabled. LFS is enabled by default
+  now on 32bit architectures.
+* Fix crash when passing wrong socketlen in getnameinfo
+
 # 4.0.1 (2026-01-10)
 * Add wrapper for freebsd's non-posix compliant `setpgrp`.
 
