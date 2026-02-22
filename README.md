@@ -57,6 +57,27 @@ let () =
     info.sysname info.release info.machine
 ```
 
+```ocaml
+(* Using posix-socket for DNS resolution *)
+open Ctypes
+open Posix_socket
+
+let () =
+  (* Resolve hostname to socket addresses *)
+  let addresses = getaddrinfo ~port:(`Int 443) "example.com" in
+  List.iter (fun sockaddr ->
+    (* Convert back to human-readable form *)
+    let host, port = getnameinfo sockaddr in
+    Printf.printf "Resolved: %s:%d\n" host port
+  ) addresses
+
+(* Convert between Unix and POSIX socket addresses *)
+let unix_to_posix addr =
+  let posix_addr = from_unix_sockaddr addr in
+  let host, port = getnameinfo posix_addr in
+  Printf.printf "Address: %s:%d\n" host port
+```
+
 ## Available Packages
 
 | Package | Description | Replaces |
