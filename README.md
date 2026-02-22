@@ -15,6 +15,10 @@ ocaml-posix provides comprehensive bindings to POSIX system interfaces for OCaml
 
 This project consolidates and extends various existing POSIX binding libraries into a single, consistent collection.
 
+## Documentation
+
+API documentation is available at: http://www.liquidsoap.info/ocaml-posix/
+
 ## Installation
 
 ### Via opam (recommended)
@@ -70,10 +74,6 @@ let () =
 | `posix-signal` | Signal handling | - |
 | `posix-stat` | File status (`sys/stat.h`) | [unix-sys-stat](https://github.com/dsheets/ocaml-unix-sys-stat) |
 | `posix-math2` | Mathematical functions | - |
-
-## Documentation
-
-API documentation is available at: http://www.liquidsoap.info/ocaml-posix/
 
 ## Cross-compilation
 
