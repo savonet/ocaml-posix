@@ -1,0 +1,157 @@
+(library
+ (name posix_base)
+ (public_name posix-base)
+ (modules posix_base system_detect lfs_detect clibs_include_path)
+ (synopsis
+  "posix-base provides the base tools to generate the various posix bindings")
+ (libraries ctypes.stubs integers))
+
+(executable
+ (modules gen_clibs_include_path)
+ (name gen_clibs_include_path))
+
+(executable
+ (modules gen_exec_path)
+ (name gen_exec_path)
+ (libraries unix))
+
+(rule
+ (target exec_path)
+ (deps exec.sh)
+ (action
+  (with-stdout-to
+   %{target}
+   (run %{exe:gen_exec_path.exe} exec.sh))))
+
+(rule
+ (target clibs_include_path.ml)
+ (action
+  (with-stdout-to
+   %{target}
+   (run
+    %{exe:gen_clibs_include_path.exe}
+    %{lib:ctypes:ctypes_cstubs_internals.h}))))
+
+(rule
+ (targets target_system_detect.exe)
+ (deps target_system_detect.c)
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -DOCAML_POSIX_ERRNO_SYSTEM=ocaml_posix_%{system}
+   -o
+   %{targets}
+   target_system_detect.c)))
+
+(rule
+ (targets off_t_size_native.exe)
+ (deps off_t_size.c)
+ (action
+  (run %{ocaml-config:c_compiler} -o %{targets} off_t_size.c)))
+
+(rule
+ (targets off_t_size_lfs.exe)
+ (deps off_t_size.c)
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   -D_FILE_OFFSET_BITS=64
+   -o
+   %{targets}
+   off_t_size.c)))
+
+(rule
+ (targets off_t_size_native)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps off_t_size_native.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./off_t_size_native.exe))))
+
+(rule
+ (targets off_t_size_native)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps exec_path off_t_size_native.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{read:exec_path} %{ocaml-config:system} ./off_t_size_native.exe"))))
+
+(rule
+ (targets off_t_size_lfs)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps off_t_size_lfs.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./off_t_size_lfs.exe))))
+
+(rule
+ (targets off_t_size_lfs)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps exec_path off_t_size_lfs.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{read:exec_path} %{ocaml-config:system} ./off_t_size_lfs.exe"))))
+
+(executable
+ (name gen_lfs_detect)
+ (modules gen_lfs_detect))
+
+(rule
+ (targets lfs_detect.ml)
+ (deps off_t_size_native off_t_size_lfs gen_lfs_detect.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_lfs_detect.exe off_t_size_native off_t_size_lfs))))
+
+(executable
+ (name gen_config)
+ (modules gen_config)
+ (libraries posix-base))
+
+(rule
+ (targets c_flags.inc)
+ (deps gen_config.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_config.exe dune))))
+
+(rule
+ (targets c_flags)
+ (deps gen_config.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_config.exe include))))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  exec_path
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{read:exec_path} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets system_detect.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen target_system_detect.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))

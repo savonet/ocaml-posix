@@ -1,0 +1,71 @@
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries posix-errno.stubs posix-base))
+
+(library
+ (name errno_defaults)
+ (libraries str posix-base)
+ (modules errno_defaults))
+
+(executable
+ (name gen_constants_c)
+ (modules gen_constants_c)
+ (libraries errno_defaults posix-errno.constants posix-base))
+
+(rule
+ (targets gen_constants.c)
+ (action
+  (run ./gen_constants_c.exe %{targets})))
+
+(rule
+ (targets gen_constants_c_target.exe)
+ (deps
+  (:c_code ./gen_constants.c))
+ (action
+  (run
+   %{ocaml-config:c_compiler}
+   %{read-lines:../../../../base/c_flags}
+   -I
+   %{ocaml-config:standard_library}
+   -o
+   %{targets}
+   %{c_code})))
+
+(executable
+ (name gen_errno_constants)
+ (modules gen_errno_constants)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_errno_type)
+ (modules gen_errno_type)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_errno_conversions)
+ (modules gen_errno_conversions)
+ (libraries errno_defaults))
+
+(executable
+ (name gen_is_native_detector)
+ (modules gen_is_native_detector)
+ (libraries errno_defaults))
+
+(rule
+ (targets target_is_native_detector.c)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen_is_native_detector.exe))))
+
+(executable
+ (name gen_get_value)
+ (modules gen_get_value)
+ (libraries errno_defaults posix-errno))
+
+(rule
+ (targets target_is_native_detector.exe)
+ (deps target_is_native_detector.c)
+ (action
+  (run %{ocaml-config:c_compiler} -o %{targets} target_is_native_detector.c)))

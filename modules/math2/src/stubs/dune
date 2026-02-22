@@ -1,0 +1,32 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(library
+ (name posix_math_stubs)
+ (public_name posix-math2.stubs)
+ (libraries posix-math2.types ctypes.stubs))
+
+(rule
+ (targets posix_math_generated_types.ml)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  ../../../../base/exec_path
+  (:gen ../generator/gen_types_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (system "%{read:../../../../base/exec_path} %{ocaml-config:system} %{gen}"))))
+
+(rule
+ (targets posix_math_generated_types.ml)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps
+  (:gen ../generator/gen_types_c_target.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{gen}))))
