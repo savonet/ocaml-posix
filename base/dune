@@ -10,6 +10,19 @@
  (modules gen_clibs_include_path)
  (name gen_clibs_include_path))
 
+(executable
+ (modules gen_exec_path)
+ (name gen_exec_path)
+ (libraries unix))
+
+(rule
+ (target exec_path)
+ (deps exec.sh)
+ (action
+  (with-stdout-to
+   %{target}
+   (run %{exe:gen_exec_path.exe} exec.sh))))
+
 (rule
  (target clibs_include_path.ml)
  (action
@@ -49,23 +62,19 @@
 
 (rule
  (targets off_t_size_native)
- (deps
-  (:exec ./exec.sh)
-  off_t_size_native.exe)
+ (deps exec_path off_t_size_native.exe)
  (action
   (with-stdout-to
    %{targets}
-   (system "./%{exec} %{ocaml-config:system} ./off_t_size_native.exe"))))
+   (system "%{read:exec_path} %{ocaml-config:system} ./off_t_size_native.exe"))))
 
 (rule
  (targets off_t_size_lfs)
- (deps
-  (:exec ./exec.sh)
-  off_t_size_lfs.exe)
+ (deps exec_path off_t_size_lfs.exe)
  (action
   (with-stdout-to
    %{targets}
-   (system "./%{exec} %{ocaml-config:system} ./off_t_size_lfs.exe"))))
+   (system "%{read:exec_path} %{ocaml-config:system} ./off_t_size_lfs.exe"))))
 
 (executable
  (name gen_lfs_detect)
@@ -105,12 +114,12 @@
  (enabled_if
   (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps
-  (:exec ./exec.sh)
+  exec_path
   (:gen target_system_detect.exe))
  (action
   (with-stdout-to
    %{targets}
-   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+   (system "%{read:exec_path} %{ocaml-config:system} %{gen}"))))
 
 (rule
  (targets system_detect.ml)

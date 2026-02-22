@@ -34,12 +34,12 @@
  (enabled_if
   (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps
-  (:exec ../../../base/exec.sh)
+  ../../../base/exec_path
   (:gen ./generator/target_is_native_detector.exe))
  (action
   (with-stdout-to
    %{targets}
-   (system "%{exec} %{ocaml-config:system} %{gen}"))))
+   (system "%{read:../../../base/exec_path} %{ocaml-config:system} %{gen}"))))
 
 (rule
  (targets posix_eai_errno_is_native_impl.ml)
