@@ -62,6 +62,18 @@
 
 (rule
  (targets off_t_size_native)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps off_t_size_native.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./off_t_size_native.exe))))
+
+(rule
+ (targets off_t_size_native)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps exec_path off_t_size_native.exe)
  (action
   (with-stdout-to
@@ -70,6 +82,18 @@
 
 (rule
  (targets off_t_size_lfs)
+ (enabled_if
+  (= %{ocaml-config:host} %{ocaml-config:target}))
+ (deps off_t_size_lfs.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./off_t_size_lfs.exe))))
+
+(rule
+ (targets off_t_size_lfs)
+ (enabled_if
+  (<> %{ocaml-config:host} %{ocaml-config:target}))
  (deps exec_path off_t_size_lfs.exe)
  (action
   (with-stdout-to
