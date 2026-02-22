@@ -1,104 +1,150 @@
-(** High-level API to <sys/resource.h>. See:
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_resource.h.html}
-     sys/resource.h} for details on data structures and functions. *)
+(** POSIX resource usage and limits.
 
-(** {2 Resource limit constants} *)
+    This module provides OCaml bindings to POSIX resource functions defined in
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_resource.h.html} sys/resource.h}.
 
-(** CPU time limit in seconds *)
+    It includes functions for querying and setting resource limits, getting
+    resource usage statistics, and managing process priorities.
+
+    {2 Example}
+
+    {[
+      (* Get resource usage for current process *)
+      let usage = Posix_resource.getrusage rusage_self in
+      Printf.printf "User CPU time: %s\n"
+        (Posix_time2.Timeval.to_string usage.ru_utime);
+      Printf.printf "Max RSS: %Ld KB\n" usage.ru_maxrss;
+
+      (* Get file descriptor limit *)
+      let limits = Posix_resource.getrlimit rlimit_nofile in
+      Printf.printf "Max open files: %s\n"
+        (Unsigned.UInt64.to_string limits.rlim_cur)
+    ]} *)
+
+(** {1 Resource Limit Constants} *)
+
+(** CPU time limit in seconds (RLIMIT_CPU). *)
 val rlimit_cpu : int
 
-(** Maximum file size *)
+(** Maximum file size in bytes (RLIMIT_FSIZE). *)
 val rlimit_fsize : int
 
-(** Maximum data segment size *)
+(** Maximum data segment size (RLIMIT_DATA). *)
 val rlimit_data : int
 
-(** Maximum stack size *)
+(** Maximum stack size (RLIMIT_STACK). *)
 val rlimit_stack : int
 
-(** Maximum core file size *)
+(** Maximum core file size (RLIMIT_CORE). *)
 val rlimit_core : int
 
-(** Maximum number of open files *)
+(** Maximum number of open files (RLIMIT_NOFILE). *)
 val rlimit_nofile : int
 
-(** Maximum address space size *)
+(** Maximum address space size (RLIMIT_AS). *)
 val rlimit_as : int
 
-(** Special value meaning no limit *)
+(** Special value meaning no limit (RLIM_INFINITY). *)
 val rlim_infinity : Unsigned.uint64
 
-(** {2 Resource usage constants} *)
+(** {1 Resource Usage Constants} *)
 
-(** Current process *)
+(** Current process (RUSAGE_SELF). *)
 val rusage_self : int
 
-(** All terminated and waited-for children *)
+(** All terminated and waited-for children (RUSAGE_CHILDREN). *)
 val rusage_children : int
 
-(** {2 Priority constants} *)
+(** {1 Priority Constants} *)
 
-(** Process priority *)
+(** Process priority (PRIO_PROCESS). *)
 val prio_process : int
 
-(** Process group priority *)
+(** Process group priority (PRIO_PGRP). *)
 val prio_pgrp : int
 
-(** User priority *)
+(** User priority (PRIO_USER). *)
 val prio_user : int
 
-(** {2 Resource limit types} *)
+(** {1 Resource Limit Types} *)
 
 type rlimit = {
   rlim_cur : Unsigned.uint64;  (** Current (soft) limit *)
   rlim_max : Unsigned.uint64;  (** Maximum (hard) limit *)
 }
 
-(** {2 Resource usage types} *)
+(** {1 Resource Usage Types} *)
 
+(** Resource usage information returned by {!getrusage}.
+    Corresponds to POSIX [struct rusage]. *)
 type rusage = {
-  ru_utime : Posix_time2.Timeval.t;  (** User CPU time used *)
-  ru_stime : Posix_time2.Timeval.t;  (** System CPU time used *)
-  ru_maxrss : int64;  (** Maximum resident set size *)
-  ru_ixrss : int64;  (** Integral shared memory size *)
-  ru_idrss : int64;  (** Integral unshared data size *)
-  ru_isrss : int64;  (** Integral unshared stack size *)
-  ru_minflt : int64;  (** Page reclaims (soft page faults) *)
-  ru_majflt : int64;  (** Page faults (hard page faults) *)
-  ru_nswap : int64;  (** Swaps *)
-  ru_inblock : int64;  (** Block input operations *)
-  ru_oublock : int64;  (** Block output operations *)
-  ru_msgsnd : int64;  (** IPC messages sent *)
-  ru_msgrcv : int64;  (** IPC messages received *)
-  ru_nsignals : int64;  (** Signals received *)
-  ru_nvcsw : int64;  (** Voluntary context switches *)
-  ru_nivcsw : int64;  (** Involuntary context switches *)
+  ru_utime : Posix_time2.Timeval.t;
+  ru_stime : Posix_time2.Timeval.t;
+  ru_maxrss : int64;
+  ru_ixrss : int64;
+  ru_idrss : int64;
+  ru_isrss : int64;
+  ru_minflt : int64;
+  ru_majflt : int64;
+  ru_nswap : int64;
+  ru_inblock : int64;
+  ru_oublock : int64;
+  ru_msgsnd : int64;
+  ru_msgrcv : int64;
+  ru_nsignals : int64;
+  ru_nvcsw : int64;
+  ru_nivcsw : int64;
 }
 
-(** {2 Resource limit functions} *)
+(** {1 Resource Limit Functions} *)
 
-(** [getrlimit resource] returns the current resource limits for [resource].
-    @raise Unix.Unix_error on failure *)
+(** Get resource limits.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html} getrlimit(2)}.
+
+    @param resource One of the [rlimit_*] constants.
+    @return The current soft and hard limits.
+    @raise Unix.Unix_error on failure. *)
 val getrlimit : int -> rlimit
 
-(** [setrlimit resource limits] sets the resource limits for [resource].
-    @raise Unix.Unix_error on failure *)
+(** Set resource limits.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setrlimit.html} setrlimit(2)}.
+
+    @param resource One of the [rlimit_*] constants.
+    @param limits The new soft and hard limits.
+    @raise Unix.Unix_error on failure. *)
 val setrlimit : int -> rlimit -> unit
 
-(** {2 Resource usage functions} *)
+(** {1 Resource Usage Functions} *)
 
-(** [getrusage who] returns resource usage statistics. [who] should be
-    {!rusage_self} or {!rusage_children}.
-    @raise Unix.Unix_error on failure *)
+(** Get resource usage statistics.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrusage.html} getrusage(2)}.
+
+    @param who {!rusage_self} or {!rusage_children}.
+    @return Resource usage information.
+    @raise Unix.Unix_error on failure. *)
 val getrusage : int -> rusage
 
-(** {2 Priority functions} *)
+(** {1 Priority Functions} *)
 
-(** [getpriority which who] returns the priority of process, process group, or
-    user. [which] should be {!prio_process}, {!prio_pgrp}, or {!prio_user}.
-    @raise Unix.Unix_error on failure *)
+(** Get process scheduling priority.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpriority.html} getpriority(2)}.
+
+    @param which {!prio_process}, {!prio_pgrp}, or {!prio_user}.
+    @param who Process ID, process group ID, or user ID (0 for current).
+    @return The priority value.
+    @raise Unix.Unix_error on failure. *)
 val getpriority : int -> int -> int
 
-(** [setpriority which who prio] sets the priority.
-    @raise Unix.Unix_error on failure *)
+(** Set process scheduling priority.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setpriority.html} setpriority(2)}.
+
+    @param which {!prio_process}, {!prio_pgrp}, or {!prio_user}.
+    @param who Process ID, process group ID, or user ID (0 for current).
+    @param prio The new priority value.
+    @raise Unix.Unix_error on failure. *)
 val setpriority : int -> int -> int -> unit

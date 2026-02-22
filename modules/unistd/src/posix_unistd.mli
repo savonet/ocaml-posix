@@ -1,11 +1,23 @@
-(** POSIX unistd.h bindings with OCaml-friendly API
+(** POSIX unistd.h bindings.
 
-    This module provides comprehensive bindings to POSIX unistd.h functions,
-    with a user-friendly OCaml interface. Functions are wrapped to use standard
-    OCaml types where appropriate and integrate with the Unix module.
+    This module provides OCaml bindings to POSIX functions defined in
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/unistd.h.html} unistd.h}.
 
-    Most functions return [option] types: [Some value] on success, [None] on
-    error (with errno set appropriately via Errno_unix). *)
+    It includes functions for file I/O, process control, user/group IDs,
+    directory operations, and system configuration.
+
+    {2 Example}
+
+    {[
+      (* Read from a file descriptor *)
+      let buf = Bytes.create 1024 in
+      let n = Posix_unistd.read fd buf 0 1024 in
+      Printf.printf "Read %d bytes\n" n;
+
+      (* Get system configuration *)
+      let max_open = Posix_unistd.sysconf sc_open_max in
+      Printf.printf "Max open files: %d\n" max_open
+    ]} *)
 
 (** {1 Constants} *)
 
@@ -145,295 +157,375 @@ val stderr_fileno : int
 
 (** {1 Basic I/O Operations} *)
 
-(** [read fd buf ofs len] reads up to [len] bytes from [fd] into [buf] starting
-    at offset [ofs]. Returns [Some n] where [n] is the number of bytes read, or
-    [None] on error. *)
+(** Read from a file descriptor.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/read.html} read(2)}.
+
+    @return Number of bytes read.
+    @raise Unix.Unix_error on failure. *)
 val read : Unix.file_descr -> bytes -> int -> int -> int
 
-(** [write fd buf ofs len] writes up to [len] bytes from [buf] starting at
-    offset [ofs] to [fd]. Returns [Some n] where [n] is the number of bytes
-    written, or [None] on error. *)
+(** Write to a file descriptor.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html} write(2)}.
+
+    @return Number of bytes written.
+    @raise Unix.Unix_error on failure. *)
 val write : Unix.file_descr -> bytes -> int -> int -> int
 
 (** {1 Positioned I/O} *)
 
-(** [pread fd buf ofs len offset] reads up to [len] bytes from [fd] at file
-    offset [offset] into [buf] starting at [ofs]. Does not change the file
-    offset. Returns [Some n] or [None] on error. *)
+(** Read from a file descriptor at a given offset without changing the file offset.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/pread.html} pread(2)}.
+
+    @return Number of bytes read.
+    @raise Unix.Unix_error on failure. *)
 val pread : Unix.file_descr -> bytes -> int -> int -> int -> int
 
-(** [pwrite fd buf ofs len offset] writes up to [len] bytes to [fd] at file
-    offset [offset] from [buf] starting at [ofs]. Does not change the file
-    offset. Returns [Some n] or [None] on error. *)
+(** Write to a file descriptor at a given offset without changing the file offset.
+
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/pwrite.html} pwrite(2)}.
+
+    @return Number of bytes written.
+    @raise Unix.Unix_error on failure. *)
 val pwrite : Unix.file_descr -> bytes -> int -> int -> int -> int
 
 (** {1 File Descriptor Operations} *)
 
-(** [close fd] closes the file descriptor [fd]. *)
+(** Close a file descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/close.html} close(2)}. *)
 val close : Unix.file_descr -> unit
 
-(** [dup fd] duplicates the file descriptor [fd]. *)
+(** Duplicate a file descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/dup.html} dup(2)}. *)
 val dup : Unix.file_descr -> Unix.file_descr
 
-(** [dup2 fd1 fd2] duplicates [fd1] to [fd2], closing [fd2] first if necessary.
-*)
+(** Duplicate a file descriptor to a specified descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/dup2.html} dup2(2)}. *)
 val dup2 : Unix.file_descr -> Unix.file_descr -> Unix.file_descr
 
-(** [pipe ()] creates a pipe and returns [(read_end, write_end)]. *)
+(** Create a pipe.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/pipe.html} pipe(2)}.
+    @return [(read_end, write_end)]. *)
 val pipe : unit -> Unix.file_descr * Unix.file_descr
 
 (** {1 Data Synchronization} *)
 
-(** [fsync fd] synchronizes file data and metadata to disk. *)
+(** Synchronize file data and metadata to disk.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fsync.html} fsync(2)}. *)
 val fsync : Unix.file_descr -> unit
 
-(** [fdatasync fd] synchronizes file data (but not necessarily metadata) to
-    disk. *)
+(** Synchronize file data (but not necessarily metadata) to disk.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fdatasync.html} fdatasync(2)}. *)
 val fdatasync : Unix.file_descr -> unit
 
-(** [sync ()] schedules writes of all modified buffer cache blocks to disk. *)
+(** Schedule writes of all modified buffer cache blocks to disk.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/sync.html} sync(2)}. *)
 val sync : unit -> unit
 
 (** {1 File Operations} *)
 
-(** [link ~target ~link_name] creates a hard link. *)
+(** Create a hard link.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/link.html} link(2)}. *)
 val link : target:string -> link_name:string -> unit
 
-(** [symlink ~target ~link_name] creates a symbolic link. *)
+(** Create a symbolic link.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/symlink.html} symlink(2)}. *)
 val symlink : target:string -> link_name:string -> unit
 
-(** [readlink path] reads the target of a symbolic link. *)
+(** Read the target of a symbolic link.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/readlink.html} readlink(2)}. *)
 val readlink : ?max_len:int -> string -> string
 
-(** [unlink path] removes a file. *)
+(** Remove a file.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html} unlink(2)}. *)
 val unlink : string -> unit
 
-(** [rmdir path] removes an empty directory. *)
+(** Remove an empty directory.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/rmdir.html} rmdir(2)}. *)
 val rmdir : string -> unit
 
 (** {1 Directory Operations} *)
 
-(** [chdir path] changes the current working directory. *)
+(** Change the current working directory.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html} chdir(2)}. *)
 val chdir : string -> unit
 
-(** [fchdir fd] changes the current working directory to the directory
-    referenced by [fd]. *)
+(** Change the current working directory to a directory referenced by a file descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchdir.html} fchdir(2)}. *)
 val fchdir : Unix.file_descr -> unit
 
-(** [getcwd ()] returns the current working directory. *)
+(** Get the current working directory.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getcwd.html} getcwd(3)}. *)
 val getcwd : unit -> string
 
 (** {1 File Positioning} *)
 
+(** File positioning commands for {!lseek}. *)
 type seek_command =
-  | Seek_set
-  | Seek_cur
-  | Seek_end  (** File positioning commands for [lseek]. *)
+  | Seek_set  (** Set offset to the given value *)
+  | Seek_cur  (** Set offset relative to current position *)
+  | Seek_end  (** Set offset relative to end of file *)
 
-(** [lseek fd offset whence] repositions the file offset. *)
+(** Reposition the file offset.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/lseek.html} lseek(2)}. *)
 val lseek : Unix.file_descr -> int -> seek_command -> int
 
 (** {1 File Permissions and Ownership} *)
 
-(** Access permission flags for [access]. *)
+(** Access permission flags for {!access}. *)
 type access_permission = [ `Read | `Write | `Execute | `Exists ]
 
-(** [access path perms] checks whether the calling process can access the file
-    [path] with the specified permissions. *)
+(** Check file accessibility.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html} access(2)}. *)
 val access : string -> access_permission list -> bool
 
-(** [chown path uid gid] changes file ownership. *)
+(** Change file ownership.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/chown.html} chown(2)}. *)
 val chown : string -> int -> int -> unit
 
-(** [fchown fd uid gid] changes file ownership using a file descriptor. *)
+(** Change file ownership using a file descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchown.html} fchown(2)}. *)
 val fchown : Unix.file_descr -> int -> int -> unit
 
-(** [lchown path uid gid] changes ownership of a symbolic link itself. *)
+(** Change ownership of a symbolic link itself.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/lchown.html} lchown(2)}. *)
 val lchown : string -> int -> int -> unit
 
-(** [truncate path length] truncates a file to specified length. *)
+(** Truncate a file to a specified length.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/truncate.html} truncate(2)}. *)
 val truncate : string -> int -> unit
 
-(** [ftruncate fd length] truncates a file to specified length using a file
-    descriptor. *)
+(** Truncate a file to a specified length using a file descriptor.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ftruncate.html} ftruncate(2)}. *)
 val ftruncate : Unix.file_descr -> int -> unit
 
 (** {1 File Locking} *)
 
-(** File locking commands for [lockf]. *)
+(** File locking commands for {!lockf}. *)
 type lock_command = [ `Unlock | `Lock | `Test_lock | `Try_lock ]
 
-(** [lockf fd cmd size] applies, tests, or removes a POSIX lock on a section of
-    a file. *)
+(** Apply, test, or remove a POSIX lock on a section of a file.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/lockf.html} lockf(3)}. *)
 val lockf : Unix.file_descr -> lock_command -> int -> unit
 
 (** {1 Process Operations} *)
 
-(** [fork ()] creates a new process. Returns [Some 0] in the child, [Some pid]
-    in the parent where [pid] is the child's process ID. *)
+(** Create a new process.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fork.html} fork(2)}.
+    @return 0 in the child, child's PID in the parent. *)
 val fork : unit -> int
 
-(** [getpid ()] returns the process ID of the calling process. *)
+(** Get the process ID of the calling process.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpid.html} getpid(2)}. *)
 val getpid : unit -> int
 
-(** [getppid ()] returns the parent process ID. *)
+(** Get the parent process ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getppid.html} getppid(2)}. *)
 val getppid : unit -> int
 
-(** [getpgid pid] gets the process group ID of the specified process. *)
+(** Get the process group ID of a process.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpgid.html} getpgid(2)}. *)
 val getpgid : int -> int
 
-(** [setpgid pid pgid] sets the process group ID. *)
+(** Set the process group ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setpgid.html} setpgid(2)}. *)
 val setpgid : int -> int -> unit
 
-(** [getpgrp ()] returns the process group ID of the calling process. *)
+(** Get the process group ID of the calling process.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpgrp.html} getpgrp(2)}. *)
 val getpgrp : unit -> int
 
-(** [setpgrp ()] sets the process group ID to the process ID. *)
+(** Set the process group ID to the process ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setpgrp.html} setpgrp(3)}. *)
 val setpgrp : unit -> unit
 
-(** [setsid ()] creates a new session and returns the session ID. *)
+(** Create a new session.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setsid.html} setsid(2)}.
+    @return The session ID. *)
 val setsid : unit -> int
 
-(** [getsid pid] gets the session ID of the specified process. *)
+(** Get the session ID of a process.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getsid.html} getsid(2)}. *)
 val getsid : int -> int
 
 (** {1 User and Group IDs} *)
 
-(** [getuid ()] returns the real user ID. *)
+(** Get the real user ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getuid.html} getuid(2)}. *)
 val getuid : unit -> int
 
-(** [geteuid ()] returns the effective user ID. *)
+(** Get the effective user ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/geteuid.html} geteuid(2)}. *)
 val geteuid : unit -> int
 
-(** [getgid ()] returns the real group ID. *)
+(** Get the real group ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getgid.html} getgid(2)}. *)
 val getgid : unit -> int
 
-(** [getegid ()] returns the effective group ID. *)
+(** Get the effective group ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getegid.html} getegid(2)}. *)
 val getegid : unit -> int
 
-(** [setuid uid] sets the user ID. *)
+(** Set the user ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setuid.html} setuid(2)}. *)
 val setuid : int -> unit
 
-(** [seteuid uid] sets the effective user ID. *)
+(** Set the effective user ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/seteuid.html} seteuid(2)}. *)
 val seteuid : int -> unit
 
-(** [setgid gid] sets the group ID. *)
+(** Set the group ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setgid.html} setgid(2)}. *)
 val setgid : int -> unit
 
-(** [setegid gid] sets the effective group ID. *)
+(** Set the effective group ID.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setegid.html} setegid(2)}. *)
 val setegid : int -> unit
 
-(** [setreuid ruid euid] sets real and effective user IDs. *)
+(** Set real and effective user IDs.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setreuid.html} setreuid(2)}. *)
 val setreuid : int -> int -> unit
 
-(** [setregid rgid egid] sets real and effective group IDs. *)
+(** Set real and effective group IDs.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setregid.html} setregid(2)}. *)
 val setregid : int -> int -> unit
 
 (** {1 Group Membership} *)
 
-(** [getgroups ()] returns the list of supplementary group IDs. *)
+(** Get the list of supplementary group IDs.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getgroups.html} getgroups(2)}. *)
 val getgroups : unit -> int list
 
-(** [setgroups groups] sets the supplementary group IDs. *)
+(** Set the supplementary group IDs.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setgroups.html} setgroups(2)}. *)
 val setgroups : int list -> unit
 
 (** {1 System Configuration} *)
 
-(** [sysconf name] gets system configuration value. Use [sc_*] constants. *)
+(** Get system configuration value.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/sysconf.html} sysconf(3)}.
+    Use [sc_*] constants. *)
 val sysconf : int -> int
 
-(** [pathconf path name] gets path configuration value. Use [pc_*] constants. *)
+(** Get path configuration value.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/pathconf.html} pathconf(3)}.
+    Use [pc_*] constants. *)
 val pathconf : string -> int -> int
 
-(** [fpathconf fd name] gets path configuration value for an open file. *)
+(** Get path configuration value for an open file.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fpathconf.html} fpathconf(3)}. *)
 val fpathconf : Unix.file_descr -> int -> int
 
-(** [confstr name] gets configuration string value. Use [cs_*] constants. *)
+(** Get configuration string value.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/confstr.html} confstr(3)}.
+    Use [cs_*] constants. *)
 val confstr : int -> string
 
 (** {1 Process Priority} *)
 
-(** [nice incr] adjusts process priority by [incr]. Returns new priority. *)
+(** Adjust process priority.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/nice.html} nice(2)}.
+    @return The new priority. *)
 val nice : int -> int
 
 (** {1 Sleep Operations} *)
 
-(** [sleep seconds] sleeps for specified number of seconds. Returns 0 on
-    completion, or number of seconds remaining if interrupted. *)
+(** Sleep for a number of seconds.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/sleep.html} sleep(3)}.
+    @return 0 on completion, or seconds remaining if interrupted. *)
 val sleep : int -> int
 
-(** [usleep microseconds] sleeps for specified number of microseconds. *)
+(** Sleep for a number of microseconds.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/usleep.html} usleep(3)}. *)
 val usleep : int -> unit
 
 (** {1 Signal and Timer} *)
 
-(** [pause ()] waits until a signal is caught. Always returns [None]. *)
+(** Wait until a signal is caught.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/pause.html} pause(2)}. *)
 val pause : unit -> unit
 
-(** [alarm seconds] sets an alarm clock. Returns seconds remaining from a
-    previous alarm, or 0 if no previous alarm. *)
+(** Set an alarm clock.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/alarm.html} alarm(2)}.
+    @return Seconds remaining from previous alarm, or 0 if none. *)
 val alarm : int -> int
 
 (** {1 Terminal Operations} *)
 
-(** [isatty fd] tests whether [fd] refers to a terminal. *)
+(** Test whether a file descriptor refers to a terminal.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/isatty.html} isatty(3)}. *)
 val isatty : Unix.file_descr -> bool
 
-(** [ttyname fd] returns the name of the terminal device. *)
+(** Get the name of a terminal device.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ttyname.html} ttyname(3)}. *)
 val ttyname : Unix.file_descr -> string
 
-(** [ttyname_r ?len fd] thread-safe version of [ttyname]. *)
+(** Thread-safe version of {!ttyname}.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ttyname.html} ttyname_r(3)}. *)
 val ttyname_r : ?len:int -> Unix.file_descr -> string
 
-(** [ctermid ()] returns the path to the controlling terminal. *)
+(** Get the pathname of the controlling terminal.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ctermid.html} ctermid(3)}. *)
 val ctermid : unit -> string
 
-(** [tcgetpgrp fd] returns the process group ID of the foreground process group
-    associated with the terminal. *)
+(** Get the foreground process group ID associated with a terminal.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/tcgetpgrp.html} tcgetpgrp(3)}. *)
 val tcgetpgrp : Unix.file_descr -> int
 
-(** [tcsetpgrp fd pgrp] sets the foreground process group ID associated with the
-    terminal to [pgrp]. *)
+(** Set the foreground process group ID associated with a terminal.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsetpgrp.html} tcsetpgrp(3)}. *)
 val tcsetpgrp : Unix.file_descr -> int -> unit
 
 (** {1 System Information} *)
 
-(** [getpagesize ()] returns the system page size in bytes. *)
+(** Get the system page size in bytes.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpagesize.html} getpagesize(2)}. *)
 val getpagesize : unit -> int
 
-(** [gethostid ()] returns the unique identifier of the current host. *)
+(** Get the unique identifier of the current host.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gethostid.html} gethostid(3)}. *)
 val gethostid : unit -> int64
 
-(** [gethostname ()] returns the host name. *)
+(** Get the host name.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gethostname.html} gethostname(2)}. *)
 val gethostname : unit -> string
 
-(** [sethostname name] sets the host name. *)
+(** Set the host name.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/sethostname.html} sethostname(2)}. *)
 val sethostname : string -> unit
 
 (** {1 Login Information} *)
 
-(** [getlogin ()] returns the login name of the user. *)
+(** Get the login name of the user.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getlogin.html} getlogin(3)}. *)
 val getlogin : unit -> string
 
-(** [getlogin_r ()] thread-safe version of [getlogin]. *)
+(** Thread-safe version of {!getlogin}.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getlogin.html} getlogin_r(3)}. *)
 val getlogin_r : ?len:int -> unit -> string
 
 (** {1 Program Execution} *)
 
-(** [execv path args] executes a program with specified arguments. Only returns
-    on error (by raising an exception). *)
+(** Execute a program with specified arguments.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html} execv(2)}.
+    Only returns on error (by raising an exception). *)
 val execv : string -> string list -> unit
 
-(** [execve path args env] executes a program with specified arguments and
-    environment. Only returns on error (by raising an exception). *)
+(** Execute a program with specified arguments and environment.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html} execve(2)}.
+    Only returns on error (by raising an exception). *)
 val execve : string -> string list -> string list -> unit
 
-(** [execvp file args] executes a program using PATH to find the executable.
+(** Execute a program using PATH to find the executable.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html} execvp(2)}.
     Only returns on error (by raising an exception). *)
 val execvp : string -> string list -> unit
 
 (** {1 Process Termination} *)
 
-(** [_exit status] terminates the calling process immediately without cleanup.
+(** Terminate the calling process immediately without cleanup.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/_exit.html} _exit(2)}.
     Use [Stdlib.exit] for normal termination. *)
 val _exit : int -> unit

@@ -1,4 +1,26 @@
-(** POSIX errno handling *)
+(** POSIX errno handling.
+
+    This module provides OCaml bindings for POSIX error codes defined in
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html} errno.h}.
+
+    It includes a comprehensive errno type covering POSIX, Linux, BSD, macOS,
+    and Windows error codes, along with functions for error checking and
+    conversion.
+
+    {2 Example}
+
+    {[
+      (* Check for errors when calling a C function *)
+      let fd = Posix_errno.raise_on_neg ~call:"open" (fun () ->
+        (* some C binding that returns -1 on error *)
+        c_open path flags mode
+      ) in
+      Printf.printf "Opened file descriptor: %d\n" fd
+
+      (* Get the current errno value *)
+      let err = Posix_errno.get_errno () in
+      Printf.printf "Error: %s\n" (Posix_errno.strerror err)
+    ]} *)
 
 (** {1 Errno Type} *)
 
@@ -162,21 +184,22 @@ type t =
 
 (** {1 Errno Conversion} *)
 
-(** Convert errno code to variant *)
+(** Convert errno integer code to variant. *)
 val of_int : int -> t
 
-(** Convert variant to errno code *)
+(** Convert variant to errno integer code. *)
 val to_int : t -> int
 
 (** {1 Errno Access} *)
 
-(** Get current errno value *)
+(** Get current errno value.
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/errno.html} errno(3)}. *)
 val get_errno : unit -> t
 
-(** Get current errno as int *)
+(** Get current errno as integer. *)
 val get_errno_int : unit -> int
 
-(** Reset errno to 0 *)
+(** Reset errno to 0. Should be called before operations that set errno. *)
 val reset_errno : unit -> unit
 
 (** {1 Error Raising} *)
@@ -221,21 +244,26 @@ val int_to_unix_error : int -> Unix.error
 
 (** {1 Error String Functions} *)
 
-(** Get error message string for an errno value using strerror. This function is
-    cross-platform (works on both POSIX and Windows) but not thread-safe.
+(** Get error message string for an errno value using strerror.
 
-    @param errnum The errno value to get the message for
-    @return Error message string *)
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html} strerror(3)}.
+
+    This function is cross-platform (works on both POSIX and Windows) but not
+    thread-safe.
+
+    @return Error message string. *)
 val strerror : t -> string
 
-(** Get error message string for an errno value using strerror_r. This function
-    is thread-safe but only available on POSIX systems.
+(** Get error message string for an errno value using strerror_r.
 
-    @param buflen Optional buffer length for error message (default: 1024)
-    @param errn The errno value to get the message for
-    @return Error message string
-    @raise Invalid_argument on Windows where strerror_r is not available
-    @raise Unix_error if strerror_r fails *)
+    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html} strerror_r(3)}.
+
+    This function is thread-safe but only available on POSIX systems.
+
+    @param buflen Optional buffer length for error message (default: 1024).
+    @return Error message string.
+    @raise Invalid_argument on Windows where strerror_r is not available.
+    @raise Unix_error if strerror_r fails. *)
 val strerror_r : ?buflen:int -> t -> string
 
 (** {1 Native Definition Detection} *)
