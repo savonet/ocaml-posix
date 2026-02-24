@@ -55,7 +55,7 @@ let apply_opt c = function
   | `Required callback -> callback (optarg ())
 
 let unknown_option _argv =
-  let _optopt = !@optopt in
+  let _optopt = Char.chr !@optopt in
   let unknown =
     if _optopt <> Char.chr 0 then Printf.sprintf "-%c" _optopt
     else List.nth (CArray.to_list _argv) (!@optind - 1)
@@ -64,13 +64,13 @@ let unknown_option _argv =
 
 let check_result _argv c opts select =
   if c = '?' then unknown_option _argv;
-  let _optopt = if c = ':' then !@optopt else c in
+  let _optopt = if c = ':' then Char.chr !@optopt else c in
   let opt = List.find (select _optopt) opts in
   if c = ':' then begin
     match opt.arg with
       | `None _ -> assert false
       | `Optional _ -> ()
-      | `Required _ -> raise (Missing_argument !@optopt)
+      | `Required _ -> raise (Missing_argument (Char.chr !@optopt))
   end;
   opt
 

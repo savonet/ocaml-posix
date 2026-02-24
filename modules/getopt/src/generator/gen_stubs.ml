@@ -28,8 +28,8 @@ static int *getopterr() {
   return &opterr;
 }
 
-static char *getoptopt() {
-  return (char *)&optopt;
+static int *getoptopt() {
+  return (int *)&optopt;
 }
 
 static int *getoptreset() {
