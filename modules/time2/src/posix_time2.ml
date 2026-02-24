@@ -334,6 +334,7 @@ let select r w e timeval =
 let utimes path timeval =
   Posix_errno.raise_on_none ~call:"utimes" (fun () ->
       let timeval = Timeval.from_timeval timeval in
-      match utimes path (addr timeval) with
+      let array = CArray.make Types.Timeval.t ~initial:timeval 2 in
+      match utimes path (CArray.start array) with
         | x when x < 0 -> None
         | _ -> Some ())
