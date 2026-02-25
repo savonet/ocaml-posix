@@ -19,7 +19,7 @@
   test_terminal_errors
   test_sysinfo_errors
   test)
- (libraries unix posix-unistd ounit2))
+ (libraries compiler-libs.common unix posix-unistd ounit2))
 
 (rule
  (alias citest)
