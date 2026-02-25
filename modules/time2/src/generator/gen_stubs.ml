@@ -22,7 +22,7 @@ static inline void ocaml_posix_time2_fd_clr(int fd, fd_set *fdset) {
   FD_CLR(fd, fdset);
 }
 
-#ifdef __MACH__
+#if defined(__MACH__) && !defined(__gnu_hurd__)
 
 #define TIMING_GIGA (1000000000)
 
