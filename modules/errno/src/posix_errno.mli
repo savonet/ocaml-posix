@@ -180,15 +180,15 @@ type t =
   | (* Windows *)
     `EOTHER
   | (* Unknown *)
-    `EUNKNOWN of int ]
+    `EUNKNOWN of nativeint ]
 
 (** {1 Errno Conversion} *)
 
 (** Convert errno integer code to variant. *)
-val of_int : int -> t
+val of_int : nativeint -> t
 
 (** Convert variant to errno integer code. *)
-val to_int : t -> int
+val to_int : t -> nativeint
 
 (** {1 Errno Access} *)
 
@@ -197,7 +197,7 @@ val to_int : t -> int
 val get_errno : unit -> t
 
 (** Get current errno as integer. *)
-val get_errno_int : unit -> int
+val get_errno_int : unit -> nativeint
 
 (** Reset errno to 0. Should be called before operations that set errno. *)
 val reset_errno : unit -> unit
@@ -240,7 +240,7 @@ val raise_on_none : ?call:string -> (unit -> 'a option) -> 'a
 val to_unix_error : t -> Unix.error
 
 (** Convert errno int to Unix.error *)
-val int_to_unix_error : int -> Unix.error
+val int_to_unix_error : nativeint -> Unix.error
 
 (** {1 Error String Functions} *)
 

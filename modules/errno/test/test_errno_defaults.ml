@@ -41,7 +41,7 @@ let () =
           different_list := (name, default_value, int_value) :: !different_list;
           ("DIFFERENT", "**"))
       in
-      Printf.printf "%s%-20s | %-10d | %-10d | %-10s | %s\n" mark name
+      Printf.printf "%s%-20s | %-10nd | %-10nd | %-10s | %s\n" mark name
         default_value int_value native_str status)
     Errno_defaults.errno_defaults;
 
@@ -58,7 +58,7 @@ let () =
       let alias_native = if is_native alias_value then "YES" else "NO" in
       let target_native = if is_native target_value then "YES" else "NO" in
 
-      Printf.printf "  %-20s | %-10d | %-10s | %-15s | %-10d | %-10s\n"
+      Printf.printf "  %-20s | %-10nd | %-10s | %-15s | %-10nd | %-10s\n"
         alias_name
         (Posix_errno.to_int alias_value)
         alias_native target_name
@@ -77,8 +77,8 @@ let () =
     Printf.printf "\nValues that differ from defaults:\n";
     List.iter
       (fun (name, default_val, system_val) ->
-        Printf.printf "  %-20s: default=%d, system=%d (diff=%d)\n" name
-          default_val system_val (system_val - default_val))
+        Printf.printf "  %-20s: default=%nd, system=%nd (diff=%nd)\n" name
+          default_val system_val Nativeint.(sub system_val default_val))
       (List.rev !different_list));
 
   Printf.printf

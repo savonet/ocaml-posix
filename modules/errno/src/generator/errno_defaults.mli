@@ -6,4 +6,4 @@ type errno_def = {
 
 val errno_defs : errno_def list
 val errno_aliases : (string * string) list
-val errno_defaults : (string * int) list
+val errno_defaults : (string * nativeint) list

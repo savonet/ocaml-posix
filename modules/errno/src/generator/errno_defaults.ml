@@ -1789,7 +1789,7 @@ let get_value_for_system system errno_def =
     | (systems, value) :: rest ->
         if List.mem system systems then value else find_override rest
   in
-  find_override errno_def.overrides
+  Nativeint.of_int (find_override errno_def.overrides)
 
 (* Get platform-specific errno defaults based on system *)
 let get_errno_defaults system =
