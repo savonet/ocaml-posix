@@ -1,7 +1,8 @@
 (** POSIX errno handling.
 
     This module provides OCaml bindings for POSIX error codes defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html} errno.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html}
+     errno.h}.
 
     It includes a comprehensive errno type covering POSIX, Linux, BSD, macOS,
     and Windows error codes, along with functions for error checking and
@@ -192,8 +193,9 @@ val to_int : t -> int
 
 (** {1 Errno Access} *)
 
-(** Get current errno value.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/errno.html} errno(3)}. *)
+(** Get current errno value. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/errno.html}
+     errno(3)}. *)
 val get_errno : unit -> t
 
 (** Get current errno as integer. *)
@@ -246,7 +248,9 @@ val int_to_unix_error : int -> Unix.error
 
 (** Get error message string for an errno value using strerror.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html} strerror(3)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html}
+     strerror(3)}.
 
     This function is cross-platform (works on both POSIX and Windows) but not
     thread-safe.
@@ -256,7 +260,9 @@ val strerror : t -> string
 
 (** Get error message string for an errno value using strerror_r.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html} strerror_r(3)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html}
+     strerror_r(3)}.
 
     This function is thread-safe but only available on POSIX systems.
 

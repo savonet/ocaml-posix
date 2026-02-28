@@ -1,7 +1,8 @@
 (** POSIX command-line option parsing bindings.
 
     This module provides OCaml bindings to the POSIX getopt functions defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html} unistd.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html}
+     unistd.h}.
 
     It supports short options (single character), long options (GNU extension),
     and various argument handling modes. *)
@@ -11,14 +12,16 @@
 (** Short option: a single character (e.g., ['v'] for [-v]). *)
 type short = char
 
-(** Long option: a pair of (long name, short equivalent).
-    For example, [("verbose", 'v')] matches both [--verbose] and [-v]. *)
+(** Long option: a pair of (long name, short equivalent). For example,
+    [("verbose", 'v')] matches both [--verbose] and [-v]. *)
 type long = string * char
 
 (** Argument specification for an option.
     - [`None f] - Option takes no argument. [f ()] is called when matched.
-    - [`Optional f] - Option has an optional argument. [f (Some arg)] or [f None].
-    - [`Required f] - Option requires an argument. [f arg] is called with the value. *)
+    - [`Optional f] - Option has an optional argument. [f (Some arg)] or
+      [f None].
+    - [`Required f] - Option requires an argument. [f arg] is called with the
+      value. *)
 type arg =
   [ `None of unit -> unit
   | `Optional of string option -> unit
@@ -40,24 +43,27 @@ exception Missing_argument of char
 (** [true] if the system supports GNU-style long options via [getopt_long]. *)
 val has_getopt_long : bool
 
-(** [true] if the system supports [getopt_long_only] (long options with single dash). *)
+(** [true] if the system supports [getopt_long_only] (long options with single
+    dash). *)
 val has_getopt_long_only : bool
 
 (** {1 Configuration} *)
 
-(** Enable or disable error messages printed to stderr by getopt.
-    Default is [true] (errors are printed). *)
+(** Enable or disable error messages printed to stderr by getopt. Default is
+    [true] (errors are printed). *)
 val print_error : bool -> unit
 
-(** Reset the getopt state for parsing a new set of arguments.
-    Call this before parsing a new argv if you've already parsed arguments. *)
+(** Reset the getopt state for parsing a new set of arguments. Call this before
+    parsing a new argv if you've already parsed arguments. *)
 val reset : unit -> unit
 
 (** {1 Parsing Functions} *)
 
 (** Parse command-line arguments using short options only.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html} getopt(3)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html}
+     getopt(3)}.
 
     @param argv The argument array to parse (typically [Sys.argv]).
     @param opts List of short option specifications.
@@ -82,8 +88,8 @@ val getopt : string array -> short opt list -> string array
 
     See getopt_long(3).
 
-    Long options are specified as [--name] or [--name=value].
-    Each long option also has a short equivalent.
+    Long options are specified as [--name] or [--name=value]. Each long option
+    also has a short equivalent.
 
     @param argv The argument array to parse.
     @param opts List of long option specifications.

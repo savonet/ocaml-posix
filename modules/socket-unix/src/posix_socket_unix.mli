@@ -1,12 +1,15 @@
 (** POSIX Unix domain socket bindings.
 
     This module provides OCaml bindings for Unix domain sockets (AF_UNIX),
-    extending the {!Posix_socket} module with Unix-specific socket address types.
+    extending the {!Posix_socket} module with Unix-specific socket address
+    types.
 
     Unix domain sockets provide local inter-process communication using
     filesystem paths as addresses.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_un.h.html} sys/un.h}. *)
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_un.h.html}
+     sys/un.h}. *)
 
 open Ctypes
 open Posix_socket

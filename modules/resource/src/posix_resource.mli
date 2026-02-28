@@ -1,7 +1,8 @@
 (** POSIX resource usage and limits.
 
     This module provides OCaml bindings to POSIX resource functions defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_resource.h.html} sys/resource.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_resource.h.html}
+     sys/resource.h}.
 
     It includes functions for querying and setting resource limits, getting
     resource usage statistics, and managing process priorities.
@@ -75,8 +76,8 @@ type rlimit = {
 
 (** {1 Resource Usage Types} *)
 
-(** Resource usage information returned by {!getrusage}.
-    Corresponds to POSIX [struct rusage]. *)
+(** Resource usage information returned by {!getrusage}. Corresponds to POSIX
+    [struct rusage]. *)
 type rusage = {
   ru_utime : Posix_time2.Timeval.t;
   ru_stime : Posix_time2.Timeval.t;
@@ -100,7 +101,9 @@ type rusage = {
 
 (** Get resource limits.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html} getrlimit(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html}
+     getrlimit(2)}.
 
     @param resource One of the [rlimit_*] constants.
     @return The current soft and hard limits.
@@ -109,7 +112,9 @@ val getrlimit : int -> rlimit
 
 (** Set resource limits.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setrlimit.html} setrlimit(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setrlimit.html}
+     setrlimit(2)}.
 
     @param resource One of the [rlimit_*] constants.
     @param limits The new soft and hard limits.
@@ -120,7 +125,9 @@ val setrlimit : int -> rlimit -> unit
 
 (** Get resource usage statistics.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrusage.html} getrusage(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getrusage.html}
+     getrusage(2)}.
 
     @param who {!rusage_self} or {!rusage_children}.
     @return Resource usage information.
@@ -131,7 +138,9 @@ val getrusage : int -> rusage
 
 (** Get process scheduling priority.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpriority.html} getpriority(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getpriority.html}
+     getpriority(2)}.
 
     @param which {!prio_process}, {!prio_pgrp}, or {!prio_user}.
     @param who Process ID, process group ID, or user ID (0 for current).
@@ -141,7 +150,9 @@ val getpriority : int -> int -> int
 
 (** Set process scheduling priority.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setpriority.html} setpriority(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setpriority.html}
+     setpriority(2)}.
 
     @param which {!prio_process}, {!prio_pgrp}, or {!prio_user}.
     @param who Process ID, process group ID, or user ID (0 for current).

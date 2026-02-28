@@ -78,7 +78,8 @@
  (action
   (with-stdout-to
    %{targets}
-   (system "%{read:exec_path} %{ocaml-config:system} ./off_t_size_native.exe"))))
+   (system
+    "%{read:exec_path} %{ocaml-config:system} ./off_t_size_native.exe"))))
 
 (rule
  (targets off_t_size_lfs)

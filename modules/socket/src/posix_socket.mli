@@ -1,37 +1,41 @@
 (** POSIX socket interface bindings.
 
     This module provides OCaml bindings to the POSIX socket API defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html} sys/socket.h}
-    and {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netdb.h.html} netdb.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html}
+     sys/socket.h} and
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netdb.h.html}
+     netdb.h}.
 
-    It includes functions for address resolution, byte order conversion,
-    and socket address manipulation. *)
+    It includes functions for address resolution, byte order conversion, and
+    socket address manipulation. *)
 
 open Ctypes
 
 (** {1 Error Handling}
 
     Error codes returned by address resolution functions like
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html} getaddrinfo}
-    and {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html} getnameinfo}. *)
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html}
+     getaddrinfo} and
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html}
+     getnameinfo}. *)
 
 (** Address resolution error codes (EAI_* constants). *)
 type error =
   [ `ADDRFAMILY  (** Address family not supported *)
-  | `AGAIN       (** Temporary failure in name resolution *)
-  | `BADFLAGS    (** Invalid flags value *)
-  | `BADHINTS    (** Invalid hints value *)
-  | `FAIL        (** Non-recoverable failure in name resolution *)
-  | `FAMILY      (** Address family not supported *)
-  | `MEMORY      (** Memory allocation failure *)
-  | `NODATA      (** No address associated with hostname *)
-  | `NONAME      (** Name or service not known *)
-  | `PROTOCOL    (** Resolved protocol is unknown *)
-  | `SOCKTYPE    (** Socket type not supported *)
-  | `OVERFLOW    (** Argument buffer overflow *)
-  | `SERVICE     (** Service not supported for socket type *)
-  | `SYSTEM      (** System error, check errno *)
-  | `UNKNOWN of int (** Unknown error code *) ]
+  | `AGAIN  (** Temporary failure in name resolution *)
+  | `BADFLAGS  (** Invalid flags value *)
+  | `BADHINTS  (** Invalid hints value *)
+  | `FAIL  (** Non-recoverable failure in name resolution *)
+  | `FAMILY  (** Address family not supported *)
+  | `MEMORY  (** Memory allocation failure *)
+  | `NODATA  (** No address associated with hostname *)
+  | `NONAME  (** Name or service not known *)
+  | `PROTOCOL  (** Resolved protocol is unknown *)
+  | `SOCKTYPE  (** Socket type not supported *)
+  | `OVERFLOW  (** Argument buffer overflow *)
+  | `SERVICE  (** Service not supported for socket type *)
+  | `SYSTEM  (** System error, check errno *)
+  | `UNKNOWN of int  (** Unknown error code *) ]
 
 (** Convert an error to its integer representation. *)
 val int_of_error : error -> int
@@ -42,8 +46,9 @@ val error_of_int : int -> error
 (** Returns [true] if this error code is natively defined on this platform. *)
 val is_native : error -> bool
 
-(** Return a human-readable error message.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gai_strerror.html} gai_strerror(3)}. *)
+(** Return a human-readable error message. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gai_strerror.html}
+     gai_strerror(3)}. *)
 val strerror : error -> string
 
 (** Exception raised by address resolution functions on error. *)
@@ -51,8 +56,10 @@ exception Error of error
 
 (** {1 Byte Order Conversion}
 
-    Functions for converting between network byte order (big-endian) and
-    host byte order. See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/htonl.html} byteorder(3)}. *)
+    Functions for converting between network byte order (big-endian) and host
+    byte order. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/htonl.html}
+     byteorder(3)}. *)
 
 (** Convert 32-bit integer from network to host byte order. *)
 val ntohl : Unsigned.uint32 -> Unsigned.uint32
@@ -68,8 +75,9 @@ val htons : Unsigned.uint16 -> Unsigned.uint16
 
 (** {1 Socket Types}
 
-    Socket type constants used when creating sockets.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/socket.html} socket(2)}. *)
+    Socket type constants used when creating sockets. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/socket.html}
+     socket(2)}. *)
 
 (** Abstract type representing socket types. *)
 type socket_type
@@ -83,13 +91,15 @@ val sock_dgram : socket_type
 (** Stream socket (connection-oriented, reliable). Used with TCP. *)
 val sock_stream : socket_type
 
-(** Sequenced packet socket (connection-oriented, reliable, message boundaries preserved). *)
+(** Sequenced packet socket (connection-oriented, reliable, message boundaries
+    preserved). *)
 val sock_seqpacket : socket_type
 
 (** {1 Address Families}
 
-    Socket address family constants.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html} sys/socket.h}. *)
+    Socket address family constants. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html}
+     sys/socket.h}. *)
 
 (** Module for the [sa_family] field type. *)
 module Sa_family = Posix_socket_types.Sa_family
@@ -106,12 +116,15 @@ val af_inet : sa_family_t
 (** IPv6 address family (AF_INET6). *)
 val af_inet6 : sa_family_t
 
-(** Unspecified address family (AF_UNSPEC). Used to request any address family. *)
+(** Unspecified address family (AF_UNSPEC). Used to request any address family.
+*)
 val af_unspec : sa_family_t
 
 (** {1 Name Resolution Constants}
 
-    Constants for {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html} getnameinfo(3)}. *)
+    Constants for
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html}
+     getnameinfo(3)}. *)
 
 (** Maximum length of a service name string. *)
 val ni_maxserv : int
@@ -127,8 +140,9 @@ val ni_numericserv : int
 
 (** {1 Protocol Constants}
 
-    IP protocol numbers for use with sockets.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html} netinet/in.h}. *)
+    IP protocol numbers for use with sockets. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html}
+     netinet/in.h}. *)
 
 (** Internet Protocol (IP). *)
 val ipproto_ip : int
@@ -150,8 +164,9 @@ val ipproto_udp : int
 
 (** {1 Socket Length Type}
 
-    The [socklen_t] type used for socket address lengths.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html} sys/socket.h}. *)
+    The [socklen_t] type used for socket address lengths. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html}
+     sys/socket.h}. *)
 
 (** Unsigned module for socklen_t arithmetic. *)
 module Socklen : Unsigned.S
@@ -165,7 +180,9 @@ val socklen_t : socklen_t typ
 (** {1 Socket Address Storage}
 
     Generic socket address storage large enough to hold any socket address type.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html} sockaddr_storage}. *)
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html}
+     sockaddr_storage}. *)
 
 (** Abstract type for socket address storage. *)
 type sockaddr_storage
@@ -178,8 +195,9 @@ val sockaddr_storage_len : int
 
 (** {1 Generic Socket Address}
 
-    The generic [sockaddr] structure.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html} sockaddr}. *)
+    The generic [sockaddr] structure. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html}
+     sockaddr}. *)
 
 (** Generic socket address structure. *)
 module Sockaddr : sig
@@ -207,8 +225,9 @@ val sockaddr_len : sockaddr ptr -> int
 
 (** {1 Address Info}
 
-    The [addrinfo] structure used by getaddrinfo.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html} getaddrinfo(3)}. *)
+    The [addrinfo] structure used by getaddrinfo. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html}
+     getaddrinfo(3)}. *)
 
 (** Address information structure returned by [getaddrinfo]. *)
 module Addrinfo : sig
@@ -250,8 +269,9 @@ val in_port_t : Unsigned.uint16 typ
 
 (** {1 IPv4 Socket Address}
 
-    The [sockaddr_in] structure for IPv4 addresses.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html} netinet/in.h}. *)
+    The [sockaddr_in] structure for IPv4 addresses. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html}
+     netinet/in.h}. *)
 
 (** IPv4 socket address structure. *)
 module SockaddrInet : sig
@@ -294,8 +314,9 @@ val sockaddr_in_t : sockaddr_in typ
 
 (** {1 IPv6 Socket Address}
 
-    The [sockaddr_in6] structure for IPv6 addresses.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html} netinet/in.h}. *)
+    The [sockaddr_in6] structure for IPv6 addresses. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html}
+     netinet/in.h}. *)
 
 (** IPv6 socket address structure. *)
 module SockaddrInet6 : sig
@@ -344,7 +365,8 @@ val sockaddr_in6_t : sockaddr_in6 typ
 (** Convert a socket address to a hostname and port number.
 
     This is a wrapper around
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html} getnameinfo(3)}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getnameinfo.html}
+     getnameinfo(3)}.
 
     @param sockaddr The socket address to convert.
     @return A tuple [(hostname, port)].
@@ -354,7 +376,8 @@ val getnameinfo : sockaddr ptr -> string * int
 (** Resolve a hostname to a list of socket addresses.
 
     This is a wrapper around
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html} getaddrinfo(3)}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html}
+     getaddrinfo(3)}.
 
     @param hints Optional hints to filter results.
     @param port Optional port number or service name.
@@ -365,10 +388,11 @@ val getnameinfo : sockaddr ptr -> string * int
     Example:
     {[
       let addresses = getaddrinfo ~port:(`Int 443) "example.com" in
-      List.iter (fun addr ->
-        let host, port = getnameinfo addr in
-        Printf.printf "%s:%d\n" host port
-      ) addresses
+      List.iter
+        (fun addr ->
+          let host, port = getnameinfo addr in
+          Printf.printf "%s:%d\n" host port)
+        addresses
     ]} *)
 val getaddrinfo :
   ?hints:Addrinfo.t structure ptr ->
@@ -378,13 +402,15 @@ val getaddrinfo :
 
 (** {1 Utility Functions} *)
 
-(** Calculate the length of a null-terminated string up to a maximum.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strnlen.html} strnlen(3)}. *)
+(** Calculate the length of a null-terminated string up to a maximum. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/strnlen.html}
+     strnlen(3)}. *)
 val strnlen : char ptr -> Unsigned.size_t -> Unsigned.size_t
 
 (** {1 Unix Module Interoperability}
 
-    Functions for converting between [Unix.sockaddr] and POSIX socket addresses. *)
+    Functions for converting between [Unix.sockaddr] and POSIX socket addresses.
+*)
 
 (** Convert a [Unix.sockaddr] to a POSIX socket address.
 

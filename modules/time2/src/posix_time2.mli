@@ -1,11 +1,13 @@
 (** POSIX time and clock functions.
 
     This module provides OCaml bindings to POSIX time functions defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html} time.h}
-    and {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_time.h.html} sys/time.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html}
+     time.h} and
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_time.h.html}
+     sys/time.h}.
 
-    It includes high-precision time structures, clock access, timers, and
-    time conversion functions. *)
+    It includes high-precision time structures, clock access, timers, and time
+    conversion functions. *)
 
 (** {1 Time Structures} *)
 
@@ -39,8 +41,8 @@ module Timespec : sig
   (** [to_string t] returns a string in the form ["sec.nsec"]. *)
   val to_string : t -> string
 
-  (** [compare t1 t2] compares two time values. Returns [0] if equal,
-      negative if [t1 < t2], positive if [t1 > t2]. *)
+  (** [compare t1 t2] compares two time values. Returns [0] if equal, negative
+      if [t1 < t2], positive if [t1 > t2]. *)
   val compare : t -> t -> int
 end
 
@@ -48,7 +50,7 @@ end
 module Itimerspec : sig
   type t = {
     it_interval : Timespec.t;  (** Timer interval *)
-    it_value : Timespec.t;     (** Initial expiration *)
+    it_value : Timespec.t;  (** Initial expiration *)
   }
 end
 
@@ -82,17 +84,17 @@ module Timeval : sig
   (** [to_string t] returns a string in the form ["sec.usec"]. *)
   val to_string : t -> string
 
-  (** [compare t1 t2] compares two time values. Returns [0] if equal,
-      negative if [t1 < t2], positive if [t1 > t2]. *)
+  (** [compare t1 t2] compares two time values. Returns [0] if equal, negative
+      if [t1 < t2], positive if [t1 > t2]. *)
   val compare : t -> t -> int
 end
 
 (** POSIX broken-down time structure. *)
 module Tm : sig
-  (** Broken-down time with fields for seconds [0-60], minutes [0-59],
-      hours [0-23], day of month [1-31], month [0-11], years since 1900,
-      day of week [0-6] (Sunday = 0), day of year [0-365], and daylight
-      saving flag (positive if DST, 0 if not, negative if unknown). *)
+  (** Broken-down time with fields for seconds [0-60], minutes [0-59], hours
+      [0-23], day of month [1-31], month [0-11], years since 1900, day of week
+      [0-6] (Sunday = 0), day of year [0-365], and daylight saving flag
+      (positive if DST, 0 if not, negative if unknown). *)
   type t = private {
     tm_sec : int;
     tm_min : int;
@@ -119,104 +121,123 @@ end
 module Itimerval : sig
   type t = {
     it_interval : Timeval.t;  (** Timer interval *)
-    it_value : Timeval.t;     (** Current value *)
+    it_value : Timeval.t;  (** Current value *)
   }
 end
 
 (** {1 Clock Types} *)
 
-(** Clock identifiers for {!clock_gettime} and related functions.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_getres.html} clock_getres(3)}. *)
+(** Clock identifiers for {!clock_gettime} and related functions. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_getres.html}
+     clock_getres(3)}. *)
 type clock =
-  [ `Realtime        (** System-wide real-time clock *)
-  | `Monotonic       (** Monotonic clock that cannot be set *)
-  | `Process_cputime (** CPU time consumed by the process *)
-  | `Thread_cputime  (** CPU time consumed by the thread *)
-  ]
+  [ `Realtime  (** System-wide real-time clock *)
+  | `Monotonic  (** Monotonic clock that cannot be set *)
+  | `Process_cputime  (** CPU time consumed by the process *)
+  | `Thread_cputime  (** CPU time consumed by the thread *) ]
 
 (** {1 Clock Functions} *)
 
-(** Convert broken-down time to a string.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/asctime.html} asctime(3)}. *)
+(** Convert broken-down time to a string. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/asctime.html}
+     asctime(3)}. *)
 val asctime : Tm.t -> string
 
-(** Get clock resolution.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_getres.html} clock_getres(3)}. *)
+(** Get clock resolution. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_getres.html}
+     clock_getres(3)}. *)
 val clock_getres : clock -> Timespec.t
 
-(** Get current time from a clock.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_gettime.html} clock_gettime(3)}. *)
+(** Get current time from a clock. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_gettime.html}
+     clock_gettime(3)}. *)
 val clock_gettime : clock -> Timespec.t
 
-(** Set a clock's time (requires appropriate privileges).
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_settime.html} clock_settime(3)}. *)
+(** Set a clock's time (requires appropriate privileges). See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_settime.html}
+     clock_settime(3)}. *)
 val clock_settime : clock -> Timespec.t -> unit
 
-(** Convert Unix timestamp to a date/time string.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ctime.html} ctime(3)}. *)
+(** Convert Unix timestamp to a date/time string. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/ctime.html}
+     ctime(3)}. *)
 val ctime : int64 -> string
 
-(** Convert Unix timestamp to broken-down UTC time.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gmtime.html} gmtime(3)}. *)
+(** Convert Unix timestamp to broken-down UTC time. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gmtime.html}
+     gmtime(3)}. *)
 val gmtime : int64 -> Tm.t
 
-(** Convert Unix timestamp to broken-down local time.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/localtime.html} localtime(3)}. *)
+(** Convert Unix timestamp to broken-down local time. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/localtime.html}
+     localtime(3)}. *)
 val localtime : int64 -> Tm.t
 
-(** Convert broken-down time to Unix timestamp.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mktime.html} mktime(3)}. *)
+(** Convert broken-down time to Unix timestamp. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mktime.html}
+     mktime(3)}. *)
 val mktime : Tm.t -> int64
 
 (** {1 Sleep Functions} *)
 
-(** High-resolution sleep.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/nanosleep.html} nanosleep(3)}. *)
+(** High-resolution sleep. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/nanosleep.html}
+     nanosleep(3)}. *)
 val nanosleep : Timespec.t -> unit
 
-(** High-resolution sleep with clock selection.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_nanosleep.html} clock_nanosleep(3)}.
+(** High-resolution sleep with clock selection. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_nanosleep.html}
+     clock_nanosleep(3)}.
 
-    @param absolute If [true], sleep until the specified absolute time.
-                    If [false], sleep for the specified duration.
+    @param absolute
+      If [true], sleep until the specified absolute time. If [false], sleep for
+      the specified duration.
     @param clock The clock to use for timing. *)
 val clock_nanosleep : absolute:bool -> clock:clock -> Timespec.t -> unit
 
 (** {1 Interval Timers} *)
 
-(** Interval timer types for {!getitimer} and {!setitimer}.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getitimer.html} getitimer(3)}. *)
+(** Interval timer types for {!getitimer} and {!setitimer}. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getitimer.html}
+     getitimer(3)}. *)
 type itimer =
-  [ `Real    (** ITIMER_REAL: decrements in real time, delivers SIGALRM *)
-  | `Virtual (** ITIMER_VIRTUAL: decrements in process virtual time, delivers SIGVTALRM *)
-  | `Prof    (** ITIMER_PROF: decrements in process time, delivers SIGPROF *)
-  ]
+  [ `Real  (** ITIMER_REAL: decrements in real time, delivers SIGALRM *)
+  | `Virtual
+    (** ITIMER_VIRTUAL: decrements in process virtual time, delivers SIGVTALRM
+    *)
+  | `Prof  (** ITIMER_PROF: decrements in process time, delivers SIGPROF *) ]
 
-(** Get the value of an interval timer.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getitimer.html} getitimer(3)}. *)
+(** Get the value of an interval timer. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/getitimer.html}
+     getitimer(3)}. *)
 val getitimer : itimer -> Itimerval.t
 
-(** Set an interval timer and return its previous value.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setitimer.html} setitimer(3)}. *)
+(** Set an interval timer and return its previous value. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/setitimer.html}
+     setitimer(3)}. *)
 val setitimer : itimer -> Itimerval.t -> Itimerval.t
 
 (** {1 Time of Day} *)
 
-(** Get the current time of day.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gettimeofday.html} gettimeofday(3)}. *)
+(** Get the current time of day. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/gettimeofday.html}
+     gettimeofday(3)}. *)
 val gettimeofday : unit -> Timeval.t
 
 (** {1 I/O Multiplexing} *)
 
 (** Synchronous I/O multiplexing.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/select.html} select(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/select.html}
+     select(2)}.
 
     @param readfds File descriptors to check for readability.
     @param writefds File descriptors to check for writability.
     @param exceptfds File descriptors to check for exceptions.
     @param timeout Maximum time to wait, or [None] to block indefinitely.
-    @return Triple of ready file descriptors [(readable, writable, exceptions)]. *)
+    @return Triple of ready file descriptors [(readable, writable, exceptions)].
+*)
 val select :
   Unix.file_descr list ->
   Unix.file_descr list ->
@@ -226,8 +247,9 @@ val select :
 
 (** {1 File Times} *)
 
-(** Set file access and modification times.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html} utimes(3)}.
+(** Set file access and modification times. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html}
+     utimes(3)}.
 
     @param path Path to the file.
     @param times The access and modification time to set. *)

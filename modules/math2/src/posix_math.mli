@@ -1,7 +1,8 @@
 (** POSIX mathematical functions bindings.
 
     This module provides OCaml bindings to the POSIX math functions defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/math.h.html} math.h}.
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/math.h.html}
+     math.h}.
 
     Functions are provided in three variants:
     - Double precision: [sin], [cos], etc.
@@ -16,14 +17,16 @@ open Ctypes
 
 (** Result of floating-point classification. *)
 type fp_type =
-  [ `Infinite    (** Positive or negative infinity *)
-  | `NaN         (** Not a number *)
-  | `Normal      (** Normal floating-point number *)
-  | `Subnormal   (** Subnormal (denormalized) number *)
-  | `Zero ]      (** Positive or negative zero *)
+  [ `Infinite  (** Positive or negative infinity *)
+  | `NaN  (** Not a number *)
+  | `Normal  (** Normal floating-point number *)
+  | `Subnormal  (** Subnormal (denormalized) number *)
+  | `Zero ]
+(** Positive or negative zero *)
 
-(** Classify a floating-point value.
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fpclassify.html} fpclassify(3)}. *)
+(** Classify a floating-point value. See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fpclassify.html}
+     fpclassify(3)}. *)
 val fpclassify : float -> fp_type option
 
 (** Test if a value is finite (not infinite and not NaN). *)
@@ -35,7 +38,8 @@ val isinf : float -> bool
 (** Test if a value is NaN (not a number). *)
 val isnan : float -> bool
 
-(** Test if a value is a normal number (not zero, subnormal, infinite, or NaN). *)
+(** Test if a value is a normal number (not zero, subnormal, infinite, or NaN).
+*)
 val isnormal : float -> bool
 
 (** Test if a value is negative (including negative zero). *)
@@ -46,16 +50,19 @@ val signbit : float -> bool
 (** [isgreater x y] is [true] if [x > y], without raising exceptions for NaN. *)
 val isgreater : float -> float -> bool
 
-(** [isgreaterequal x y] is [true] if [x >= y], without raising exceptions for NaN. *)
+(** [isgreaterequal x y] is [true] if [x >= y], without raising exceptions for
+    NaN. *)
 val isgreaterequal : float -> float -> bool
 
 (** [isless x y] is [true] if [x < y], without raising exceptions for NaN. *)
 val isless : float -> float -> bool
 
-(** [islessequal x y] is [true] if [x <= y], without raising exceptions for NaN. *)
+(** [islessequal x y] is [true] if [x <= y], without raising exceptions for NaN.
+*)
 val islessequal : float -> float -> bool
 
-(** [islessgreater x y] is [true] if [x < y] or [x > y], without raising exceptions for NaN. *)
+(** [islessgreater x y] is [true] if [x < y] or [x > y], without raising
+    exceptions for NaN. *)
 val islessgreater : float -> float -> bool
 
 (** [isunordered x y] is [true] if either [x] or [y] is NaN. *)

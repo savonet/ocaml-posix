@@ -1,10 +1,12 @@
 (** POSIX file status and permissions.
 
-    This module provides OCaml bindings to POSIX file status functions defined in
-    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_stat.h.html} sys/stat.h}.
+    This module provides OCaml bindings to POSIX file status functions defined
+    in
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_stat.h.html}
+     sys/stat.h}.
 
-    It includes functions for querying file metadata, changing permissions,
-    and creating directories and special files.
+    It includes functions for querying file metadata, changing permissions, and
+    creating directories and special files.
 
     {2 Example}
 
@@ -14,14 +16,13 @@
       Printf.printf "Size: %Ld bytes\n" (Posix_types.Off.to_int64 info.st_size);
 
       (* Check if it's a regular file *)
-      if s_isreg info.st_mode then
-        print_endline "Regular file"
+      if s_isreg info.st_mode then print_endline "Regular file"
     ]} *)
 
 (** {1 File Type Constants}
 
-    Constants for the file type portion of [st_mode].
-    Use {!s_ifmt} to mask out the file type bits. *)
+    Constants for the file type portion of [st_mode]. Use {!s_ifmt} to mask out
+    the file type bits. *)
 
 (** File type mask. Use as [Posix_types.Mode.logand mode s_ifmt]. *)
 val s_ifmt : Posix_types.mode_t
@@ -106,8 +107,8 @@ val s_ixoth : Posix_types.mode_t
 
 (** {1 File Type Test Functions}
 
-    These functions test the [st_mode] field to determine file type.
-    They are equivalent to the POSIX S_IS* macros. *)
+    These functions test the [st_mode] field to determine file type. They are
+    equivalent to the POSIX S_IS* macros. *)
 
 (** [s_isreg mode] returns [true] if [mode] indicates a regular file. *)
 val s_isreg : Posix_types.mode_t -> bool
@@ -154,14 +155,18 @@ type stat = {
 
 (** Get file status, following symbolic links.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html} stat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html}
+     stat(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val stat : string -> stat
 
 (** Get file status for an open file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstat.html} fstat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstat.html}
+     fstat(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val fstat : Unix.file_descr -> stat
@@ -170,7 +175,9 @@ val fstat : Unix.file_descr -> stat
 
     Returns information about the symbolic link itself, not its target.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html} lstat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html}
+     lstat(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val lstat : string -> stat
@@ -179,14 +186,18 @@ val lstat : string -> stat
 
 (** Change file permissions.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html} chmod(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html}
+     chmod(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val chmod : string -> Posix_types.mode_t -> unit
 
 (** Change file permissions using a file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html} fchmod(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html}
+     fchmod(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val fchmod : Unix.file_descr -> Posix_types.mode_t -> unit
@@ -195,14 +206,18 @@ val fchmod : Unix.file_descr -> Posix_types.mode_t -> unit
 
 (** Create a directory.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html} mkdir(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html}
+     mkdir(2)}.
 
     @raise Unix.Unix_error on failure. *)
 val mkdir : string -> Posix_types.mode_t -> unit
 
 (** Create a FIFO (named pipe).
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkfifo.html} mkfifo(3)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkfifo.html}
+     mkfifo(3)}.
 
     @raise Unix.Unix_error on failure. *)
 val mkfifo : string -> Posix_types.mode_t -> unit
@@ -211,24 +226,28 @@ val mkfifo : string -> Posix_types.mode_t -> unit
 
 (** Set the file mode creation mask.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/umask.html} umask(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/umask.html}
+     umask(2)}.
 
-    The umask is used to turn off permission bits when creating files.
-    For example, [umask (Mode.of_int 0o022)] prevents group and others
-    write permissions on newly created files.
+    The umask is used to turn off permission bits when creating files. For
+    example, [umask (Mode.of_int 0o022)] prevents group and others write
+    permissions on newly created files.
 
     @return The previous umask value. *)
 val umask : Posix_types.mode_t -> Posix_types.mode_t
 
 (** {1 Directory-Relative Operations}
 
-    These functions operate relative to a directory file descriptor,
-    providing protection against certain race conditions (TOCTOU).
+    These functions operate relative to a directory file descriptor, providing
+    protection against certain race conditions (TOCTOU).
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstatat.html} *at(2)} functions. *)
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstatat.html}
+     *at(2)} functions. *)
 
-(** Use current working directory as the base for relative paths.
-    Pass this as [dirfd] to use CWD like the non-[*at] functions. *)
+(** Use current working directory as the base for relative paths. Pass this as
+    [dirfd] to use CWD like the non-[*at] functions. *)
 val at_fdcwd : int
 
 (** Flag: do not follow symbolic links. *)
@@ -242,7 +261,9 @@ val at_eaccess : int
 
 (** Like {!stat}/{!lstat} but relative to a directory file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstatat.html} fstatat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fstatat.html}
+     fstatat(2)}.
 
     @param dirfd Base directory (default: current working directory).
     @param flags May include {!at_symlink_nofollow} to not follow symlinks.
@@ -251,7 +272,9 @@ val fstatat : ?dirfd:Unix.file_descr -> ?flags:int list -> string -> stat
 
 (** Like {!chmod} but relative to a directory file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmodat.html} fchmodat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmodat.html}
+     fchmodat(2)}.
 
     @param dirfd Base directory (default: current working directory).
     @param flags Optional flags.
@@ -265,7 +288,9 @@ val fchmodat :
 
 (** Like {!mkdir} but relative to a directory file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdirat.html} mkdirat(2)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdirat.html}
+     mkdirat(2)}.
 
     @param dirfd Base directory (default: current working directory).
     @raise Unix.Unix_error on failure. *)
@@ -273,7 +298,9 @@ val mkdirat : ?dirfd:Unix.file_descr -> string -> Posix_types.mode_t -> unit
 
 (** Like {!mkfifo} but relative to a directory file descriptor.
 
-    See {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkfifoat.html} mkfifoat(3)}.
+    See
+    {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/mkfifoat.html}
+     mkfifoat(3)}.
 
     @param dirfd Base directory (default: current working directory).
     @raise Unix.Unix_error on failure. *)

@@ -18,7 +18,8 @@
  (action
   (with-stdout-to
    %{targets}
-   (system "%{read:../../../../base/exec_path} %{ocaml-config:system} %{gen}"))))
+   (system
+    "%{read:../../../../base/exec_path} %{ocaml-config:system} %{gen}"))))
 
 (rule
  (targets posix_math_generated_constants.ml)
