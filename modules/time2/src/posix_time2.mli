@@ -251,6 +251,7 @@ val select :
     {{:https://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html}
      utimes(3)}.
 
-    @param path Path to the file.
-    @param times The access and modification time to set. *)
-val utimes : string -> Timeval.t -> unit
+    @param ~last_access date and time of last access
+    @param ~last_modification date and time of last modification
+    @param path Path to the file. *)
+val utimes : last_access:Timeval.t -> last_modification:Timeval.t -> string -> unit

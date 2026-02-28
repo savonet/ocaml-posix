@@ -179,9 +179,11 @@ let test_select_invalid_fd () =
 let test_utimes_valid () =
   Printf.printf "Testing utimes (success case)...\n%!";
   let temp_file = Filename.temp_file "posix_time2_test" ".tmp" in
-  let new_time = Timeval.create 1000000000L 0L in
+  let access_time = Timeval.create 1000000000L 0L in
   (* Jan 9, 2001 *)
-  utimes temp_file new_time;
+  let modification_time = Timeval.create 1100000000L 0L in
+  (* Nov 9, 2004 *)
+  utimes ~last_access:access_time ~last_modification:modification_time temp_file;
   Sys.remove temp_file;
   Printf.printf "  ✓ utimes succeeded on valid file\n%!"
 
@@ -191,7 +193,7 @@ let test_utimes_invalid () =
   let nonexistent = "/tmp/this_file_should_not_exist_posix_time2_test_12345" in
   let new_time = Timeval.create 1000000000L 0L in
   try
-    utimes nonexistent new_time;
+    utimes ~last_access:new_time ~last_modification:new_time nonexistent;
     Printf.printf "  ✗ utimes on non-existent file should have failed\n%!";
     assert false
   with Unix.Unix_error (Unix.ENOENT, "utimes", _) ->

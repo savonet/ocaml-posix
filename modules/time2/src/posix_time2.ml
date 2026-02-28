@@ -331,9 +331,15 @@ let select r w e timeval =
             in
             Some (get_fd_set r r_set, get_fd_set w w_set, get_fd_set e e_set))
 
-let utimes path timeval =
+let utimes ~last_access ~last_modification path =
   Posix_errno.raise_on_none ~call:"utimes" (fun () ->
-      let timeval = Timeval.from_timeval timeval in
-      match utimes path (addr timeval) with
+      let array =
+        CArray.of_list Types.Timeval.t
+          [
+            Timeval.from_timeval last_access;
+            Timeval.from_timeval last_modification;
+          ]
+      in
+      match utimes path (CArray.start array) with
         | x when x < 0 -> None
         | _ -> Some ())
