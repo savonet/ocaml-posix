@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries posix-time2 threads))
+ (libraries posix-time2 threads compiler-libs.common))
 
 (rule
  (alias citest)

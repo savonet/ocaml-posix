@@ -13,7 +13,7 @@ let get_errno () = of_int (Stubs.posix_errno_get_errno ())
 let get_errno_int () = Stubs.posix_errno_get_errno ()
 
 (** Reset errno to 0 *)
-let reset_errno () = Stubs.posix_errno_set_errno 0
+let reset_errno () = Stubs.posix_errno_set_errno 0n
 
 (** Convert errno variant to Unix.error *)
 let to_unix_error = function
@@ -98,8 +98,8 @@ let to_unix_error = function
     | `EPWROFF | `EREMCHG | `EREMOTE | `EREMOTEIO | `ERESTART | `ERFKILL
     | `ERPCMISMATCH | `ESHLIBVERS | `ESTALE | `ESTRPIPE | `ETIME | `ETOOBIG
     | `ETXTBSY | `EUCLEAN | `EUNATCH | `EUSERS | `EXFULL ) as v ->
-      Unix.EUNKNOWNERR (to_int v)
-  | `EUNKNOWN n -> Unix.EUNKNOWNERR n
+      Unix.EUNKNOWNERR (Nativeint.to_int (to_int v))
+  | `EUNKNOWN n -> Unix.EUNKNOWNERR (Nativeint.to_int n)
 
 (** Convert errno int to Unix.error *)
 let int_to_unix_error n = to_unix_error (of_int n)
@@ -133,7 +133,7 @@ let strerror_r ?(buflen = 1024) err =
   let buf = CArray.make char buflen in
   let buf_ptr = CArray.start buf in
   let result = Stubs.strerror_r (to_int err) buf_ptr buflen in
-  if result = 0 then (
+  if result = 0n then (
     (* Success - get actual string length and convert to OCaml string *)
     let len = Stubs.strlen buf_ptr in
     string_from_ptr buf_ptr ~length:len)

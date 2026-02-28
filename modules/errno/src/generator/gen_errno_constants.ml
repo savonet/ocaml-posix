@@ -17,7 +17,7 @@ let generate_constant_definition () =
         let error_name =
           String.sub name 0 1 ^ "_" ^ String.sub name 1 (String.length name - 1)
         in
-        Printf.sprintf "let %s = S.constant \"%s\" S.int\n"
+        Printf.sprintf "let %s = S.constant \"%s\" S.nativeint\n"
           (String.lowercase_ascii error_name)
           name)
       names

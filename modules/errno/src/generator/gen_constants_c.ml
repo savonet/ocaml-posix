@@ -3,7 +3,7 @@ let generate_errno_defaults_c () =
   let regular_defs =
     List.map
       (fun (name, value) ->
-        Printf.sprintf "#ifndef %s\n#define %s %d\n#endif\n" name name value)
+        Printf.sprintf "#ifndef %s\n#define %s %nd\n#endif\n" name name value)
       Errno_defaults.errno_defaults
   in
   let alias_defs =

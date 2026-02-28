@@ -30,7 +30,7 @@ let generate_type_definition () =
 
   (* Add unknown directly *)
   lines @ variant_lines @ alias_lines
-  @ ["  (* Unknown *)"; "  | `EUNKNOWN of int"; "]"]
+  @ ["  (* Unknown *)"; "  | `EUNKNOWN of nativeint"; "]"]
 
 let () =
   let type_def = generate_type_definition () in

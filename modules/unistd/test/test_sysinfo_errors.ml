@@ -4,6 +4,9 @@ open Test_helpers
 
 (* Test error handling for system info operations *)
 
+let sethostname_eperm_error =
+  if Config.system = "gnu" then Unix.EACCES else Unix.EPERM
+
 let test_sethostname_eperm _ =
   (* sethostname as non-root should raise EPERM *)
   if getuid () = 0 then
@@ -11,7 +14,7 @@ let test_sethostname_eperm _ =
       "Operation not permitted (sethostname)" "Running as root"
   else
     assert_raises_verbose
-      (Unix.Unix_error (Unix.EPERM, "sethostname", ""))
+      (Unix.Unix_error (sethostname_eperm_error, "sethostname", ""))
       "sethostname as non-root"
       (fun () -> sethostname "testhostname")
 

@@ -61,8 +61,9 @@ let () =
   let timespec = clock_gettime `Monotonic in
   Printf.printf "Monotonic time time: %s\n%!" (sprint_timespec timespec);
 
-  let timespec = clock_getres `Process_cputime in
-  Printf.printf "Process clock resolution: %s\n%!" (sprint_timespec timespec);
+  if Config.system <> "gnu" then (
+    let timespec = clock_getres `Process_cputime in
+    Printf.printf "Process clock resolution: %s\n%!" (sprint_timespec timespec);
 
-  let timespec = clock_gettime `Process_cputime in
-  Printf.printf "Process time: %s\n%!" (sprint_timespec timespec)
+    let timespec = clock_gettime `Process_cputime in
+    Printf.printf "Process time: %s\n%!" (sprint_timespec timespec))

@@ -12,9 +12,9 @@ module Def (F : Cstubs.FOREIGN) = struct
     foreign "memcpy" (ptr char @-> ocaml_bytes @-> int @-> returning void)
 
   let ttyname_r =
-    foreign "ttyname_r" (int @-> ptr char @-> int @-> returning int)
+    foreign "ttyname_r" (int @-> ptr char @-> int @-> returning nativeint)
 
-  let getlogin_r = foreign "getlogin_r" (ptr char @-> int @-> returning int)
+  let getlogin_r = foreign "getlogin_r" (ptr char @-> int @-> returning nativeint)
 
   (* File descriptor operations *)
   let close = foreign "close" (int @-> returning int)

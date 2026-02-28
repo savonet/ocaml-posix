@@ -292,7 +292,7 @@ let ttyname_r ?(len = host_name_max) fd =
   let fd = fd_to_int fd in
   let buf = CArray.make char len in
   match ttyname_r fd (CArray.start buf) len with
-    | 0 ->
+    | 0n ->
         string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
     | n ->
         raise
@@ -337,7 +337,7 @@ let getlogin () =
 let getlogin_r ?(len = login_name_max) () =
   let buf = CArray.make char len in
   match getlogin_r (CArray.start buf) len with
-    | 0 ->
+    | 0n ->
         string_from_ptr (CArray.start buf) ~length:(strlen (CArray.start buf))
     | n ->
         raise

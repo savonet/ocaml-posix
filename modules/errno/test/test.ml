@@ -7,7 +7,7 @@ let () =
 
   (* Test with errno integers *)
   let test_errno errnum err_variant =
-    Printf.printf "  %s (errno %d): %s\n"
+    Printf.printf "  %s (errno %nd): %s\n"
       (match err_variant with
         | `EPERM -> "EPERM"
         | `ENOENT -> "ENOENT"
