@@ -156,14 +156,14 @@
  (description "install all available posix bindings")
  (allow_empty)
  (depends
-  posix-types
-  posix-socket
-  posix-socket-unix
-  posix-time2
-  posix-unistd
-  posix-uname
-  posix-math2
-  posix-getopt
-  posix-stat
-  posix-resource)
+  (posix-types  (= :version))
+  (posix-socket  (= :version))
+  (posix-socket-unix  (= :version))
+  (posix-time2  (= :version))
+  (posix-unistd  (= :version))
+  (posix-uname  (= :version))
+  (posix-math2  (= :version))
+  (posix-getopt  (= :version))
+  (posix-stat  (= :version))
+  (posix-resource (= :version)))
 )

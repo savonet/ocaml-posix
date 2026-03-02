@@ -14,7 +14,8 @@ module Def (F : Cstubs.FOREIGN) = struct
   let ttyname_r =
     foreign "ttyname_r" (int @-> ptr char @-> int @-> returning nativeint)
 
-  let getlogin_r = foreign "getlogin_r" (ptr char @-> int @-> returning nativeint)
+  let getlogin_r =
+    foreign "getlogin_r" (ptr char @-> int @-> returning nativeint)
 
   (* File descriptor operations *)
   let close = foreign "close" (int @-> returning int)

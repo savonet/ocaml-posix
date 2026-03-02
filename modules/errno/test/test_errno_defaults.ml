@@ -78,7 +78,8 @@ let () =
     List.iter
       (fun (name, default_val, system_val) ->
         Printf.printf "  %-20s: default=%nd, system=%nd (diff=%nd)\n" name
-          default_val system_val Nativeint.(sub system_val default_val))
+          default_val system_val
+          Nativeint.(sub system_val default_val))
       (List.rev !different_list));
 
   Printf.printf
